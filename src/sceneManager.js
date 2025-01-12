@@ -49,7 +49,6 @@ class SceneManager {
             ctx.save();
             ctx.fillStyle = 'red';
             this.map.tiles.forEach((tile) =>{
-                console.log(tile);
                 if (tile.img) {
                     ctx.drawImage(tile.img, tile.x * this.cellSize, tile.y * this.cellSize, this.cellSize, this.cellSize);
                 } else if (!tile.traversable) {
