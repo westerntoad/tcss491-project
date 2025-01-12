@@ -7,33 +7,6 @@ class Player {
         this.speed = 0.5; // grandmas are slow :(
         this.dx = 0;
         this.dy = 0;
-        
-        game.ctx.canvas.addEventListener("keydown", e => {
-            if (e.key == 'ArrowRight' && !this.isMoving) {
-                if (this.scene.isTraversable(this.x + 1, this.y)) {
-                    this.isMoving = true;
-                }
-                this.dir = 1;
-            }
-            if (e.key == "ArrowLeft" && !this.isMoving) {
-                if (this.scene.isTraversable(this.x - 1, this.y)) {
-                    this.isMoving = true;
-                }
-                this.dir = 3;
-            }
-            if (e.key == "ArrowUp" && !this.isMoving) {
-                if (this.scene.isTraversable(this.x, this.y - 1)) {
-                    this.isMoving = true;
-                }
-                this.dir = 0;
-            }
-            if (e.key == "ArrowDown" && !this.isMoving) {
-                if (this.scene.isTraversable(this.x, this.y + 1)) {
-                    this.isMoving = true;
-                }
-                this.dir = 2;
-            }
-        });
     }
 
     update() {
@@ -58,6 +31,31 @@ class Player {
                 this.dx = 0;
                 this.dy = 0;
                 this.isMoving = false;
+            }
+        } else {
+            if (this.game.keys['ArrowRight']) {
+                if (this.scene.isTraversable(this.x + 1, this.y)) {
+                    this.isMoving = true;
+                }
+                this.dir = 1;
+            }
+            if (this.game.keys['ArrowLeft']) {
+                if (this.scene.isTraversable(this.x - 1, this.y)) {
+                    this.isMoving = true;
+                }
+                this.dir = 3;
+            }
+            if (this.game.keys['ArrowUp']) {
+                if (this.scene.isTraversable(this.x, this.y - 1)) {
+                    this.isMoving = true;
+                }
+                this.dir = 0;
+            }
+            if (this.game.keys['ArrowDown']) {
+                if (this.scene.isTraversable(this.x, this.y + 1)) {
+                    this.isMoving = true;
+                }
+                this.dir = 2;
             }
         }
     }
