@@ -6,25 +6,25 @@ class Player {
         
         game.ctx.canvas.addEventListener("keydown", e => {
             if (e.key == 'ArrowRight') {
-                if (this.x < scene.map.width - 1) {
+                if (this.scene.isTraversable(this.x + 1, this.y)) {
                     this.x++;
                 }
                 this.dir = 1;
             }
             if (e.key == "ArrowLeft") {
-                if (this.x > 0) {
+                if (this.scene.isTraversable(this.x - 1, this.y)) {
                     this.x--;
                 }
                 this.dir = 3;
             }
             if (e.key == "ArrowUp") {
-                if (this.y > 0) {
+                if (this.scene.isTraversable(this.x, this.y - 1)) {
                     this.y--;
                 }
                 this.dir = 0;
             }
             if (e.key == "ArrowDown") {
-                if (this.y < scene.map.height - 1) {
+                if (this.scene.isTraversable(this.x, this.y + 1)) {
                     this.y++;
                 }
                 this.dir = 2;

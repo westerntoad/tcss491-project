@@ -2,5 +2,9 @@
   "width": 10,
   "height": 10,
   "player": { "x": 5, "y": 5 },
-  "tiles": []
+  "tiles": [
+    { "x": 2, "y": 3, "traversable": false, "asset": "./assets/brick.png" },
+    { "x": 3, "y": 3, "traversable": false, "asset": "./assets/brick.png" },
+    { "x": 3, "y": 4, "traversable": false, "asset": "./assets/brick.png" }
+  ]
 }
