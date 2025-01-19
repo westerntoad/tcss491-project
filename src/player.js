@@ -1,3 +1,4 @@
+
 class Player {
     constructor(game, scene, x, y) {
         Object.assign(this, { game, scene, x, y });
@@ -7,6 +8,7 @@ class Player {
         this.speed = 0.5; // grandmas are slow :(
         this.dx = 0;
         this.dy = 0;
+        this.encounterRate = 1.00; // 100% chance of battle
         
         game.ctx.canvas.addEventListener("keydown", e => {
             if (e.key == 'ArrowRight' && !this.isMoving) {
@@ -58,6 +60,14 @@ class Player {
                 this.dx = 0;
                 this.dy = 0;
                 this.isMoving = false;
+
+                // ✅ Check for random dungeon battles
+                if (this.scene.isDungeon()) { 
+                    if (Math.random() <= this.encounterRate) {
+                        console.log("A wild enemy appears!");
+                        this.scene.battleScene(false); // true if boss type
+                    }
+                }
             }
         }
     }
