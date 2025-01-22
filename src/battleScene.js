@@ -9,6 +9,7 @@ let lastClickTime = 0; // Tracks the last click timestamp
 const clickCooldown = 500; // 0.5 seconds (500ms)
 class BattleScene {
     constructor(game, sceneManager, players, enemies) {
+        this.turn = [];
         this.game = game;
         this.sceneManager = sceneManager;
         this.players = players;
@@ -20,28 +21,29 @@ class BattleScene {
              /**
              * 0 = awaiting moves | 1 = attack | 2 = defend | 3 = special move
              */
-             player.actions = 1; // instantiate new field
+             player.actions = 0; // instantiate new field
              player.hovered = true; // instantiate new field
         });
 
         playerCount = this.players.length;
         enemiesCount = this.enemies.length;
         playableSpace = this.game.height - padding * 2 - guiHeight;
-        console.log("Division: ", playableSpace / playerCount);
 
         // 0 = setting up battle scene
         // 1 = awaiting action input
         // 2 = drawing actions for turn
         this.actions = 0;
 
-        console.log('Screen Width:', this.game.width);
-        console.log('Screen Height:', this.game.height);
-        this.battleOptions = ASSET_MANAGER.getAsset("./assets/options.png"); // Load battle options
-        this.greenPointer = ASSET_MANAGER.getAsset("./assets/greenPointer.png"); // OPTION SELECTED
-        this.redPointer = ASSET_MANAGER.getAsset("./assets/redPointer.png"); // OPTION NOT SELECTED
+        this.greenPointer = ASSET_MANAGER.getAsset("./assets/battleScene/greenPointer.png"); // OPTION SELECTED
+        this.redPointer = ASSET_MANAGER.getAsset("./assets/battleScene/redPointer.png"); // OPTION NOT SELECTED
         this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
-        this.grannyHp = ASSET_MANAGER.getAsset("./assets/grannyhp.png"); // Load hp bar for player
-        this.button = ASSET_MANAGER.getAsset("./assets/button.png"); // Load button for actions
+        this.grannyHp = ASSET_MANAGER.getAsset("./assets/battleScene/grannyhp.png"); // Load hp bar for player
+        this.button = ASSET_MANAGER.getAsset("./assets/battleScene/endButton.png"); // Load button for actions
+
+        this.attackButton = ASSET_MANAGER.getAsset("./assets/battleScene/attack.png"); // Load attack button
+        this.defendButton = ASSET_MANAGER.getAsset("./assets/battleScene/defend.png"); // Load defend button
+        this.specialButton = ASSET_MANAGER.getAsset("./assets/battleScene/special.png"); // Load special button
+
         console.log('Granny HP Image:', this.grannyHp); // Debugging statement
     }
 
@@ -68,8 +70,6 @@ class BattleScene {
         // }
     }
     redraw(ctx) {
-
-        console.log('Playable Space:', playableSpace);
         // Draw background
         if (this.background) {
             ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -126,7 +126,7 @@ class BattleScene {
     awaiting() {
         const currentTime = Date.now();
             
-                // ✅ If less than 500ms since last click, ignore the event
+                // If less than 500ms since last click, ignore the event
                 if (currentTime - lastClickTime < clickCooldown) {
                     return false;
                 }
@@ -148,47 +148,80 @@ class BattleScene {
             /**
              * 0 = awaiting moves | 1 = attack | 2 = defend | 3 = special move
              */
-            
-
             // (img, startX/Y of img, w/h of img, canvas-coord, resize);
-            // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
-            // sx = 1, sy = 1, sw = 30, sh = 30 (size of options.png)
-            const handlePointerClick = (e) => {
-                if(this.awaiting()){
-                    const rect = ctx.canvas.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                
-                    this.players.forEach((player) => {
-                        if (x >= player.startX && 
-                            x <= player.startX + spriteSize &&
-                            y >= player.startY &&
-                            y <= player.startY + spriteSize) {
-                                if(player.hovered) {
-                                    player.hovered = false;
-                                    console.log("Unhovered on Player", player.name);
-                                    this.redraw(ctx);
-                                }
-                                else {
-                                    player.hovered = true;
-                                    console.log("Hovered on Player", player.name);
-                                }
-                        }
-                    });
-                }
-            };
-            ctx.canvas.addEventListener("click", handlePointerClick);
+                // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
 
             this.players.forEach((player) => {
+
+                const startX = player.startX + spriteSize * 2;
+                const startY = player.startY + spriteSize/2 - spriteSize * 2
+
                 if(player.hovered) {
-                    ctx.drawImage(this.battleOptions, 1, 1, 30, 30, player.startX + spriteSize * 2, player.startY + spriteSize/2 - spriteSize * 2,
+                    ctx.drawImage(this.attackButton, 1, 1, 30, 30, 
+                        startX, startY,
+                        spriteSize * 2, spriteSize * 2);
+
+                    ctx.drawImage(this.defendButton, 1, 1, 30, 30, 
+                        startX + spriteSize * 2, startY,
+                        spriteSize * 2, spriteSize * 2);
+
+                    ctx.drawImage(this.specialButton, 1, 1, 30, 30, 
+                        startX + spriteSize * 4, startY,
                         spriteSize * 2, spriteSize * 2);
                 }
                 const pointerSize = spriteSize * 3/4;
+                
+                
                 // 15, 9, 7, 7 for pointer
-                ctx.drawImage(this.greenPointer, 16, 9, 7, 7, player.startX + spriteSize,  player.startY - pointerSize,
+                ctx.drawImage(player.actions == 0 ? this.redPointer : this.greenPointer,
+                    16, 9, 7, 7, player.startX + spriteSize,  player.startY - pointerSize,
                     pointerSize, pointerSize);
+
+                // sx = 1, sy = 1, sw = 30, sh = 30 (size of options)
             });
+            const handlePointerClick = (e) => {
+                if (!this.awaiting()) return;
+            
+                const rect = ctx.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+            
+                let clickedPlayer = null; // Store the player being clicked
+            
+                this.players.forEach((player) => {
+                    const startX = player.startX + spriteSize * 2;
+                    const startY = player.startY + spriteSize / 2 - spriteSize * 2;
+            
+                    if (player.hovered) {
+                        if (x >= startX && x <= startX + spriteSize * 2 && y >= startY && y <= startY + spriteSize * 2) {
+                            player.actions = 1; // Attack
+                        } else if (x >= startX + spriteSize * 2 && x <= startX + spriteSize * 4 && y >= startY && y <= startY + spriteSize * 2) {
+                            player.actions = 2; // Defend
+                        } else if (x >= startX + spriteSize * 4 && x <= startX + spriteSize * 6 && y >= startY && y <= startY + spriteSize * 2) {
+                            player.actions = 3; // Special
+                        }
+
+                        if(x >= startX && x <= startX + spriteSize * 4 && 
+                            y >= startY && y <= startY + spriteSize * 2) {
+                            clickedPlayer = player;
+                            this.targetting(clickedPlayer, ctx);
+                        }
+                    }
+                    else if(x >= player.startX && x <= player.startX + spriteSize && y >= player.startY && y <= player.startY + spriteSize) {
+                        player.hovered = true;
+                    }
+                });
+            
+                if (clickedPlayer) {
+                    console.log("Player", clickedPlayer.name, "chose action:", clickedPlayer.actions);
+                    clickedPlayer.hovered = false; // Only reset hovered for the clicked player
+                    this.redraw(ctx);
+                }
+            };
+            
+            // Ensure event listener is only added once
+            ctx.canvas.addEventListener("click", handlePointerClick);
+            
             // this.button (26, 10)
             if(this.players.filter(player => player.actions == 0).length <= 0) {
 
@@ -196,7 +229,7 @@ class BattleScene {
                 const buttonY = this.players[this.players.length - 1].startY + 100;
                 ctx.drawImage(this.button, 
                     buttonX, buttonY, 
-                    26 * 5, 10 * 5); // 130, 50
+                    32 * 4, 14 * 4); // 128, 56
 
                     const inBound = (x, y) => {
                         return x >= buttonX && 
@@ -241,5 +274,16 @@ class BattleScene {
 
         //Draw the GUI elements
     }
-    
+    targetting(player, ctx){
+        // See what is targetable
+        // store turn detail as an object
+        let createdTurn = {
+            origin: player,
+            target: null,
+            updateHp: null,
+            actionDetail: "" // construct string for actionDetail
+        }
+
+        this.turn.push(createdTurn);
+    }
 }

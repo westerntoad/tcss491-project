@@ -5,13 +5,19 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
 ASSET_MANAGER.queueDownload("./maps/dev.json");
-ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
-ASSET_MANAGER.queueDownload("./assets/grannyhp.png");
 
-ASSET_MANAGER.queueDownload("./assets/options.png");
-ASSET_MANAGER.queueDownload("./assets/greenPointer.png");
-ASSET_MANAGER.queueDownload("./assets/redPointer.png");
-ASSET_MANAGER.queueDownload("./assets/button.png");
+// For BattleScene
+ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
+
+ASSET_MANAGER.queueDownload("./assets/battleScene/grannyhp.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/greenPointer.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/redPointer.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/button.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/attack.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/special.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
+
 gameEngine.grannies = [{
         granny: "true",
         name: "Mary Yott",
