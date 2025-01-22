@@ -1,3 +1,22 @@
+
+const DUNGEON_ENCOUNTERS = {
+    "Cave": [
+        { name: "Sad Bones", hp: 30, attack: 5 },
+        { name: "BooHoo", hp: 50, attack: 10 },
+        { name: "Mad@chu", hp: 25, attack: 3 }
+    ],
+    "Ruins": [
+        { name: "Skeleton", hp: 60, attack: 12 },
+        { name: "Ghost", hp: 40, attack: 8 },
+        { name: "Zombie", hp: 70, attack: 15 }
+    ],
+    "Volcano": [
+        { name: "Fire Sprite", hp: 35, attack: 7 },
+        { name: "Lava Slime", hp: 45, attack: 10 },
+        { name: "Flame Serpent", hp: 80, attack: 18 }
+    ]
+};
+
 class SceneManager {
     constructor(game, pxWidth, pxHeight) {
         this.game = game;
@@ -7,9 +26,21 @@ class SceneManager {
         this.cellWidth = pxHeight;
         this.cellHeight = Math.ceil(game.ctx.height / this.cellSize);
 
+        this.savedState = null; // save entity state
+        this.savedMap = null; // save map state
+
         gameEngine.addEntity(this);
 
         this.load(ASSET_MANAGER.getAsset("./maps/dev.json"));
+        this.map.type = "Cave";
+    }
+    isDungeon(){
+        console.log("Checking if dungeon. Current map type:", this.map?.type);
+        console.log(this.map.type == "Cave");
+        return (this.map.type === "Cave" ||
+            this.map.type === "Ruins" ||
+            this.map.type === "Volcano"
+        )
     }
 
     load(map) {
@@ -67,5 +98,25 @@ class SceneManager {
             });
             ctx.restore();
         }
+    }
+    battleScene(isBoss) {
+        console.log("Entered Battle Scene");
+        this.savedState = this.game.entities;
+        this.savedMap = this.map;
+        
+        const enemies = DUNGEON_ENCOUNTERS[this.map.type];
+        const players = this.game.grannies;
+
+        console.log('Enemies:', enemies);
+        console.log('Players:', players);
+
+        this.game.entities = []; // Clear current entities
+        this.game.addEntity(new BattleScene(this.game, this, players, enemies));
+    }
+    restoreScene() {
+        console.log("Restoring Overworld State");
+        this.game.entities = savedState;
+        this.map = savedMap;
+        console.log("Restored Overworld");
     }
 }
