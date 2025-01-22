@@ -94,7 +94,7 @@ class SceneManager {
         this.savedState = this.game.entities;
         this.savedMap = this.map;
         
-        const enemies = DUNGEON_ENCOUNTERS[this.map.type].filter(enemy => enemy.name === "Sad Bones");
+        const enemies = DUNGEON_ENCOUNTERS[this.map.type];
         const players = this.game.grannies;
 
         console.log('Enemies:', enemies);

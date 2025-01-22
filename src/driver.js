@@ -10,8 +10,10 @@ ASSET_MANAGER.queueDownload("./maps/dev.json");
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
 
 ASSET_MANAGER.queueDownload("./assets/battleScene/grannyhp.png");
-ASSET_MANAGER.queueDownload("./assets/battleScene/greenPointer.png");
-ASSET_MANAGER.queueDownload("./assets/battleScene/redPointer.png");
+
+ASSET_MANAGER.queueDownload("./assets/battleScene/playerReady.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/targetPointer.png");
+
 ASSET_MANAGER.queueDownload("./assets/battleScene/button.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/attack.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
