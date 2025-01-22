@@ -4,15 +4,18 @@ class Player {
         this.spritesheet = ASSET_MANAGER.getAsset("./assets/arrow.png"); // placeholder dev art
         this.dir = 0; // 0 = north, 1 = east, 2 = south, 3 = west
         this.isMoving = false;
-        this.speed = 0.5; // grandmas are slow :(
+        this.speed = 10; // grandmas are slow :(
         this.dx = 0;
         this.dy = 0;
+
+        this.realX = () => this.x + Math.min(this.dx, 1);
+        this.realY = () => this.y + Math.min(this.dy, 1);
     }
 
     update() {
         if (this.isMoving) {
-            console.log(this.game.clockTick);
-            console.log(`(dx, dy) = (${this.dx}, ${this.dy})`);
+            //console.log(this.game.clockTick);
+            //console.log(`(dx, dy) = (${this.dx}, ${this.dy})`);
             const dm = this.game.clockTick * this.speed;
             if (this.dir == 0) {
                 this.dy -= dm
@@ -64,10 +67,12 @@ class Player {
         const w = 32;
         const h = 32;
         const scale = 5;
+        console.log(`(${this.scene.pxWidth / 2}, ${this.scene.pxHeight / 2})`);
         ctx.drawImage(this.spritesheet,
             this.dir * w, 0,
             w, h,
-            (this.x + this.dx) * this.scene.cellSize, (this.y + this.dy) * this.scene.cellSize,
+            //this.realX() * this.scene.cellSize, this.realY() * this.scene.cellSize,
+            (this.scene.pxWidth - this.scene.cellSize) / 2, (this.scene.pxHeight - this.scene.cellSize) / 2,
             this.scene.cellSize, this.scene.cellSize
         );
     }

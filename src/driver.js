@@ -4,6 +4,7 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
 ASSET_MANAGER.queueDownload("./maps/dev.json");
+ASSET_MANAGER.queueDownload("./maps/dev2.json");
 
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
@@ -14,5 +15,5 @@ ASSET_MANAGER.downloadAll(() => {
 
     gameEngine.start();
 
-    const scene = new SceneManager(gameEngine);
+    const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
 });
