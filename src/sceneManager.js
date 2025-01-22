@@ -1,9 +1,9 @@
 
 const DUNGEON_ENCOUNTERS = {
     "Cave": [
-        { name: "Bat", hp: 30, attack: 5 },
-        { name: "Goblin", hp: 50, attack: 10 },
-        { name: "Slime", hp: 25, attack: 3 }
+        { name: "Sad Bones", hp: 30, attack: 5 },
+        { name: "BooHoo", hp: 50, attack: 10 },
+        { name: "Mad@chu", hp: 25, attack: 3 }
     ],
     "Ruins": [
         { name: "Skeleton", hp: 60, attack: 12 },
@@ -94,7 +94,7 @@ class SceneManager {
         this.savedState = this.game.entities;
         this.savedMap = this.map;
         
-        const enemies = DUNGEON_ENCOUNTERS[this.map.type].filter(enemy => enemy.name === "Bat");
+        const enemies = DUNGEON_ENCOUNTERS[this.map.type].filter(enemy => enemy.name === "Sad Bones");
         const players = this.game.grannies;
 
         console.log('Enemies:', enemies);

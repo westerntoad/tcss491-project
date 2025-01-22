@@ -5,7 +5,7 @@ class Player {
         this.spritesheet = ASSET_MANAGER.getAsset("./assets/arrow.png"); // placeholder dev art
         this.dir = 0; // 0 = north, 1 = east, 2 = south, 3 = west
         this.isMoving = false;
-        this.speed = 0.5; // grandmas are slow :(
+        this.speed = 10; // grandmas are slow :(
         this.dx = 0;
         this.dy = 0;
         this.encounterRate = 1.00; // 100% chance of battle
@@ -61,7 +61,7 @@ class Player {
                 this.dy = 0;
                 this.isMoving = false;
 
-                // ✅ Check for random dungeon battles
+                // Check for random dungeon battles
                 if (this.scene.isDungeon()) { 
                     if (Math.random() <= this.encounterRate) {
                         console.log("A wild enemy appears!");
