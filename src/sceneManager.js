@@ -76,18 +76,19 @@ class SceneManager {
                 //ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize, (y - this.player.y - this.player.dy) * this.cellSize, this.cellSize, this.cellSize);
                 ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize + (PARAMS.canvasWidth - this.cellSize) / 2, (y - this.player.y - this.player.dy) * this.cellSize + (PARAMS.canvasHeight - this.cellSize) / 2, this.cellSize, this.cellSize);
 
-                ctx.restore();
             }
 
-            /*ctx.save();
+            ctx.save();
             ctx.fillStyle = 'red';
             this.map.tiles.forEach((tile) =>{
+                const x = (tile.x - this.player.x - this.player.dx) * this.cellSize + (PARAMS.canvasWidth - this.cellSize) / 2;
+                const y = (tile.y - this.player.y - this.player.dy) * this.cellSize + (PARAMS.canvasHeight - this.cellSize) / 2;
                 if (tile.img) {
-                    ctx.drawImage(tile.img, tile.x * this.cellSize, tile.y * this.cellSize, this.cellSize, this.cellSize);
+                    ctx.drawImage(tile.img, x, y, this.cellSize, this.cellSize);
                 } else if (!tile.traversable) {
-                    ctx.fillRect(tile.x * this.cellSize, tile.y * this.cellSize, this.cellSize, this.cellSize);
+                    ctx.fillRect(x, y, this.cellSize, this.cellSize);
                 }
-            });*/
+            });
             ctx.restore();
         }
     }
