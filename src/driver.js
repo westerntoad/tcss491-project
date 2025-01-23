@@ -5,6 +5,7 @@ const PARAMS = {};
 
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
+ASSET_MANAGER.queueDownload("./assets/houseTiles.png");
 ASSET_MANAGER.queueDownload("./maps/dev.json");
 
 // For BattleScene

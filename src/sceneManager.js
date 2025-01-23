@@ -25,7 +25,6 @@ class SceneManager {
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
 
-        gameEngine.addEntity(this);
 
         this.load(ASSET_MANAGER.getAsset("./maps/dev.json"));
         this.map.type = "Cave";
@@ -44,11 +43,12 @@ class SceneManager {
 
         for (let i = 0; i < this.map.tiles.length; i++) {
             console.log(this.map.tiles[i]);
-            this.map.tiles[i].img = ASSET_MANAGER.getAsset(this.map.tiles[0].asset);
+            this.map.tiles[i].img = ASSET_MANAGER.getAsset(this.map.tiles[i].asset);
         }
 
         this.player = new Player(this.game, this, map.player.x, map.player.y);
-        gameEngine.addEntity(this.player);
+        this.game.addEntity(this.player);
+        this.game.addEntity(this);
     }
 
     isTraversable(x, y) {
@@ -70,7 +70,7 @@ class SceneManager {
         if (this.map) {
             for (let i = 0; i < this.map.width * this.map.height; i++) {
                 const x = i % this.map.width;
-                const y = Math.floor(i / this.map.height);
+                const y = Math.floor(i / this.map.width);
 
                 
                 //ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize, (y - this.player.y - this.player.dy) * this.cellSize, this.cellSize, this.cellSize);
