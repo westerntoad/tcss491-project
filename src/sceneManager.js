@@ -47,7 +47,8 @@ class SceneManager {
             this.map.tiles[i].img = ASSET_MANAGER.getAsset(this.map.tiles[0].asset);
         }
 
-        gameEngine.addEntity(new Player(gameEngine, this, map.player.x, map.player.y));
+        this.player = new Player(this.game, this, map.player.x, map.player.y);
+        gameEngine.addEntity(this.player);
     }
 
     isTraversable(x, y) {
@@ -72,12 +73,13 @@ class SceneManager {
                 const y = Math.floor(i / this.map.height);
 
                 
-                ctx.strokeRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize);
+                //ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize, (y - this.player.y - this.player.dy) * this.cellSize, this.cellSize, this.cellSize);
+                ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize + (PARAMS.canvasWidth - this.cellSize) / 2, (y - this.player.y - this.player.dy) * this.cellSize + (PARAMS.canvasHeight - this.cellSize) / 2, this.cellSize, this.cellSize);
 
                 ctx.restore();
             }
 
-            ctx.save();
+            /*ctx.save();
             ctx.fillStyle = 'red';
             this.map.tiles.forEach((tile) =>{
                 if (tile.img) {
@@ -85,7 +87,7 @@ class SceneManager {
                 } else if (!tile.traversable) {
                     ctx.fillRect(tile.x * this.cellSize, tile.y * this.cellSize, this.cellSize, this.cellSize);
                 }
-            });
+            });*/
             ctx.restore();
         }
     }

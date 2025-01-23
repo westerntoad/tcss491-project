@@ -1,6 +1,7 @@
 
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
+const PARAMS = {};
 
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
@@ -81,6 +82,8 @@ gameEngine.grannies = [{
 ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager will jump straight into combat
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
+    PARAMS.canvasWidth = canvas.width;
+    PARAMS.canvasHeight = canvas.height;
     ctx.imageSmoothingEnabled = false;
 
     gameEngine.width = canvas.width;

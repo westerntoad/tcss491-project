@@ -75,11 +75,10 @@ class Player {
     draw(ctx) {
         const w = 32;
         const h = 32;
-        const scale = 5;
         ctx.drawImage(this.spritesheet,
             this.dir * w, 0,
             w, h,
-            (this.x + this.dx) * this.scene.cellSize, (this.y + this.dy) * this.scene.cellSize,
+            (PARAMS.canvasWidth - this.scene.cellSize) / 2, (PARAMS.canvasHeight - this.scene.cellSize) / 2,
             this.scene.cellSize, this.scene.cellSize
         );
     }
