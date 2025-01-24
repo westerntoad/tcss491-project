@@ -15,6 +15,22 @@ class GameEngine {
         this.wheel = null;
         this.keys = {};
 
+        //Player Movement in the Overworld -> Arrow Keys AND WASD movement support.
+        this.left = false;
+        this.A = false;
+        this.right = false;
+        this.D = false;
+        this.up = false;
+        this.W = false;
+        this.down = false;
+        this.S = false;
+
+        //Dialogue Scenes Select A
+        this.F = null;
+
+        //Escape key to exit 
+        this.esc = null;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
@@ -29,6 +45,12 @@ class GameEngine {
 
     start() {
         this.running = true;
+
+        //Having 3 states for the 3 different gameplay types of the game.
+        this.battle = false;
+        this.overworld = false;
+        this.dialogue = true;
+
         const gameLoop = () => {
             this.loop();
             requestAnimFrame(gameLoop, this.ctx.canvas);
@@ -72,8 +94,84 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
+        const that = this;
+
+        function mouseListener(e) {
+            that.mouse  = handleMouseMove(e);
+        };
+
+    //mouseDebugClickListener() is a temp debug method only.
+    //To log the information of the coordinates
+    function mouseDebugClickListener(e) {
+        that.mouse  = handleMouseMove(e);
+        if (PARAMS.DEBUG) console.log(that.mouse);
+    };
+        this.mouseMove = mouseListener;
+        this.mouseClick = mouseDebugClickListener;
+
         this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
+        //this.ctx.canvas.addEventListener("mousemove", handleMouseMove);
+
+
+        //when key is pressed
+        function keydownListener (e) {
+            that.keyboardActive = true;
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = true;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = true;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = true;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = true;
+                    break;
+                case "KeyF":
+                    that.A = true;
+                case "KeyEsc":
+                    that.esc = true;
+                    break;
+            }
+        }
+
+        //when key is not pressed
+        function keyupListener (e) {
+            that.keyboardActive = false;
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = false;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = false;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = false;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = false;
+                    break;
+                case "KeyF":
+                    that.A = false;
+                case "KeyEsc":
+                    that.esc = false;
+                    break;
+            }
+        }
+        that.keydown = keydownListener;
+        that.keyup = keyupListener;
+
     };
 
     addEntity(entity) {
@@ -89,6 +187,23 @@ class GameEngine {
         // Draw latest things first
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);
+        }
+    };
+
+    gamepadUpdate() {
+        this.gamepad = navigator.getGamepads()[0];
+        const controller = this.gamepad;
+        //If the controller is connected to the computer.
+        if (controller != null) {
+            this.F = controller.buttons[0].pressed;
+            this.up = controller.buttons[12].pressed || controller.axes[1] < -0.3;
+            this.W = controller.buttons[12].pressed || controller.axes[1] < -0.3;
+            this.down = controller.buttons[13].pressed || controller.axes[1] > 0.3;
+            this.S = controller.buttons[13].pressed || controller.axes[1] > 0.3;
+            this.left = controller.buttons[14].pressed || controller.axes[0] < -0.3;
+            this.A = controller.buttons[14].pressed || controller.axes[0] < -0.3;
+            this.right = controller.buttons[15].pressed || controller.axes[0] > 0.3;
+            this.D = controller.buttons[15].pressed || controller.axes[0] > 0.3;
         }
     };
 

@@ -18,10 +18,15 @@ const DUNGEON_ENCOUNTERS = {
 };
 
 class SceneManager {
-    constructor(game) {
+    constructor(game, pxWidth, pxHeight) {
         this.game = game;
         this.cellSize = 75;
         this.z = 0;
+        this.cellSize = 75; // in px
+        this.pxWidth = pxWidth;
+        this.pxHeight = pxHeight;
+        this.cellWidth = pxHeight;
+        this.cellHeight = Math.ceil(game.ctx.height / this.cellSize);
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
@@ -70,7 +75,13 @@ class SceneManager {
         return x >= 0 && x < this.map.width && y >= 0 && y < this.map.height;
     }
 
-    update() { /* currently unused */ }
+    update() {
+        if (this.map) {
+            this.game.ctx.restore();
+            this.game.ctx.save();
+            this.game.ctx.translate(100, 100);
+        }
+    }
 
     draw(ctx) {
         if (this.map) {

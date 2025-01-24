@@ -9,38 +9,17 @@ class Player {
         this.dx = 0;
         this.dy = 0;
         this.z = 1;
+
+        this.realX = () => this.x + Math.min(this.dx, 1);
+        this.realY = () => this.y + Math.min(this.dy, 1);
         this.encounterRate = 1.00; // 100% chance of battle
         
-        game.ctx.canvas.addEventListener("keydown", e => {
-            if (e.key == 'ArrowRight' && !this.isMoving) {
-                if (this.scene.isTraversable(this.x + 1, this.y)) {
-                    this.isMoving = true;
-                }
-                this.dir = 1;
-            }
-            if (e.key == "ArrowLeft" && !this.isMoving) {
-                if (this.scene.isTraversable(this.x - 1, this.y)) {
-                    this.isMoving = true;
-                }
-                this.dir = 3;
-            }
-            if (e.key == "ArrowUp" && !this.isMoving) {
-                if (this.scene.isTraversable(this.x, this.y - 1)) {
-                    this.isMoving = true;
-                }
-                this.dir = 0;
-            }
-            if (e.key == "ArrowDown" && !this.isMoving) {
-                if (this.scene.isTraversable(this.x, this.y + 1)) {
-                    this.isMoving = true;
-                }
-                this.dir = 2;
-            }
-        });
     }
 
     update() {
         if (this.isMoving) {
+            //console.log(this.game.clockTick);
+            //console.log(`(dx, dy) = (${this.dx}, ${this.dy})`);
             const dm = this.game.clockTick * this.speed;
             if (this.dir == 0) {
                 this.dy -= dm
@@ -67,6 +46,31 @@ class Player {
                         this.scene.battleScene(false); // true if boss type
                     }
                 }*/
+            }
+        } else {
+            if (this.game.keys['ArrowRight']) {
+                if (this.scene.isTraversable(this.x + 1, this.y)) {
+                    this.isMoving = true;
+                }
+                this.dir = 1;
+            }
+            if (this.game.keys['ArrowLeft']) {
+                if (this.scene.isTraversable(this.x - 1, this.y)) {
+                    this.isMoving = true;
+                }
+                this.dir = 3;
+            }
+            if (this.game.keys['ArrowUp']) {
+                if (this.scene.isTraversable(this.x, this.y - 1)) {
+                    this.isMoving = true;
+                }
+                this.dir = 0;
+            }
+            if (this.game.keys['ArrowDown']) {
+                if (this.scene.isTraversable(this.x, this.y + 1)) {
+                    this.isMoving = true;
+                }
+                this.dir = 2;
             }
         }
     }

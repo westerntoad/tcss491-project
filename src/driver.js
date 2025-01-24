@@ -7,6 +7,7 @@ ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
 ASSET_MANAGER.queueDownload("./assets/houseTiles.png");
 ASSET_MANAGER.queueDownload("./maps/dev.json");
+ASSET_MANAGER.queueDownload("./maps/dev2.json");
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
@@ -94,5 +95,5 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
 
     gameEngine.start();
 
-    const scene = new SceneManager(gameEngine);
+    const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
 });
