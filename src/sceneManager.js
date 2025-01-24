@@ -21,6 +21,7 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.cellSize = 75;
+        this.z = 0;
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
@@ -29,6 +30,7 @@ class SceneManager {
         this.load(ASSET_MANAGER.getAsset("./maps/dev.json"));
         this.map.type = "Cave";
     }
+
     isDungeon(){
         console.log("Checking if dungeon. Current map type:", this.map?.type);
         console.log(this.map.type == "Cave");
@@ -39,11 +41,17 @@ class SceneManager {
     }
 
     load(map) {
-        this.map = map;
+        this.map = {};
+        this.map.tiles = [];
+        this.map.width = map.width;
+        this.map.height = map.height;
 
-        for (let i = 0; i < this.map.tiles.length; i++) {
-            console.log(this.map.tiles[i]);
-            this.map.tiles[i].img = ASSET_MANAGER.getAsset(this.map.tiles[i].asset);
+        for (let i = 0; i < map.tiles.length; i++) {
+            const tile = map.tiles[i];
+            const entity = new Tile(this, tile.traversable, tile.x, tile.y, tile.z, tile.asset);
+
+            this.map.tiles.push(entity);
+            this.game.addEntity(entity);
         }
 
         this.player = new Player(this.game, this, map.player.x, map.player.y);
@@ -52,12 +60,10 @@ class SceneManager {
     }
 
     isTraversable(x, y) {
-        console.log(`${x}, ${y}`);
-
         for (let i = 0; i < this.map.tiles.length; i++) {
             const tile = this.map.tiles[i];
             if (tile.x == x && tile.y == y) {
-                return tile.traversable;
+                return tile.isTraversable;
             }
         }
 
@@ -78,7 +84,7 @@ class SceneManager {
 
             }
 
-            ctx.save();
+            /*ctx.save();
             ctx.fillStyle = 'red';
             this.map.tiles.forEach((tile) =>{
                 const x = (tile.x - this.player.x - this.player.dx) * this.cellSize + (PARAMS.canvasWidth - this.cellSize) / 2;
@@ -89,7 +95,7 @@ class SceneManager {
                     ctx.fillRect(x, y, this.cellSize, this.cellSize);
                 }
             });
-            ctx.restore();
+            ctx.restore();*/
         }
     }
     battleScene(isBoss) {

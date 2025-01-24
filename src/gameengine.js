@@ -82,7 +82,6 @@ class GameEngine {
 
     draw() {
         if(this.entities.filter(entity => entity instanceof BattleScene).length <= 0) {
-            console.log('Not Battle Scene');
             // Draw latest things first
             // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
             this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -113,6 +112,8 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
+        // draw and update things in order of z value
+        this.entities.sort((a, b) => b.z - a.z);
         this.update();
         this.draw();
     };

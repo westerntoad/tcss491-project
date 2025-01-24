@@ -8,6 +8,7 @@ class Player {
         this.speed = 10; // grandmas are slow :(
         this.dx = 0;
         this.dy = 0;
+        this.z = 1;
         this.encounterRate = 1.00; // 100% chance of battle
         
         game.ctx.canvas.addEventListener("keydown", e => {
@@ -40,8 +41,6 @@ class Player {
 
     update() {
         if (this.isMoving) {
-            console.log(this.game.clockTick);
-            console.log(`(dx, dy) = (${this.dx}, ${this.dy})`);
             const dm = this.game.clockTick * this.speed;
             if (this.dir == 0) {
                 this.dy -= dm
