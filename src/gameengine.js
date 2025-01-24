@@ -111,6 +111,64 @@ class GameEngine {
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
         this.ctx.canvas.addEventListener("mousemove", handleMouseMove);
 
+        //when key is pressed
+        function keydownListener (e) {
+            that.keyboardActive = true;
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = true;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = true;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = true;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = true;
+                    break;
+                case "KeyF":
+                    that.A = true;
+                case "KeyEsc":
+                    that.esc = true;
+                    break;
+            }
+        }
+
+        //when key is not pressed
+        function keyupListener (e) {
+            that.keyboardActive = false;
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = false;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = false;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = false;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = false;
+                    break;
+                case "KeyF":
+                    that.A = false;
+                case "KeyEsc":
+                    that.esc = false;
+                    break;
+            }
+        }
+        that.keydown = keydownListener;
+        that.keyup = keyupListener;
+
     };
 
     addEntity(entity) {
