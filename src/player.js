@@ -53,20 +53,17 @@ class Player {
                     this.isMoving = true;
                 }
                 this.dir = 1;
-            }
-            if (this.game.keys['ArrowLeft']) {
+            } else  if (this.game.keys['ArrowLeft']) {
                 if (this.scene.isTraversable(this.x - 1, this.y)) {
                     this.isMoving = true;
                 }
                 this.dir = 3;
-            }
-            if (this.game.keys['ArrowUp']) {
+            } else if (this.game.keys['ArrowUp']) {
                 if (this.scene.isTraversable(this.x, this.y - 1)) {
                     this.isMoving = true;
                 }
                 this.dir = 0;
-            }
-            if (this.game.keys['ArrowDown']) {
+            } else if (this.game.keys['ArrowDown']) {
                 if (this.scene.isTraversable(this.x, this.y + 1)) {
                     this.isMoving = true;
                 }
