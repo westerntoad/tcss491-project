@@ -63,7 +63,7 @@ class SceneManager {
         /* ~DEBUG~ */
         const interactable = new Tile(this, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png');
         //interactable.interact = () => alert("y'like my cats?");
-        interactable.interact = () => this.showDialog('hello');
+        interactable.interact = () => this.showDialog("y'like my cats?");
         this.map.tiles.push(interactable);
         this.game.addEntity(interactable);
         const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png');
@@ -100,13 +100,15 @@ class SceneManager {
     }
 
     showDialog(text) {
-        this.dialog = new Dialog(this, text);
+        this.dialog = new Dialog(this.game, this, text);
         this.game.addEntity(this.dialog);
+        this.player.disableMovement = true;
     }
 
     hideDialog() {
         this.dialog.removeFromWorld = true;
         this.dialog = undefined;
+        this.player.disableMovement = false;
     }
 
     update() {

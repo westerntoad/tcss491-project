@@ -1,14 +1,20 @@
 class Dialog {
-    constructor(scene, text) {
-        Object.assign(this, {scene, text});
+    constructor(game, scene, text) {
+        Object.assign(this, {game, scene, text});
         this.z = 5;
-        this.textSpeed = 1;
+        this.textSpeed = 0.2; // characters per second
         this.timeElapsed = 0;
         this.dText = '';
+        this.nextCharIndex = 0;
     }
 
     update() {
-        //this.timeElapsed += this.game.clockTick
+        this.timeElapsed += this.game.clockTick
+        if (this.timeElapsed >= this.textSpeed) {
+            this.timeElapsed -= this.textSpeed;
+            this.dText += this.text.charAt(this.nextCharIndex);
+            this.nextCharIndex++;
+        }
         
     }
 
@@ -20,6 +26,6 @@ class Dialog {
         ctx.font = '40pt comic sans';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        ctx.fillText(this.text, padding * 2, PARAMS.canvasHeight * 2/3 + 2 * padding);
+        ctx.fillText(this.dText, padding * 2, PARAMS.canvasHeight * 2/3 + 2 * padding);
     }
 }

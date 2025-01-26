@@ -62,7 +62,7 @@ class Player {
                     }
                 }*/
             }
-        } else {
+        } else if (!this.disableMovement) {
             if (this.game.keys['ArrowRight']) {
                 if (this.scene.isTraversable(this.x + 1, this.y)) {
                     this.isMoving = true;
