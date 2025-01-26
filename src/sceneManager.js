@@ -36,6 +36,7 @@ class SceneManager {
         this.map.type = "Cave";
     }
 
+
     isDungeon(){
         console.log("Checking if dungeon. Current map type:", this.map?.type);
         console.log(this.map.type == "Cave");
@@ -61,7 +62,8 @@ class SceneManager {
 
         /* ~DEBUG~ */
         const interactable = new Tile(this, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png');
-        interactable.interact = () => alert("y'like my cats?");
+        //interactable.interact = () => alert("y'like my cats?");
+        interactable.interact = () => this.showDialog('hello');
         this.map.tiles.push(interactable);
         this.game.addEntity(interactable);
         const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png');
@@ -97,20 +99,27 @@ class SceneManager {
         return x >= 0 && x < this.map.width && y >= 0 && y < this.map.height;
     }
 
+    showDialog(text) {
+        this.dialog = new Dialog(this, text);
+        this.game.addEntity(this.dialog);
+    }
+
+    hideDialog() {
+        this.dialog.removeFromWorld = true;
+        this.dialog = undefined;
+    }
+
     update() {
-        if (this.map) {
-            this.game.ctx.restore();
-            this.game.ctx.save();
-            this.game.ctx.translate(100, 100);
-        }
-
-
         // interactable tile
         if (this.game.keys['z']) {
-            const facedTile = this.player.facingTile();
-            const presentTiles = this.getTile(facedTile.x, facedTile.y);
-            for (let i = 0; i < presentTiles.length; i++) {
-                presentTiles[i].interact?.();
+            if (this.dialog) {
+                this.hideDialog();
+            } else {
+                const facedTile = this.player.facingTile();
+                const presentTiles = this.getTile(facedTile.x, facedTile.y);
+                for (let i = 0; i < presentTiles.length; i++) {
+                    presentTiles[i].interact?.();
+                }
             }
             this.game.keys['z'] = false;
         }
