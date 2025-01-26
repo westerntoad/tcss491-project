@@ -6,8 +6,12 @@ const PARAMS = {};
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
 ASSET_MANAGER.queueDownload("./assets/houseTiles.png");
+ASSET_MANAGER.queueDownload("./assets/portalPoint.png");
+ASSET_MANAGER.queueDownload("./assets/grandmas/Bernice_Campbell.png");
+ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
 ASSET_MANAGER.queueDownload("./maps/dev.json");
 ASSET_MANAGER.queueDownload("./maps/dev2.json");
+ASSET_MANAGER.queueDownload("./maps/house.json");
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");

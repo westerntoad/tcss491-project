@@ -183,7 +183,10 @@ class GameEngine {
             // Draw latest things first
             // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
             this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        } 
+        } else {
+            // hmmm
+            this.ctx.clearRect(0, 0, PARAMS.canvasWidth, PARAMS.canvasHeight);
+        }
         // Draw latest things first
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);

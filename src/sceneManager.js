@@ -32,7 +32,7 @@ class SceneManager {
         this.savedMap = null; // save map state
 
 
-        this.load(ASSET_MANAGER.getAsset("./maps/dev.json"));
+        this.load(ASSET_MANAGER.getAsset("./maps/house.json"));
         this.map.type = "Cave";
     }
 
@@ -60,10 +60,13 @@ class SceneManager {
         }
 
         /* ~DEBUG~ */
-        const interactable = new Tile(this, false, 6, 2, 2, './assets/brick.png');
-        interactable.interact = () => alert('hi');
+        const interactable = new Tile(this, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png');
+        interactable.interact = () => alert("y'like my cats?");
         this.map.tiles.push(interactable);
         this.game.addEntity(interactable);
+        const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png');
+        this.map.tiles.push(portalPoint);
+        this.game.addEntity(portalPoint);
         /* ~DEBUG~ */
 
         this.player = new Player(this.game, this, map.player.x, map.player.y);
@@ -72,22 +75,26 @@ class SceneManager {
     }
 
     getTile(x, y) {
+        let tiles = [];
         for (let i = 0; i < this.map.tiles.length; i++) {
             const tile = this.map.tiles[i];
             if (tile.x == x && tile.y == y) {
-                return tile;
+                tiles.push(tile);
             }
         }
-        return null;
+
+        return tiles;
     }
 
     isTraversable(x, y) {
-        const tile = this.getTile(x, y);
-        if (tile) {
-            return tile.isTraversable;
-        } else {
-            return x >= 0 && x < this.map.width && y >= 0 && y < this.map.height;
+        const tiles = this.getTile(x, y);
+        for (let i = 0; i < tiles.length; i++) {
+            if (!tiles[i].isTraversable) {
+                return false;
+            }
         }
+
+        return x >= 0 && x < this.map.width && y >= 0 && y < this.map.height;
     }
 
     update() {
@@ -101,9 +108,9 @@ class SceneManager {
         // interactable tile
         if (this.game.keys['z']) {
             const facedTile = this.player.facingTile();
-            const presentTile = this.getTile(facedTile.x, facedTile.y);
-            if (presentTile && presentTile.interact) {
-                presentTile.interact();
+            const presentTiles = this.getTile(facedTile.x, facedTile.y);
+            for (let i = 0; i < presentTiles.length; i++) {
+                presentTiles[i].interact?.();
             }
             this.game.keys['z'] = false;
         }
