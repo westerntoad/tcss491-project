@@ -54,6 +54,9 @@ class Player {
                 this.dy = 0;
                 this.isMoving = false;
 
+                const tilesMovedOn = this.scene.getTile(this.x, this.y);
+                tilesMovedOn.forEach((tile) => tile.stepOn?.());
+
                 //Check for random dungeon battles
                 /*if (this.scene.isDungeon()) { 
                     if (Math.random() <= this.encounterRate) {

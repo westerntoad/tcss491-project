@@ -47,6 +47,9 @@ class SceneManager {
     }
 
     load(map) {
+        // clear old map
+        this.map?.tiles?.forEach(tile => tile.removeFromWorld = true);
+
         this.map = {};
         this.map.tiles = [];
         this.map.width = map.width;
@@ -67,13 +70,19 @@ class SceneManager {
         this.map.tiles.push(interactable);
         this.game.addEntity(interactable);
         const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png');
+        portalPoint.stepOn = () => this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
         this.map.tiles.push(portalPoint);
         this.game.addEntity(portalPoint);
         /* ~DEBUG~ */
 
-        this.player = new Player(this.game, this, map.player.x, map.player.y);
-        this.game.addEntity(this.player);
-        this.game.addEntity(this);
+        if (!this.player) {
+            this.player = new Player(this.game, this, map.player.x, map.player.y);
+            this.game.addEntity(this.player);
+            this.game.addEntity(this);
+        } else {
+            this.player.x = map.player.x;
+            this.player.y = map.player.y;
+        }
     }
 
     getTile(x, y) {
