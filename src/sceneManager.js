@@ -59,20 +59,35 @@ class SceneManager {
             this.game.addEntity(entity);
         }
 
+        /* ~DEBUG~ */
+        const interactable = new Tile(this, false, 6, 2, 2, './assets/brick.png');
+        interactable.interact = () => alert('hi');
+        this.map.tiles.push(interactable);
+        this.game.addEntity(interactable);
+        /* ~DEBUG~ */
+
         this.player = new Player(this.game, this, map.player.x, map.player.y);
         this.game.addEntity(this.player);
         this.game.addEntity(this);
     }
 
-    isTraversable(x, y) {
+    getTile(x, y) {
         for (let i = 0; i < this.map.tiles.length; i++) {
             const tile = this.map.tiles[i];
             if (tile.x == x && tile.y == y) {
-                return tile.isTraversable;
+                return tile;
             }
         }
+        return null;
+    }
 
-        return x >= 0 && x < this.map.width && y >= 0 && y < this.map.height;
+    isTraversable(x, y) {
+        const tile = this.getTile(x, y);
+        if (tile) {
+            return tile.isTraversable;
+        } else {
+            return x >= 0 && x < this.map.width && y >= 0 && y < this.map.height;
+        }
     }
 
     update() {
@@ -80,6 +95,17 @@ class SceneManager {
             this.game.ctx.restore();
             this.game.ctx.save();
             this.game.ctx.translate(100, 100);
+        }
+
+
+        // interactable tile
+        if (this.game.keys['z']) {
+            const facedTile = this.player.facingTile();
+            const presentTile = this.getTile(facedTile.x, facedTile.y);
+            if (presentTile && presentTile.interact) {
+                presentTile.interact();
+            }
+            this.game.keys['z'] = false;
         }
     }
 
