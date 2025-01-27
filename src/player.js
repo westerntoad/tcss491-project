@@ -40,7 +40,7 @@ class Player {
                 this.isMoving = false;
 
                 //Check for random dungeon battles
-                if (this.scene.isDungeon()) { 
+                if (this.scene.isDungeon()) {
                     if (Math.random() <= this.encounterRate) {
                         console.log("A wild enemy appears!");
                         this.scene.battleScene(false); // true if boss type

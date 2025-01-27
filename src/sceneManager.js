@@ -1,9 +1,9 @@
 
 const DUNGEON_ENCOUNTERS = {
     "Cave": [
-        { name: "Sad Bones", hp: 30, attack: 5 },
-        { name: "BooHoo", hp: 50, attack: 10 },
-        { name: "Mad@chu", hp: 25, attack: 3 }
+        { name: "Sad Bones", hp: 30, attack: 5, exp: 5 },
+        { name: "BooHoo", hp: 50, attack: 10, exp: 10 },
+        { name: "Mad@chu", hp: 25, attack: 3, exp: 4 }
     ],
     "Ruins": [
         { name: "Skeleton", hp: 60, attack: 12 },
@@ -114,19 +114,40 @@ class SceneManager {
         this.savedState = this.game.entities;
         this.savedMap = this.map;
         
-        const enemies = DUNGEON_ENCOUNTERS[this.map.type];
+        const enemies = [];
+        for(let i = 0; i < 2; i ++) {
+            enemies.push(
+                {
+                    name: "Vera Mulberry",
+                    asset: "./assets/grandmas/Vera_Mulberry.png",
+                    maxHp: 20,
+                    hp: 20,
+                    attack: 10,
+                    defense: 5,
+                    speed: 1,
+                    exp: 5,
+                    attackRate: 0.7,
+                    defendRate: 0.3,
+                    specialRate: 0
+                }
+            );
+        }
+
+        
         const players = this.game.grannies;
 
         console.log('Enemies:', enemies);
         console.log('Players:', players);
 
         this.game.entities = []; // Clear current entities
+        this.game.ctx.translate(-100, -100);
         this.game.addEntity(new BattleScene(this.game, this, players, enemies));
     }
     restoreScene() {
+        this.game.ctx.translate(100, 100);
         console.log("Restoring Overworld State");
-        this.game.entities = savedState;
-        this.map = savedMap;
+        this.game.entities = this.savedState;
+        this.map = this.savedMap;
         console.log("Restored Overworld");
     }
 }
