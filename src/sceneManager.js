@@ -1,9 +1,55 @@
 
 const DUNGEON_ENCOUNTERS = {
     "Cave": [
-        { name: "Sad Bones", hp: 30, attack: 5, exp: 5 },
-        { name: "BooHoo", hp: 50, attack: 10, exp: 10 },
-        { name: "Mad@chu", hp: 25, attack: 3, exp: 4 }
+        /**{
+                    name: "Vera Mulberry",
+                    asset: "./assets/grandmas/Vera_Mulberry.png",
+                    maxHp: 20,
+                    hp: 20,
+                    attack: 10,
+                    defense: 5,
+                    speed: 1,
+                    exp: 5,
+                    attackRate: 0.7,
+                    defendRate: 0.3,
+                    specialRate: 0
+                } */
+        { name: "L0neb0ne",
+            maxHp: 50,
+            hp: 50,
+            attack: 10,
+            defense: 5,
+            speed: 1,
+            exp: 3,
+            attackRate: 0.5,
+            defendRate: 0.5,
+            specialRate: 0,
+            asset: "./assets/enemies/L0neb0ne.png"
+         },
+        { name: "D3pr3ss0",
+            maxHp: 25,
+            hp: 25,
+            attack: 25,
+            defense: 10,
+            speed: 2,
+            exp: 4,
+            attackRate: 0.9,
+            defendRate: 0.1,
+            specialRate: 0,
+            asset: "./assets/enemies/D3pr3ss0.png"
+         },
+        { name: "Mad@Chu",
+            maxHp: 30,
+            hp: 30,
+            attack: 15,
+            defense: 2,
+            speed: 2,
+            exp: 2,
+            attackRate: 0.75,
+            defendRate: 0.25,
+            specialRate: 0,
+            asset: "./assets/enemies/Mad@Chu.png"
+         }
     ],
     "Ruins": [
         { name: "Skeleton", hp: 60, attack: 12 },
@@ -109,28 +155,30 @@ class SceneManager {
             ctx.restore();*/
         }
     }
+    getRandomEncounter(dungeonType) {
+        const enemies = DUNGEON_ENCOUNTERS[dungeonType]; // Get the array of enemies
+    
+        if (!enemies) {
+            console.error("Invalid dungeon type!");
+            return null;
+        }
+    
+        const randomIndex = Math.floor(Math.random() * enemies.length); // Roll for a random enemy
+        return enemies[randomIndex]; // Return the selected enemy
+    }
     battleScene(isBoss) {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
         
         const enemies = [];
-        for(let i = 0; i < 2; i ++) {
+        const random = Math.floor(Math.random() * 2);
+        let i = random;
+        while(i >= 0) {
             enemies.push(
-                {
-                    name: "Vera Mulberry",
-                    asset: "./assets/grandmas/Vera_Mulberry.png",
-                    maxHp: 20,
-                    hp: 20,
-                    attack: 10,
-                    defense: 5,
-                    speed: 1,
-                    exp: 5,
-                    attackRate: 0.7,
-                    defendRate: 0.3,
-                    specialRate: 0
-                }
+                Object.assign({}, this.getRandomEncounter("Cave"))
             );
+            i--;
         }
 
         

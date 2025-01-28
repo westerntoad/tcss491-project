@@ -15,21 +15,31 @@ ASSET_MANAGER.queueDownload("./assets/grandmas/Pearl_Martinez.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Bernice_Campbell.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Ye-soon_Kim.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/Jerry_Mulberry_64.png");
+
+// Enemies
+ASSET_MANAGER.queueDownload("./assets/enemies/Mad@Chu.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/D3pr3ss0.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/L0neb0ne.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
 
 ASSET_MANAGER.queueDownload("./assets/battleScene/grannyhp.png");
 
+ASSET_MANAGER.queueDownload("./assets/battleScene/enemyHealth.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/playerReady.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/targetPointer.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/attackTransparent.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/defendTransparent.png");
+ASSET_MANAGER.queueDownload("./assets/battleScene/specialTransparent.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/button.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/attack.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/special.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
+
 
 gameEngine.grannies = [
     {
@@ -41,11 +51,12 @@ gameEngine.grannies = [
         attack: 10,
         defense: 5,
         special: {
+            name: "Tea Time",
             detail: "heal", // shows when hovering special move
             // target: self, ally, allies (all), enemy, enemies # 
-            target: "self",
-            turn(){
-                
+            target: "ally",
+            use : () => {
+
             }
         },
         speed: 1

@@ -23,6 +23,7 @@ class BattleScene {
         this.toDraw = 0;
         this.buttonPressed = false;
         this.eventListener = [];
+        this.dialogue = null;
 
 
         // instantiate new fields for players for battleScene
@@ -41,7 +42,7 @@ class BattleScene {
             player.isDefending = 0;
             player.drawAsset = ASSET_MANAGER.getAsset(player.asset);
             player.frames = player.drawAsset.width / inputSprite;
-            player.currentFrame = false;
+            player.currentFrame = 0;
              player.ally = true; // instantiate new field
              player.actions = 0; // instantiate new field
              player.hovered = true; // instantiate new field
@@ -49,6 +50,7 @@ class BattleScene {
         this.enemies.forEach((enemy, index) => {
             enemy.currentFrame = 0;
             enemy.drawAsset = ASSET_MANAGER.getAsset(enemy.asset);
+            console.log(enemy.asset);
             enemy.frames = enemy.drawAsset.width / inputSprite;
             enemy.isDefending = false;
             enemy.index = index;
@@ -69,10 +71,12 @@ class BattleScene {
         this.targetPointer = ASSET_MANAGER.getAsset("./assets/battleScene/targetPointer.png"); // TARGET POINTER
         this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
         this.grannyHp = ASSET_MANAGER.getAsset("./assets/battleScene/grannyhp.png"); // Load hp bar for player
+        this.enemyHp = ASSET_MANAGER.getAsset("./assets/battleScene/enemyHealth.png"); // Load hp bar for enemy
         this.button = ASSET_MANAGER.getAsset("./assets/battleScene/endButton.png"); // Load button for actions
 
         this.attackTransparent = ASSET_MANAGER.getAsset("./assets/battleScene/attackTransparent.png");
         this.defendTransparent = ASSET_MANAGER.getAsset("./assets/battleScene/defendTransparent.png");
+        this.specialTransparent = ASSET_MANAGER.getAsset("./assets/battleScene/specialTransparent.png");
         this.attackButton = ASSET_MANAGER.getAsset("./assets/battleScene/attack.png"); // Load attack button
         this.defendButton = ASSET_MANAGER.getAsset("./assets/battleScene/defend.png"); // Load defend button
         this.specialButton = ASSET_MANAGER.getAsset("./assets/battleScene/special.png"); // Load special button
@@ -81,35 +85,13 @@ class BattleScene {
 
         
     }
+    update() {return;} // not utilized.
     removeStackingFrames(x, y, width, height){ // just redraw background around the selected image
         if (this.background) {
             this.game.ctx.drawImage(this.background, x, y, width, height, x, y, width, height);
         } else {
             console.log("removeStackingFrames not executed due to no background available");
         }
-    }
-
-    update() {
-        // wait for all player actions, then generate enemy actions
-        // const actions = {};
-        // for(){
-        //     actions[player] =
-        // }
-
-        if(this.actions == 1) {
-            // for each player, get the action
-            // for each enemy, get the action
-        }
-
-        else if(this.actions == 2) {
-            // for each player, do the action
-            // for each enemy, do the action
-        }
-
-        // if (this.enemies.every(enemy => enemy.hp <= 0)) {
-        //     console.log("Battle Over! Returning to Overworld...");
-        //     this.sceneManager.restoreScene(); // Return to map
-        // }
     }
     redraw(ctx) {
         // Draw background
@@ -132,7 +114,7 @@ class BattleScene {
             // ctx.fillRect(startX, startY,
             //     spriteSize, spriteSize); // Placeholder player sprite
 
-            ctx.drawImage(player.drawAsset, inputSprite, 0, inputSprite, inputSprite, 
+            ctx.drawImage(player.drawAsset, 0, 0, inputSprite, inputSprite, 
                 startX, startY, spriteSize, spriteSize);
             // placeholder GUI cover
             // ctx.fillRect(0, this.game.height - guiHeight, this.game.width, guiHeight)
@@ -167,23 +149,43 @@ class BattleScene {
                 enemy.startY = (playableSpace * index / enemiesCount) + padding;
             }
 
-                ctx.drawImage(enemy.drawAsset, inputSprite, 0, inputSprite, inputSprite, 
+                ctx.drawImage(enemy.drawAsset, 0, 0, inputSprite, inputSprite, 
                     enemy.startX, enemy.startY, spriteSize, spriteSize)
 
             ctx.fillStyle = "white";
             ctx.fillText(enemy.name, 450, 220 + index * 50);
 
-            //draw the enemy's health bar
-            const currHpBar = enemy.hp / enemy.maxHp;
-
-            ctx.fillStyle = "black";
-            ctx.fillRect(enemy.startX + this.game.width/8, enemy.startY, 
-                (spriteSize / 2), spriteSize /4)
-
-                ctx.fillStyle = "red";
-            ctx.fillRect(enemy.startX + this.game.width/8, enemy.startY, 
-                currHpBar * (spriteSize / 2), spriteSize /4);
+            this.updateEnemyHp(enemy, ctx);
+                
         });
+    }
+    updateEnemyHp(enemy, ctx){
+        //draw the enemy's health bar
+             //enemy.hp / enemy.maxHp
+        const currHpBar = enemy.hp/enemy.maxHp;
+    
+             //draw the black heart
+             ctx.drawImage(this.enemyHp, inputSprite + 1, 5,
+                 30, 26, 
+                 enemy.startX + this.game.width/8, enemy.startY,
+                 spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
+             );
+
+             const pHeight = 5 + currHpBar * 26;
+             //draw the purple heart
+             // x: 1, y: 5, width: 30, height: 26
+            //  ctx.drawImage(this.enemyHp, 1, 5,
+            //      30, 26, 
+            //      enemy.startX + this.game.width/8, enemy.startY,
+            //      spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
+            //  );
+             ctx.drawImage(this.enemyHp, 1, pHeight,
+                    30, Math.floor((1 - currHpBar) * 26),
+                    enemy.startX + this.game.width/8, 
+                    enemy.startY + currHpBar* spriteSize * (26/30) * (3/5), // startY
+                    spriteSize * (3/5) , //width
+                    Math.floor((1 - currHpBar)* spriteSize * (26/30) * (3/5)) //height
+                );
     }
     awaiting() {
         const currentTime = Date.now();
@@ -210,7 +212,7 @@ class BattleScene {
                 this.enemies = this.enemies.filter(enemy => enemy.index !== target.index);
                 console.log("Remaining Enemies:", this.enemies);
                 this.removeStackingFrames(target.startX + this.game.width/8, target.startY, 
-                    (spriteSize / 2), spriteSize /4);
+                    spriteSize * (3/5) , spriteSize * (26/30) * (3/5));
 
                 this.turn = this.turn.filter(turn => turn.caster.index !== target.index);
             }
@@ -232,17 +234,7 @@ class BattleScene {
                 ctx.fillRect(hpBarX + target.startX - this.game.width/8, hpBarY + target.startY, currentHp * 19 * upscale, 4 * upscale);
                 ctx.drawImage(this.grannyHp, 3, 10, 27, 10, target.startX - this.game.width/8, target.startY, 27 * upscale, 10 * upscale);
             } else {
-                    //draw the enemy's health bar
-                const currHpBar = target.hp / target.maxHp;
-    
-                ctx.fillStyle = "black";
-                ctx.fillRect(target.startX + this.game.width/8, target.startY, 
-                    (spriteSize / 2), spriteSize /4)
-    
-                    ctx.fillStyle = "red";
-                ctx.fillRect(target.startX + this.game.width/8, target.startY, 
-                    currHpBar * (spriteSize / 2), spriteSize /4);
-    
+                this.updateEnemyHp(target, ctx);
             }
         }
     }
@@ -305,7 +297,7 @@ class BattleScene {
                     player.startY - pointerSize, pointerSize, pointerSize);
             });
 
-            const handleMouseMove = (e, targetter, actions) => {
+            const handleMouseMove = (e, targetType) => {
                 console.log("handleMouseMove active: ", this.id);
                 const rect = ctx.canvas.getBoundingClientRect();
                 const mouseX = e.clientX - rect.left;
@@ -313,7 +305,7 @@ class BattleScene {
 
                 const pointerSize = 2/5 * spriteSize;
 
-                if(targetter.granny){
+                if(targetType == 1){
                     this.enemies.forEach((enemy) => {
                         if (mouseX >= enemy.startX && 
                             mouseX <= enemy.startX + spriteSize && 
@@ -330,12 +322,27 @@ class BattleScene {
                             );
                         }
                     });
-                } else {
-                    
+                } else if(targetType == 2) {
+                    this.players.forEach((player) => {
+                        if (mouseX >= player.startX && 
+                            mouseX <= player.startX + spriteSize && 
+                            mouseY >= player.startY && 
+                            mouseY <= player.startY + spriteSize) {
+                                
+                            ctx.drawImage(this.targetPointer,
+                                    0, 0, 7, 7, player.startX - pointerSize, player.startY - pointerSize,
+                                    pointerSize, pointerSize);
+                        } else {
+
+                            this.removeStackingFrames(player.startX - pointerSize, player.startY - pointerSize,
+                                pointerSize, pointerSize
+                            );
+                        }
+                    });
                 }
             };
             /** Add target type: 1 = enemy, 2 = ally */
-            const handleTargetClick = (e, targetter) => { 
+            const handleTargetClick = (e, targetter, targetType) => { 
                 console.log("handleTargetClick active: ", this.id);
                 if (!this.awaitingTarget) return; // Prevent incorrect targeting
             
@@ -343,21 +350,34 @@ class BattleScene {
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
             
-                let clickedEnemy = null; // Store the enemy being clicked
+                let clickedTarget = null; // Store the enemy being clicked
                 
             
-                this.enemies.forEach((enemy) => {
-                    if (x >= enemy.startX && 
-                        x <= enemy.startX + spriteSize && 
-                        y >= enemy.startY && 
-                        y <= enemy.startY + spriteSize) {
-                        clickedEnemy = enemy;
-                    }
-                });
+                if(targetType == 1) {
+                    this.enemies.forEach((enemy) => {
+                        if (x >= enemy.startX && 
+                            x <= enemy.startX + spriteSize && 
+                            y >= enemy.startY && 
+                            y <= enemy.startY + spriteSize) {
+                            clickedTarget = enemy;
+                        }
+                    });
+                } else if(targetType == 2) {
+                    this.players.forEach((player) => {
+                        if (x >= player.startX && 
+                            x <= player.startX + spriteSize && 
+                            y >= player.startY && 
+                            y <= player.startY + spriteSize) {
+                            clickedTarget = player;
+                        }
+                    });
+                } else {
+                    console.error("Invalid target type");
+                }
             
-                if (clickedEnemy) {
-                    console.log("Player", targetter.name, "chose to attack", clickedEnemy.name);
-                    targetter.createdTurn.target = clickedEnemy;
+                if (clickedTarget) {
+                    console.log("Player", targetter.name, "chose to target", clickedTarget.name);
+                    targetter.createdTurn.target = clickedTarget;
             
                     targetter.hovered = false; // Reset hovered state
                     this.awaitingTarget = false; // Reset target selection state
@@ -411,10 +431,11 @@ class BattleScene {
                             player.queueActions = 1; // Attack
                             
                             console.log("Waiting for target selection...");
+                            
                             this.awaitingTarget = true; // Set flag to indicate target selection is needed
 
                             // Bind the function with the specific player so we know who is attacking
-                            const boundHandleTargetClick = (event) => handleTargetClick(event, player);
+                            const boundHandleTargetClick = (event) => handleTargetClick(event, player, 1);
 
                             // Add event listener for selecting a target
                             ctx.canvas.addEventListener("click", boundHandleTargetClick);
@@ -426,7 +447,7 @@ class BattleScene {
                             };
 
 
-                            const mouseMoveForAttack = (event) => handleMouseMove(event, player, player.queueActions);
+                            const mouseMoveForAttack = (event) => handleMouseMove(event, 1);
                             ctx.canvas.addEventListener("mousemove", mouseMoveForAttack);
 
                             this.removeMouseListener = () => {
@@ -440,7 +461,66 @@ class BattleScene {
                         } else if (x >= startX + spriteSize * optionSize * 2 
                             && x <= startX + spriteSize * optionSize * 3 
                             && y >= startY && y <= startY + spriteSize * optionSize) {
-                            player.actions = 3; // Special
+                            player.queueActions = 3; // Special
+                            switch(player.special.target) {
+                                case "self":
+                                    player.createdTurn.target = player;
+                                    break;
+                                case "ally":
+                                    this.awaitingTarget = true; // Set flag to indicate target selection is needed
+
+                                    // Bind the function with the specific player so we know who is attacking
+                                    const boundedHandleTargetClick = (event) => handleTargetClick(event, player, 2);
+
+                                    // Add event listener for selecting a target
+                                    ctx.canvas.addEventListener("click", boundedHandleTargetClick);
+
+                                    // Remove event listener once the target is chosen
+                                    this.removeTargetListener = () => {
+                                        ctx.canvas.removeEventListener("click", boundedHandleTargetClick);
+                                        this.awaitingTarget = false; // Reset target selection state
+                                    };
+
+
+                                    const mouseMoveForHeal = (event) => handleMouseMove(event, 2);
+                                    ctx.canvas.addEventListener("mousemove", mouseMoveForHeal);
+
+                                    this.removeMouseListener = () => {
+                                        ctx.canvas.removeEventListener("mousemove", mouseMoveForHeal);
+                                    }
+                                    break;
+                                case "allies":
+                                    player.createdTurn.target = this.players;
+                                    break;
+                                case "enemy":
+                                    this.awaitingTarget = true; // Set flag to indicate target selection is needed
+
+                                    // Bind the function with the specific player so we know who is attacking
+                                    const boundHandleTargetClick = (event) => handleTargetClick(event, player, 1);
+
+                                    // Add event listener for selecting a target
+                                    ctx.canvas.addEventListener("click", boundHandleTargetClick);
+
+                                    // Remove event listener once the target is chosen
+                                    this.removeTargetListener = () => {
+                                        ctx.canvas.removeEventListener("click", boundHandleTargetClick);
+                                        this.awaitingTarget = false; // Reset target selection state
+                                    };
+
+
+                                    const mouseMoveForAttack = (event) => handleMouseMove(event, 1);
+                                    ctx.canvas.addEventListener("mousemove", mouseMoveForAttack);
+
+                                    this.removeMouseListener = () => {
+                                        ctx.canvas.removeEventListener("mousemove", mouseMoveForAttack);
+                                    }
+                                    break;
+                                case "enemies":
+                                    player.createdTurn.target = this.enemies;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
 
                         if(x >= startX && x <= startX + spriteSize * optionSize * 3 && 
@@ -466,7 +546,7 @@ class BattleScene {
             this.eventListener.push(this.handlePointerClick);
             
             // this.button (26, 10)
-            if(this.players.filter(player => player.actions == 0).length <= 0) {
+            if(this.players.filter(player => player.actions == 0).length <= 0 && !this.awaitingTarget) {
 
                 const buttonX = this.players[this.players.length - 1].startX + 100;
                 const buttonY = this.players[this.players.length - 1].startY + 100;
@@ -496,6 +576,7 @@ class BattleScene {
 
                                 this.redraw(ctx);
                                 this.buttonPressed = true;
+                                return;
                             }
                         }
                     };
@@ -528,6 +609,25 @@ class BattleScene {
                     currChar.startY, spriteSize, spriteSize);
             }
             if(this.turn[0].ticker % 4 == 0 && !this.turn[0].complete) { // janky way of limiting drawFrames
+                if(this.dialogue == null) {
+                    this.dialogue = this.turn[0].actionDetail;
+
+                    ctx.font = "25px serif";
+
+                    let textWidth = ctx.measureText(this.dialogue).width;
+                    this.textHeight = 25; //25px for font above
+                    const startY = this.game.height - spriteSize / (4/3);
+
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(this.game.width / 4 + spriteSize, 
+                        startY, 
+                        textWidth, this.textHeight);
+
+                    ctx.fillStyle = "white";
+                    const textY = this.game.height - spriteSize / (4/3) + this.textHeight / 2;
+                    ctx.fillText(this.dialogue, this.game.width / 4 + spriteSize, 
+                        startY + this.textHeight / (4/3));
+                }
                 if(this.turn[0].movedX > 0){
                     updateChar();
 
@@ -537,14 +637,6 @@ class BattleScene {
                 else if(this.turn[0].movedX == 0){ //execute moves
                     if(Math.round(this.turn[0].moveX) == 100) {
                         updateChar();
-                        ctx.font = "18px serif";
-                        ctx.fillStyle = "white";
-                    
-
-                        ctx.fillText(this.turn[0].actionDetail, 
-                        currChar.startX + (currChar.granny ? this.turn[0].moveX : -this.turn[0].moveX)
-                        + spriteSize *(3/4),
-                        currChar.startY - spriteSize / 2);
 
                         ctx.save();
                             ctx.globalAlpha = 0.75; // 50% transparency
@@ -592,22 +684,17 @@ class BattleScene {
                     } else if(currChar.actions == 3){
 
                     }
-                    currChar.actions = 0;
 
+                    currChar.actions = 0;
                     this.trackFrames = this.trackFrames ? this.trackFrames + 1 : 1;
-                    if(this.trackFrames >= 12) {
+                    if(this.trackFrames >= 8) {
                         if(Math.round(this.turn[0].moveX) == 100) this.updateHp(this.turn[0].target, 
                             this.turn[0].caster, ctx);
                         if(this.turn[0].moveX > 0){
 
                             updateChar();
-                            const text = this.turn[0].actionDetail;
-                            let textWidth = ctx.measureText(text).width;
-
-                            this.removeStackingFrames(currChar.startX + (currChar.granny ? this.turn[0].moveX : -this.turn[0].moveX)
-                            + spriteSize *(3/4), currChar.startY - spriteSize / 2 - 19, textWidth, 19*1.2)
-
                             this.turn[0].moveX -= spriteSize / 12;
+
                         }
                         else{
                             updateChar();
@@ -615,6 +702,46 @@ class BattleScene {
                             this.turn[0].complete = true;
                         }
                     }
+
+                    // ticker for scrollingPane: 24?
+                    // scrolling pane too disctracting.
+                    // if(this.turn[0].actionDetail != null) {
+                    //     this.scrollingPane.string = this.turn[0].actionDetail;
+                    //     this.turn[0].actionDetail = null;
+                    //     this.scrollingPane.ticker = 24;
+                    //     this.scrollingPane.update = () => {
+                    //         this.scrollingPane.ticker =
+                    //             (this.scrollingPane.ticker == 0 ? 0 :
+                    //                 this.scrollingPane.ticker - 1
+                    //             );
+                    //     }
+                    //     this.scrollingPane.draw = () => {
+                    //         ctx.font = "18px serif";
+
+                    //         let textWidth = ctx.measureText(this.scrollingPane.string).width;
+                    //         let textHeight = 18; //18px for font above
+                    //         const startY = this.game.height - spriteSize / (4/3);
+
+                    //         ctx.fillStyle = "black";
+                    //         ctx.fillRect(this.game.width / 4 + spriteSize, 
+                    //             startY, 
+                    //             textWidth, textHeight);
+
+                    //         ctx.fillStyle = "white";
+                    //         const textY = this.game.height - spriteSize / (4/3) + textHeight / 2;
+                    //         ctx.fillText(this.scrollingPane.string, this.game.width / 4 + spriteSize +
+                    //             textWidth - 2 * textWidth * (24-this.scrollingPane.ticker) /24, 
+                    //             startY + textHeight / (4/3));
+
+                    //             this.removeStackingFrames(this.game.width / 4 + spriteSize + textWidth, 
+                    //                 startY, this.game.width, textHeight);
+                    //             this.removeStackingFrames(0, startY, 
+                    //                 this.game.width / 4 + spriteSize, textHeight);
+                    //     }
+                        
+                    // }
+                    // this.scrollingPane.update();
+                    // this.scrollingPane.draw();
                 } else{ // maybe work with negative movedX to move it back
                 }
             } else if(this.turn[0].movedX <= 0){
@@ -632,6 +759,9 @@ class BattleScene {
                     this.endGame();
                     return;
                 }
+                this.removeStackingFrames(0, this.game.height - spriteSize / (4/3),
+                    this.game.width, this.textHeight);
+                this.dialogue = null;
                 this.turn.shift();
                 
                
@@ -762,9 +892,14 @@ class BattleScene {
             if(randomNum <= enemy.attackRate) {
                 enemy.actions = 1;
                 enemy.createdTurn.target = this.players[this.getRandomInt(this.players.length)];
+                enemy.createdTurn.actionDetail = 
+                    enemy.name + " attacks " + enemy.createdTurn.target.name +
+                    " for " +  enemy.attack + " damage!";
             } else if(randomNum <= enemy.attackRate + enemy.defendRate){
                 enemy.actions = 2;
                 enemy.createdTurn.target = enemy;
+                enemy.createdTurn.actionDetail = 
+                    enemy.name + " chose to defend with " + enemy.defense + " shield!";
             } else {
                 enemy.actions = 3;
             }
@@ -778,6 +913,7 @@ class BattleScene {
         });
         this.actions++;
         console.log(this.turn);
+        return;
     }
     getRandomInt(max) {
         return Math.floor(Math.random() * max);
