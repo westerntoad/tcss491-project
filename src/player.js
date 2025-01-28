@@ -58,12 +58,12 @@ class Player {
                 tilesMovedOn.forEach((tile) => tile.stepOn?.());
 
                 //Check for random dungeon battles
-                /*if (this.scene.isDungeon()) { 
+                if (this.scene.isDungeon) {
                     if (Math.random() <= this.encounterRate) {
                         console.log("A wild enemy appears!");
                         this.scene.battleScene(false); // true if boss type
                     }
-                }*/
+                }
             }
         } else if (!this.disableMovement) {
             if (this.game.keys['ArrowRight']) {

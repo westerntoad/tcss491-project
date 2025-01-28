@@ -1,9 +1,55 @@
 
 const DUNGEON_ENCOUNTERS = {
     "Cave": [
-        { name: "Sad Bones", hp: 30, attack: 5 },
-        { name: "BooHoo", hp: 50, attack: 10 },
-        { name: "Mad@chu", hp: 25, attack: 3 }
+        /**{
+                    name: "Vera Mulberry",
+                    asset: "./assets/grandmas/Vera_Mulberry.png",
+                    maxHp: 20,
+                    hp: 20,
+                    attack: 10,
+                    defense: 5,
+                    speed: 1,
+                    exp: 5,
+                    attackRate: 0.7,
+                    defendRate: 0.3,
+                    specialRate: 0
+                } */
+        { name: "L0neb0ne",
+            maxHp: 50,
+            hp: 50,
+            attack: 10,
+            defense: 5,
+            speed: 1,
+            exp: 3,
+            attackRate: 0.5,
+            defendRate: 0.5,
+            specialRate: 0,
+            asset: "./assets/enemies/L0neb0ne.png"
+         },
+        { name: "D3pr3ss0",
+            maxHp: 25,
+            hp: 25,
+            attack: 25,
+            defense: 10,
+            speed: 2,
+            exp: 4,
+            attackRate: 0.9,
+            defendRate: 0.1,
+            specialRate: 0,
+            asset: "./assets/enemies/D3pr3ss0.png"
+         },
+        { name: "Mad@Chu",
+            maxHp: 30,
+            hp: 30,
+            attack: 15,
+            defense: 2,
+            speed: 2,
+            exp: 2,
+            attackRate: 0.75,
+            defendRate: 0.25,
+            specialRate: 0,
+            asset: "./assets/enemies/Mad@Chu.png"
+         }
     ],
     "Ruins": [
         { name: "Skeleton", hp: 60, attack: 12 },
@@ -28,6 +74,7 @@ class SceneManager {
         this.cellWidth = pxHeight;
         this.cellHeight = Math.ceil(game.ctx.height / this.cellSize);
         this.backgroundColor = '#ffffff';
+        this.isDungeon = false;
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
@@ -38,14 +85,15 @@ class SceneManager {
     }
 
 
-    isDungeon(){
-        console.log("Checking if dungeon. Current map type:", this.map?.type);
+    /*isDungeon() {
+        /*console.log("Checking if dungeon. Current map type:", this.map?.type);
         console.log(this.map.type == "Cave");
         return (this.map.type === "Cave" ||
             this.map.type === "Ruins" ||
             this.map.type === "Volcano"
-        )
-    }
+        )*/
+        /*return this.isDungeon;
+    }*/
 
     load(map) {
         // clear old map
@@ -71,7 +119,11 @@ class SceneManager {
         this.map.tiles.push(interactable);
         this.game.addEntity(interactable);
         const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png');
-        portalPoint.stepOn = () => this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
+        portalPoint.stepOn = () => {
+            this.isDungeon = true;
+            this.player.encounterRate = 0.1;
+            this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
+        };
         this.map.tiles.push(portalPoint);
         this.game.addEntity(portalPoint);
         /* ~DEBUG~ */
@@ -163,12 +215,32 @@ class SceneManager {
             ctx.restore();*/
         }
     }
+    getRandomEncounter(dungeonType) {
+        const enemies = DUNGEON_ENCOUNTERS[dungeonType]; // Get the array of enemies
+    
+        if (!enemies) {
+            console.error("Invalid dungeon type!");
+            return null;
+        }
+    
+        const randomIndex = Math.floor(Math.random() * enemies.length); // Roll for a random enemy
+        return enemies[randomIndex]; // Return the selected enemy
+    }
     battleScene(isBoss) {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
         
-        const enemies = DUNGEON_ENCOUNTERS[this.map.type];
+        const enemies = [];
+        const random = Math.floor(Math.random() * 2);
+        let i = 0;
+        while(i >= 0) {
+            enemies.push(
+                Object.assign({}, this.getRandomEncounter("Cave"))
+            );
+            i--;
+        }
+
         const players = this.game.grannies;
 
         console.log('Enemies:', enemies);
@@ -179,8 +251,8 @@ class SceneManager {
     }
     restoreScene() {
         console.log("Restoring Overworld State");
-        this.game.entities = savedState;
-        this.map = savedMap;
+        this.game.entities = this.savedState;
+        this.map = this.savedMap;
         console.log("Restored Overworld");
     }
 }
