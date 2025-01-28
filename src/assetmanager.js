@@ -56,6 +56,32 @@ class AssetManager {
                             if (this.isDone()) callback();
                         });
                     break;
+                case 'wav':
+                case 'mp3':
+                case 'mp4':
+                    const aud = new Audio();
+                    aud.addEventListener("loadeddata", () => {
+                        console.log("Loaded " + this.src);
+                        this.successCount++;
+                        if (this.isDone()) callback();
+                    });
+
+                    aud.addEventListener("error", () => {
+                        console.log("Error loading " + this.src);
+                        this.errorCount++;
+                        if (this.isDone()) callback();
+                    });
+
+                    aud.addEventListener("ended", () => {
+                        aud.pause();
+                        aud.currentTime = 0;
+                    });
+
+                    aud.src = path;
+                    aud.load();
+
+                    this.cache[path] = aud;
+                    break;
             }
         }
     }

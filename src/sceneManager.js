@@ -248,6 +248,7 @@ class SceneManager {
 
         this.game.entities = []; // Clear current entities
         this.game.addEntity(new BattleScene(this.game, this, players, enemies));
+        ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
         console.log("Restoring Overworld State");
