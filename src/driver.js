@@ -5,6 +5,7 @@ const PARAMS = {};
 
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/brick.png");
+ASSET_MANAGER.queueDownload("./assets/the-hardest-asset-ever.png");
 ASSET_MANAGER.queueDownload("./assets/houseTiles.png");
 ASSET_MANAGER.queueDownload("./assets/portalPoint.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Bernice_Campbell.png");

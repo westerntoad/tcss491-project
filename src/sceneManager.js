@@ -27,6 +27,7 @@ class SceneManager {
         this.pxHeight = pxHeight;
         this.cellWidth = pxHeight;
         this.cellHeight = Math.ceil(game.ctx.height / this.cellSize);
+        this.backgroundColor = '#ffffff';
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
