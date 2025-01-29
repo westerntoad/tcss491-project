@@ -1,6 +1,11 @@
 class Tile {
-    constructor(scene, isTraversable, x, y, z, asset) {
+    constructor(scene, isTraversable, x, y, z, asset, sx, sy, sw, sh) {
         Object.assign(this, { scene, isTraversable, x, y, z });
+        this.sx = sx || 0;
+        this.sy = sy || 0;
+        this.sw = sw || 32;
+        this.sh = sh || 32;
+        console.log(sx, sy, sw, sh);
 
         if (asset) {
             this.img = ASSET_MANAGER.getAsset(asset);
@@ -14,7 +19,7 @@ class Tile {
         const y = (this.y - this.scene.player.y - this.scene.player.dy) * this.scene.cellSize + (PARAMS.canvasHeight - this.scene.cellSize) / 2;
 
         if (this.img) {
-            ctx.drawImage(this.img, x, y, this.scene.cellSize, this.scene.cellSize);
+            ctx.drawImage(this.img, this.sx, this.sy, this.sw, this.sh, x, y, this.scene.cellSize, this.scene.cellSize);
         }
     }
 }

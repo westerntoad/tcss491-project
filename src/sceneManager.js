@@ -106,26 +106,44 @@ class SceneManager {
 
         for (let i = 0; i < map.tiles.length; i++) {
             const tile = map.tiles[i];
-            const entity = new Tile(this, tile.traversable, tile.x, tile.y, tile.z, tile.asset);
+            let sw = 32;
+            let sh = 32;
+            console.log(tile.asset);
+            if (tile.asset == './assets/houseTiles.png') {
+                sw = 16;
+                sh = 16;
+            }
+            const entity = new Tile(this, tile.traversable, tile.x, tile.y, tile.z, tile.asset, 0, 0, sw, sh);
 
             this.map.tiles.push(entity);
             this.game.addEntity(entity);
         }
 
         /* ~DEBUG~ */
-        const interactable = new Tile(this, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png');
-        //interactable.interact = () => alert("y'like my cats?");
-        interactable.interact = () => this.showDialog("y'like my cats?");
-        this.map.tiles.push(interactable);
-        this.game.addEntity(interactable);
-        const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png');
-        portalPoint.stepOn = () => {
-            this.isDungeon = true;
-            this.player.encounterRate = 0.1;
-            this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
-        };
-        this.map.tiles.push(portalPoint);
-        this.game.addEntity(portalPoint);
+        if (map.height == 7) {
+            const interactable = new Tile(this, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png');
+            interactable.interact = () => this.showDialog("y'like my cats?");
+            this.map.tiles.push(interactable);
+            this.game.addEntity(interactable);
+            const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png', 0, 0, 16, 16);
+            this.map.tiles.push(portalPoint);
+            this.game.addEntity(portalPoint);
+            portalPoint.stepOn = () => {
+                this.isDungeon = true;
+                this.player.encounterRate = 0.1;
+                this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
+                //const tile = new Tile(this, 0, 0, -5, "./assets/singlegrass.png");
+                //this.map.tiles.push(tile);
+                //this.game.addEntity(tile);
+                for (let i = 0; i < 20 * 20; i++) {
+                    const x = i % 20;
+                    const y = Math.floor(i / 20);
+                    const tile = new Tile(this, true, x, y, -5, "./assets/singlegrass.png");
+                    this.map.tiles.push(tile);
+                    this.game.addEntity(tile);
+                }
+            };
+        }
         /* ~DEBUG~ */
 
         if (!this.player) {
