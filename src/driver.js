@@ -31,6 +31,7 @@ ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
 
+ASSET_MANAGER.queueDownload("./assets/battleScene/allyHp.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/grannyhp.png");
 
 ASSET_MANAGER.queueDownload("./assets/battleScene/enemyHealth.png");
@@ -66,50 +67,50 @@ gameEngine.grannies = [
         },
         speed: 1
     }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Bernice Campbell",
-    //     asset: "./assets/grandmas/Bernice_Campbell.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Pearl Martinez",
-    //     asset: "./assets/grandmas/Pearl_Martinez.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Vera Mulberry",
-    //     asset: "./assets/grandmas/Vera_Mulberry.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Ye-soon Kim",
-    //     asset: "./assets/grandmas/Ye-soon_Kim.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
+    , 
+    {
+        granny: "true",
+        name: "Bernice Campbell",
+        asset: "./assets/grandmas/Bernice_Campbell.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
+    , 
+    {
+        granny: "true",
+        name: "Pearl Martinez",
+        asset: "./assets/grandmas/Pearl_Martinez.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
+    , 
+    {
+        granny: "true",
+        name: "Vera Mulberry",
+        asset: "./assets/grandmas/Vera_Mulberry.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
+    , 
+    {
+        granny: "true",
+        name: "Ye-soon Kim",
+        asset: "./assets/grandmas/Ye-soon_Kim.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
 ];
 ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager will jump straight into combat
     const canvas = document.getElementById("gameWorld");
