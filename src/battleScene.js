@@ -12,6 +12,11 @@ const optionSize = 3/4;
 const padding = spriteSize * (3/4);
 class BattleScene {
     constructor(game, sceneManager, players, enemies) {
+        this.prevTextAlign = game.ctx.textAlign;
+        this.prevTextBaseline = game.ctx.textBaseline;
+        game.ctx.textAlign = "start";
+        game.ctx.textBaseline = "alphabetic";
+
         this.id = Math.random();
         console.log("ID for BattleScene: ", this.id);
         this.turn = [];
@@ -987,6 +992,8 @@ class BattleScene {
         this.game.ctx.fillStyle = "white"; 
         this.game.ctx.fillRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
         this.sceneManager.restoreScene();
+        this.game.ctx.textAlign = this.prevTextAlign;
+        this.game.ctx.textBaseline = this.prevTextBaseline;
     }
     // Quadratic easing function (ease-in-out for bouncy effect)
     /** From ChatGPT */
