@@ -894,7 +894,7 @@ class BattleScene {
         this.players.forEach(player => {
             // PLACEHOLDER FOR ACTION TEXT, EACH CHARACTER SHOULD CREATE THEIR OWN ACTION TEXT 
             if(player.actions == 1){
-                player.createdTurn.actionDetail = player.name + " heals " + player.createdTurn.target.name + " heart" +
+                player.createdTurn.actionDetail = player.name + " heals " + player.createdTurn.target.name + "'s heart" +
                     " for " +  player.attack + " points!";
                 // console.log(player.name, " | target: ", player.createdTurn.target.name)
                 // console.log(player.name, " attacks ", player.createdTurn.target.name, " for "
