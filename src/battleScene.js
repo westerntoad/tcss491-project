@@ -71,6 +71,7 @@ class BattleScene {
         this.targetPointer = ASSET_MANAGER.getAsset("./assets/battleScene/targetPointer.png"); // TARGET POINTER
         this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
         this.grannyHp = ASSET_MANAGER.getAsset("./assets/battleScene/grannyhp.png"); // Load hp bar for player
+        this.allyHp = ASSET_MANAGER.getAsset("./assets/battleScene/allyHp.png");
         this.enemyHp = ASSET_MANAGER.getAsset("./assets/battleScene/enemyHealth.png"); // Load hp bar for enemy
         this.button = ASSET_MANAGER.getAsset("./assets/battleScene/endButton.png"); // Load button for actions
 
@@ -121,23 +122,24 @@ class BattleScene {
 
             //draw the player's health bar
             const upscale = 3; // UPSCALE used only for hp bar and player name!!
-            const hpBarX = 5 * upscale;
-            const hpBarY = 1 * upscale;
-            const currentHp = player.hp/ player.maxHp;
-
+            const currentHp = 0.75;
+                //player.hp/ player.maxHp
             // new field in player for startX and startY
             player.startX = startX;
             player.startY = startY;
 
-            ctx.font = "18px serif";
-            ctx.fillStyle = "white";
-            ctx.fillText(player.name, 10 + startX - this.game.width/8, hpBarY + startY -2);
-
-            ctx.fillStyle = "black";
-            ctx.fillRect(hpBarX + startX - this.game.width/8, hpBarY + startY, 19 * upscale, 4 * upscale);
-            ctx.fillStyle = "red";
-            ctx.fillRect(hpBarX + startX - this.game.width/8, hpBarY + startY, currentHp * 19 * upscale, 4 * upscale);
-            ctx.drawImage(this.grannyHp, 3, 10, 27, 10, startX - this.game.width/8, startY, 27 * upscale, 10 * upscale);
+            ctx.drawImage(this.allyHp, inputSprite + 1, 5,
+                30, 26, 
+                player.startX - spriteSize * (3/5), player.startY,
+                spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
+            );
+                //draw the red heart
+            ctx.drawImage(this.allyHp, 1, 5,
+                30, 26 * currentHp,
+                player.startX - spriteSize * (3/5), player.startY,
+                spriteSize * (3/5) , Math.floor((1 - currentHp) * spriteSize * (26/30) * (3/5))
+            );
+            console.log("reached out");
         });
 
 
@@ -152,8 +154,10 @@ class BattleScene {
                 ctx.drawImage(enemy.drawAsset, 0, 0, inputSprite, inputSprite, 
                     enemy.startX, enemy.startY, spriteSize, spriteSize)
 
+            ctx.font = "25px serif";
             ctx.fillStyle = "white";
-            ctx.fillText(enemy.name, 450, 220 + index * 50);
+            // const nameLength = ctx.measureText(enemy.name).width;
+            ctx.fillText(enemy.name, enemy.startX + spriteSize * (5/4), enemy.startY - spriteSize / 4);
 
             this.updateEnemyHp(enemy, ctx);
                 
@@ -223,16 +227,18 @@ class BattleScene {
         } else {
             if(target.granny) {
                 //draw the player's health bar
-                const upscale = 3; // UPSCALE used only for hp bar and player name!!
-                const hpBarX = 5 * upscale;
-                const hpBarY = 1 * upscale;
-                const currentHp = target.hp/ target.maxHp;
-    
-                ctx.fillStyle = "black";
-                ctx.fillRect(hpBarX + target.startX - this.game.width/8, hpBarY + target.startY, 19 * upscale, 4 * upscale);
-                ctx.fillStyle = "red";
-                ctx.fillRect(hpBarX + target.startX - this.game.width/8, hpBarY + target.startY, currentHp * 19 * upscale, 4 * upscale);
-                ctx.drawImage(this.grannyHp, 3, 10, 27, 10, target.startX - this.game.width/8, target.startY, 27 * upscale, 10 * upscale);
+                    //draw the black heart
+                ctx.drawImage(this.allyHp, inputSprite + 1, 5,
+                    30, 26, 
+                    target.startX - this.game.width/8 - spriteSize * (3/5), target.startY,
+                    spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
+                );
+                    //draw the red heart
+                ctx.drawImage(this.allyHp, 1, 5,
+                    30, 26, 
+                    target.startX - this.game.width/8 - spriteSize * (3/5), target.startY,
+                    spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
+                );
             } else {
                 this.updateEnemyHp(target, ctx);
             }

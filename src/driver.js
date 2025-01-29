@@ -32,6 +32,7 @@ ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
 
 ASSET_MANAGER.queueDownload("./assets/battleScene/grannyhp.png");
 
+ASSET_MANAGER.queueDownload("./assets/battleScene/allyHp.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/enemyHealth.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/playerReady.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/targetPointer.png");
