@@ -232,8 +232,8 @@ class SceneManager {
         this.savedMap = this.map;
         
         const enemies = [];
-        const random = Math.floor(Math.random() * 2);
-        let i = 0;
+        const random = Math.floor(Math.random() * 2) + 2;
+        let i = random;
         while(i >= 0) {
             enemies.push(
                 Object.assign({}, this.getRandomEncounter("Cave"))

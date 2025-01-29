@@ -66,50 +66,50 @@ gameEngine.grannies = [
         },
         speed: 1
     }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Bernice Campbell",
-    //     asset: "./assets/grandmas/Bernice_Campbell.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Pearl Martinez",
-    //     asset: "./assets/grandmas/Pearl_Martinez.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Vera Mulberry",
-    //     asset: "./assets/grandmas/Vera_Mulberry.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
-    // , 
-    // {
-    //     granny: "true",
-    //     name: "Ye-soon Kim",
-    //     asset: "./assets/grandmas/Ye-soon_Kim.png",
-    //     maxHp: 100,
-    //     hp: 100,
-    //     attack: 10,
-    //     defense: 5,
-    //     speed: 1
-    // }
+    , 
+    {
+        granny: "true",
+        name: "Bernice Campbell",
+        asset: "./assets/grandmas/Bernice_Campbell.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
+    , 
+    {
+        granny: "true",
+        name: "Pearl Martinez",
+        asset: "./assets/grandmas/Pearl_Martinez.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
+    , 
+    {
+        granny: "true",
+        name: "Vera Mulberry",
+        asset: "./assets/grandmas/Vera_Mulberry.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
+    , 
+    {
+        granny: "true",
+        name: "Ye-soon Kim",
+        asset: "./assets/grandmas/Ye-soon_Kim.png",
+        maxHp: 100,
+        hp: 100,
+        attack: 10,
+        defense: 5,
+        speed: 1
+    }
 ];
 ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager will jump straight into combat
     const canvas = document.getElementById("gameWorld");

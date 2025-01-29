@@ -1,5 +1,3 @@
-const guiHeight = 0;
-const padding = 100;
 let playerCount = null;
 let enemiesCount = null;
 let playableSpace = null;
@@ -11,6 +9,7 @@ const clickCooldown = 500; // 0.5 seconds (500ms)
 // size of incomingSprite
 const inputSprite = 32;
 const optionSize = 3/4;
+const padding = spriteSize * (3/4);
 class BattleScene {
     constructor(game, sceneManager, players, enemies) {
         this.id = Math.random();
@@ -24,6 +23,7 @@ class BattleScene {
         this.buttonPressed = false;
         this.eventListener = [];
         this.dialogue = null;
+        this.game.ctx.font = "22px serif";
 
 
         // instantiate new fields for players for battleScene
@@ -60,7 +60,8 @@ class BattleScene {
 
         playerCount = this.players.length;
         enemiesCount = this.enemies.length;
-        playableSpace = this.game.height - padding * 2 - guiHeight;
+        playableSpace = this.game.height - padding * 2;
+        console.log(this.game.height);
 
         // 0 = setting up battle scene
         // 1 = awaiting action input
@@ -110,7 +111,7 @@ class BattleScene {
             // (playableSpace * i / (playerCount * 2)) + padding 
 
             const startX = this.game.width / 4;
-            const startY = (playableSpace * index / playerCount) + padding;
+            const startY = padding - (spriteSize / 2) + (index + 1) * playableSpace / (playerCount + 1);
 
             // ctx.fillRect(startX, startY,
             //     spriteSize, spriteSize); // Placeholder player sprite
@@ -122,7 +123,7 @@ class BattleScene {
 
             //draw the player's health bar
             const upscale = 3; // UPSCALE used only for hp bar and player name!!
-            const currentHp = 0.75;
+            const currentHp = player.hp / player.maxHp;
                 //player.hp/ player.maxHp
             // new field in player for startX and startY
             player.startX = startX;
@@ -130,16 +131,20 @@ class BattleScene {
 
             ctx.drawImage(this.allyHp, inputSprite + 1, 5,
                 30, 26, 
-                player.startX - spriteSize * (3/5), player.startY,
+                player.startX + spriteSize * (3/5) - this.game.width / 8, player.startY,
                 spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
             );
                 //draw the red heart
-            ctx.drawImage(this.allyHp, 1, 5,
+            ctx.drawImage(this.allyHp, 1, 5 + ((1 - currentHp) * 26),
                 30, 26 * currentHp,
-                player.startX - spriteSize * (3/5), player.startY,
-                spriteSize * (3/5) , Math.floor((1 - currentHp) * spriteSize * (26/30) * (3/5))
+                player.startX + spriteSize * (3/5) - this.game.width / 8, player.startY + Math.floor((1 - currentHp) * spriteSize * (26/30) * (3/5)),
+                spriteSize * (3/5) , Math.floor((currentHp) * spriteSize * (26/30) * (3/5))
             );
-            console.log("reached out");
+
+            ctx.fillStyle = "white";
+            const nameLength = ctx.measureText(player.name).width;
+            ctx.fillText(player.name, player.startX + spriteSize * (6/5)  - this.game.width / 8 - nameLength, 
+                player.startY - spriteSize / 6);
         });
 
 
@@ -148,17 +153,16 @@ class BattleScene {
             ctx.fillStyle = "red";
             if(!(enemy.startX && enemy.startY)) {
                 enemy.startX = this.game.width * 3/4;
-                enemy.startY = (playableSpace * index / enemiesCount) + padding;
+                enemy.startY = padding - (spriteSize / 2) + (index + 1) * playableSpace / (enemiesCount + 1);
             }
 
-                ctx.drawImage(enemy.drawAsset, 0, 0, inputSprite, inputSprite, 
-                    enemy.startX, enemy.startY, spriteSize, spriteSize)
-
-            ctx.font = "25px serif";
+            ctx.drawImage(enemy.drawAsset, 0, 0, inputSprite, inputSprite, 
+                enemy.startX, enemy.startY, spriteSize, spriteSize)
+    
             ctx.fillStyle = "white";
+            
             // const nameLength = ctx.measureText(enemy.name).width;
-            ctx.fillText(enemy.name, enemy.startX + spriteSize * (5/4), enemy.startY - spriteSize / 4);
-
+            ctx.fillText(enemy.name, enemy.startX + spriteSize * (13/10), enemy.startY - spriteSize / 6)
             this.updateEnemyHp(enemy, ctx);
                 
         });
@@ -215,29 +219,45 @@ class BattleScene {
     
                 this.enemies = this.enemies.filter(enemy => enemy.index !== target.index);
                 console.log("Remaining Enemies:", this.enemies);
-                this.removeStackingFrames(target.startX + this.game.width/8, target.startY, 
+                this.removeStackingFrames(target.startX + this.game.width/8, target.startY, // remove enemy
                     spriteSize * (3/5) , spriteSize * (26/30) * (3/5));
+                    
+                //remove name
+                let textWidth = ctx.measureText(target.name).width;
+                this.removeStackingFrames(target.startX + spriteSize * (13/10), 
+                    target.startY - spriteSize / 6 - 22, textWidth, 22);
+                this.turn = this.turn.filter(turn => turn.caster.index !== target.index); // remove dead enemies turn
 
-                this.turn = this.turn.filter(turn => turn.caster.index !== target.index);
+                if(this.enemies.length > 0){ // just for players targetting dead enemies
+                    this.turn.forEach((turns) => {
+                        if(turns.target.index == target.index){
+                            turns.target = this.enemies[0];
+                            this.updateDialogue(turns.caster, this.enemies[0], turns.actions, turns);
+                        }
+                    });
+                    // this.updateDialogue(this.turn[0].caster, this.turn[0].target, 
+                    //     this.turn[0].actions, this.turn[0]);
+                } else this.endGame;
             }
-                    this.removeStackingFrames(target.startX,
-                        this.turn[0].target.startY, spriteSize, spriteSize);
+            this.removeStackingFrames(target.startX,
+                target.startY, spriteSize, spriteSize);
                         
             
         } else {
             if(target.granny) {
                 //draw the player's health bar
-                    //draw the black heart
+                const player = target;
+                const currentHp = player.hp / player.maxHp;
                 ctx.drawImage(this.allyHp, inputSprite + 1, 5,
                     30, 26, 
-                    target.startX - this.game.width/8 - spriteSize * (3/5), target.startY,
+                    player.startX + spriteSize * (3/5) - this.game.width / 8, player.startY,
                     spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
                 );
                     //draw the red heart
-                ctx.drawImage(this.allyHp, 1, 5,
-                    30, 26, 
-                    target.startX - this.game.width/8 - spriteSize * (3/5), target.startY,
-                    spriteSize * (3/5) , spriteSize * (26/30) * (3/5)
+                    ctx.drawImage(this.allyHp, 1, 5 + ((1 - currentHp) * 26),
+                    30, 26 * currentHp,
+                    player.startX + spriteSize * (3/5) - this.game.width / 8, player.startY + Math.floor((1 - currentHp) * spriteSize * (26/30) * (3/5)),
+                    spriteSize * (3/5) , Math.floor((currentHp) * spriteSize * (26/30) * (3/5))
                 );
             } else {
                 this.updateEnemyHp(target, ctx);
@@ -618,10 +638,9 @@ class BattleScene {
                 if(this.dialogue == null) {
                     this.dialogue = this.turn[0].actionDetail;
 
-                    ctx.font = "25px serif";
 
                     let textWidth = ctx.measureText(this.dialogue).width;
-                    this.textHeight = 25; //25px for font above
+                    this.textHeight = 22; //22px for font above
                     const startY = this.game.height - spriteSize / (4/3);
 
                     ctx.fillStyle = "black";
@@ -677,7 +696,9 @@ class BattleScene {
                         // }
                     if(currChar.actions == 1) {
                         if(this.turn[0].target.hp <= 0) {
-                            if(this.enemies.length > 0) this.turn[0].target = this.enemies[0];
+                            if(this.enemies.length > 0) {
+                                this.turn[0].target = this.enemies[0];
+                            }
                             else return;
                         }
                         this.turn[0].target.hp -= this.turn[0].target.isDefending > 0 ? 
@@ -795,8 +816,20 @@ class BattleScene {
 
         //Draw the GUI elements
     }
-    
-    
+
+    // this.updateDialogue(this.turn[0].caster, this.turn[0].target, this.turn[0].actions);
+    updateDialogue(caster, target, actions, turn){
+        switch(actions) {
+            case 1: //attack
+                turn.actionDetail =  caster.name + " heals " + target.name + "'s heart" + 
+                " for " +  caster.attack + " points!";
+                break;
+            case 3: // special
+                break;
+            default:
+                break;
+        }
+    }
     createTurn(){
         /**
             Mary Yott: Main character. Likes birdwatching, gardening, and tea.
@@ -861,9 +894,8 @@ class BattleScene {
         this.players.forEach(player => {
             // PLACEHOLDER FOR ACTION TEXT, EACH CHARACTER SHOULD CREATE THEIR OWN ACTION TEXT 
             if(player.actions == 1){
-                player.createdTurn.actionDetail = 
-                    player.name + " attacks " + player.createdTurn.target.name +
-                    " for " +  player.attack + " damage!";
+                player.createdTurn.actionDetail = player.name + " heals " + player.createdTurn.target.name + " heart" +
+                    " for " +  player.attack + " points!";
                 // console.log(player.name, " | target: ", player.createdTurn.target.name)
                 // console.log(player.name, " attacks ", player.createdTurn.target.name, " for "
                 //     , player.attack, " damage");
