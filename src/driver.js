@@ -45,6 +45,9 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/special.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 
+// MUSIC 
+ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
+
 
 gameEngine.grannies = [
     {
