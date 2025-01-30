@@ -31,6 +31,7 @@ ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
 
+ASSET_MANAGER.queueDownload("./assets/battleScene/allyHp.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/grannyhp.png");
 
 ASSET_MANAGER.queueDownload("./assets/battleScene/allyHp.png");

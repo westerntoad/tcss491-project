@@ -130,7 +130,7 @@ class SceneManager {
             this.game.addEntity(portalPoint);
             portalPoint.stepOn = () => {
                 this.isDungeon = true;
-                this.player.encounterRate = 0.1;
+                this.player.encounterRate = 0.5;
                 this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
                 //const tile = new Tile(this, 0, 0, -5, "./assets/singlegrass.png");
                 //this.map.tiles.push(tile);
@@ -250,8 +250,8 @@ class SceneManager {
         this.savedMap = this.map;
         
         const enemies = [];
-        const random = Math.floor(Math.random() * 2) + 2;
-        let i = random;
+        const random = Math.floor(Math.random() * 2);
+        let i = 2;
         while(i >= 0) {
             enemies.push(
                 Object.assign({}, this.getRandomEncounter("Cave"))
