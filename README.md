@@ -8,9 +8,9 @@ The original skeleton for this project was originally forked from this class' ga
 
 ## Contributors
 
-- Luke Chung
+- [Luke Chung](https://github.com/NeonAfro)
 - [Abraham Engebretson](https://abecodes.dev)
-- Kylie Hammett
-- Kaely Willhite
+- [Kylie Hammett](https://github.com/khammett325995)
+- [Kaely Willhite](https://github.com/NatTEA20)
 
 [Play the game!](https://westerntoad.github.io/tcss491-project/)
