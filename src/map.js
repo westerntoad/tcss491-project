@@ -5,10 +5,10 @@ class Map {
 
         this.specialTiles = [];
         
-        this.changeMap(map);
+        this.changeMap(map, 3, 2);
     }
 
-    changeMap(map) {
+    changeMap(map, x, y) {
         // clear old map
         this.tiles?.forEach(tile => tile.removeFromWorld = true);
 
@@ -33,8 +33,8 @@ class Map {
         });
 
         // place player at given x and y
-        this.scene.player.x = map.player.x;
-        this.scene.player.y = map.player.y;
+        this.scene.player.x = x;
+        this.scene.player.y = y;
     }
 
     update() { /* ~ unused */ }
@@ -81,11 +81,11 @@ MAPS.maryHouse = (scene) => {
 
     // Exit
     const portalPoint = new Tile(scene, true, 8, 0, 0, './assets/portalPoint.png');
-    map.specialTiles.push(portalPoint);
     portalPoint.stepOn = () => {
         // change to next map
-        scene.map.changeMap(MAPS.dev(scene));
+        scene.map.changeMap(MAPS.dev(scene), 2, 2);
     };
+    map.specialTiles.push(portalPoint);
 
     return map;
 };
@@ -97,7 +97,11 @@ MAPS.dev = (scene) => {
 
 
     // SPECIAL TILES
-    // ~ none ~
+    const exit = new Tile(scene, true, 0, 0, 10, './assets/portalPoint.png');
+    exit.stepOn = () => {
+        // change to next map
+        scene.map.changeMap(MAPS.maryHouse(scene), 8, 1);
+    };
     
     return map;
 }
