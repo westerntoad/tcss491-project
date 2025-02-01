@@ -66,7 +66,6 @@ const DUNGEON_ENCOUNTERS = {
 class SceneManager {
     constructor(game, pxWidth, pxHeight) {
         this.game = game;
-        this.cellSize = 75;
         this.z = 0;
         this.cellSize = 75; // in px
         this.pxWidth = pxWidth;
@@ -75,85 +74,17 @@ class SceneManager {
         this.cellHeight = Math.ceil(game.ctx.height / this.cellSize);
         this.backgroundColor = '#ffffff';
         this.isDungeon = false;
+        this.player = new Player(this.game, this, 0, 0);
+        this.game.addEntity(this.player);
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
 
+        this.map = new Map(this.game, this, MAPS.maryHouse(this));
+        this.game.addEntity(this.map);
 
-        this.load(ASSET_MANAGER.getAsset("./maps/house.json"));
         this.map.type = "Cave";
-    }
-
-
-    /*isDungeon() {
-        /*console.log("Checking if dungeon. Current map type:", this.map?.type);
-        console.log(this.map.type == "Cave");
-        return (this.map.type === "Cave" ||
-            this.map.type === "Ruins" ||
-            this.map.type === "Volcano"
-        )*/
-        /*return this.isDungeon;
-    }*/
-
-    load(map) {
-        // clear old map
-        this.map?.tiles?.forEach(tile => tile.removeFromWorld = true);
-
-        this.map = {};
-        this.map.tiles = [];
-        this.map.width = map.width;
-        this.map.height = map.height;
-
-        for (let i = 0; i < map.tiles.length; i++) {
-            const tile = map.tiles[i];
-            let sw = 32;
-            let sh = 32;
-            console.log(tile.asset);
-            if (tile.asset == './assets/houseTiles.png') {
-                sw = 16;
-                sh = 16;
-            }
-            const entity = new Tile(this, tile.traversable, tile.x, tile.y, tile.z, tile.asset, 0, 0, sw, sh);
-
-            this.map.tiles.push(entity);
-            this.game.addEntity(entity);
-        }
-
-        /* ~DEBUG~ */
-        if (map.height == 7) {
-            const interactable = new Tile(this, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png');
-            interactable.interact = () => this.showDialog("y'like my cats?");
-            this.map.tiles.push(interactable);
-            this.game.addEntity(interactable);
-            const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png', 0, 0, 16, 16);
-            this.map.tiles.push(portalPoint);
-            this.game.addEntity(portalPoint);
-            portalPoint.stepOn = () => {
-                this.isDungeon = true;
-                this.player.encounterRate = 0.5;
-                this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
-                //const tile = new Tile(this, 0, 0, -5, "./assets/singlegrass.png");
-                //this.map.tiles.push(tile);
-                //this.game.addEntity(tile);
-                for (let i = 0; i < 20 * 20; i++) {
-                    const x = i % 20;
-                    const y = Math.floor(i / 20);
-                    const tile = new Tile(this, true, x, y, -5, "./assets/singlegrass.png");
-                    this.map.tiles.push(tile);
-                    this.game.addEntity(tile);
-                }
-            };
-        }
-        /* ~DEBUG~ */
-
-        if (!this.player) {
-            this.player = new Player(this.game, this, map.player.x, map.player.y);
-            this.game.addEntity(this.player);
-            this.game.addEntity(this);
-        } else {
-            this.player.x = map.player.x;
-            this.player.y = map.player.y;
-        }
+        this.game.addEntity(this);
     }
 
     getTile(x, y) {
@@ -195,10 +126,12 @@ class SceneManager {
         // interactable tile
         if (this.game.keys['z']) {
             if (this.dialog) {
+                console.log('test');
                 this.hideDialog();
             } else {
                 const facedTile = this.player.facingTile();
                 const presentTiles = this.getTile(facedTile.x, facedTile.y);
+                console.log('test');
                 for (let i = 0; i < presentTiles.length; i++) {
                     presentTiles[i].interact?.();
                 }
@@ -207,32 +140,8 @@ class SceneManager {
         }
     }
 
-    draw(ctx) {
-        if (this.map) {
-            for (let i = 0; i < this.map.width * this.map.height; i++) {
-                const x = i % this.map.width;
-                const y = Math.floor(i / this.map.width);
+    draw(ctx) { /* ~ unused */ }
 
-                
-                //ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize, (y - this.player.y - this.player.dy) * this.cellSize, this.cellSize, this.cellSize);
-                ctx.strokeRect((x - this.player.x - this.player.dx) * this.cellSize + (PARAMS.canvasWidth - this.cellSize) / 2, (y - this.player.y - this.player.dy) * this.cellSize + (PARAMS.canvasHeight - this.cellSize) / 2, this.cellSize, this.cellSize);
-
-            }
-
-            /*ctx.save();
-            ctx.fillStyle = 'red';
-            this.map.tiles.forEach((tile) =>{
-                const x = (tile.x - this.player.x - this.player.dx) * this.cellSize + (PARAMS.canvasWidth - this.cellSize) / 2;
-                const y = (tile.y - this.player.y - this.player.dy) * this.cellSize + (PARAMS.canvasHeight - this.cellSize) / 2;
-                if (tile.img) {
-                    ctx.drawImage(tile.img, x, y, this.cellSize, this.cellSize);
-                } else if (!tile.traversable) {
-                    ctx.fillRect(x, y, this.cellSize, this.cellSize);
-                }
-            });
-            ctx.restore();*/
-        }
-    }
     getRandomEncounter(dungeonType) {
         const enemies = DUNGEON_ENCOUNTERS[dungeonType]; // Get the array of enemies
     
