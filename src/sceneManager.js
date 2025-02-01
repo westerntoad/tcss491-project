@@ -1,6 +1,6 @@
 
 const DUNGEON_ENCOUNTERS = {
-    "Cave": [
+    "Grass": [
         /**{
                     name: "Vera Mulberry",
                     asset: "./assets/grandmas/Vera_Mulberry.png",
@@ -79,9 +79,8 @@ class SceneManager {
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
 
-
-        this.load(ASSET_MANAGER.getAsset("./maps/house.json"));
-        this.map.type = "Cave";
+        this.map = {};
+        this.marysMain();
     }
 
 
@@ -94,8 +93,90 @@ class SceneManager {
         )*/
         /*return this.isDungeon;
     }*/
+   lukeLoad(map){ // placeholder, trying to get my map working!
+    this.map?.tiles?.forEach(tile => tile.removeFromWorld = true); // clear old map
 
-    load(map) {
+    this.map = { type: this.map.type};
+    this.map.tiles = [];
+    this.map.width = map.width;
+    this.map.height = map.height;
+    
+    if(this.map.type === "Grass") {
+        let grassTile = [];
+        for(let i = 0; i < 2; i++){
+            for(let j = 0; j < 3; j++){
+                grassTile.push(
+                    {
+                        sy: 32 + i * 16,
+                        sx: 96 + j * 16
+                    });
+            }
+        }
+        for(let i = 0; i < map.height; i++){
+            for(let j = 0; j < map.width; j++){
+                let sw = 16;
+                let sh = 16;
+                // scene, isTraversable, x, y, z, asset, sx, sy, sw, sh
+                const randomGrass = grassTile[Math.floor(Math.random() * 6)];
+                // const entity = new Tile(this, true, j, i, -5, ASSET_MANAGER.getAsset("./assets/tileSheet_main.png"), 
+                //     0, 0, sw, sh);
+                const tile = new Tile(this, true, j, i, -2, "./assets/tileSheet_main.png", 
+                    randomGrass.sx, randomGrass.sy, sw, sh);
+
+                this.map.tiles.push(tile);
+                this.game.addEntity(tile);
+            }
+        }
+    }
+
+    for (let i = 0; i < map.tiles.length; i++) {
+        const tile = map.tiles[i];
+        let sw = 16;
+        let sh = 16;
+        const entity = new Tile(this, tile.traversable, tile.x, tile.y, tile.z, tile.asset, 
+            tile.sx ? tile.sx : 0, tile.sy ? tile.sy : 0, sw, sh);
+
+        this.map.tiles.push(entity);
+        this.game.addEntity(entity);
+        }
+
+        if (!this.player) {
+            this.player = new Player(this.game, this, map.player.x, map.player.y);
+            this.game.addEntity(this.player);
+            this.game.addEntity(this);
+        } else {
+            this.player.x = map.player.x;
+            this.player.y = map.player.y;
+        }
+   }
+   house(){
+    this.map.type = "House";
+    this.lukeLoad(ASSET_MANAGER.getAsset("./maps/house.json"));
+    const portalPoint = new Tile(this, true, 8, 0, 0, './assets/portalPoint.png', 0, 0, 16, 16);
+    this.map.tiles.push(portalPoint);
+    this.game.addEntity(portalPoint);
+
+    portalPoint.stepOn = () => {
+        this.marysMain();
+    };
+   }
+   marysMain(){
+    this.map.type = "Grass";
+    this.lukeLoad(ASSET_MANAGER.getAsset("./maps/marysMap.json"));
+    const tree = {
+        asset: 0,
+        spriteSize: {x: 2, y: 3},
+        nontraversable: [
+            {x: 0, y: 0},
+            {x: 0, y: 1}
+        ],
+        start: {x: 16, y: 0}
+    };
+    // this.isDungeon = true;
+    // this.player.encounterRate = 0.25;
+
+   }
+   load(map) {
         // clear old map
         this.map?.tiles?.forEach(tile => tile.removeFromWorld = true);
 
@@ -129,19 +210,20 @@ class SceneManager {
             this.map.tiles.push(portalPoint);
             this.game.addEntity(portalPoint);
             portalPoint.stepOn = () => {
-                this.isDungeon = true;
-                this.player.encounterRate = 0.5;
-                this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
-                //const tile = new Tile(this, 0, 0, -5, "./assets/singlegrass.png");
-                //this.map.tiles.push(tile);
-                //this.game.addEntity(tile);
-                for (let i = 0; i < 20 * 20; i++) {
-                    const x = i % 20;
-                    const y = Math.floor(i / 20);
-                    const tile = new Tile(this, true, x, y, -5, "./assets/singlegrass.png");
-                    this.map.tiles.push(tile);
-                    this.game.addEntity(tile);
-                }
+                this.marysMain();
+                // this.isDungeon = true;
+                // this.player.encounterRate = 0.0;
+                // this.load(ASSET_MANAGER.getAsset("./maps/dev2.json"));
+                // //const tile = new Tile(this, 0, 0, -5, "./assets/singlegrass.png");
+                // //this.map.tiles.push(tile);
+                // //this.game.addEntity(tile);
+                // for (let i = 0; i < 20 * 20; i++) {
+                //     const x = i % 20;
+                //     const y = Math.floor(i / 20);
+                //     const tile = new Tile(this, true, x, y, -5, "./assets/singlegrass.png");
+                //     this.map.tiles.push(tile);
+                //     this.game.addEntity(tile);
+                // }
             };
         }
         /* ~DEBUG~ */
@@ -254,7 +336,7 @@ class SceneManager {
         let i = 2;
         while(i >= 0) {
             enemies.push(
-                Object.assign({}, this.getRandomEncounter("Cave"))
+                Object.assign({}, this.getRandomEncounter("Grass"))
             );
             i--;
         }

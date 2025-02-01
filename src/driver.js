@@ -11,9 +11,13 @@ ASSET_MANAGER.queueDownload("./assets/houseTiles.png");
 ASSET_MANAGER.queueDownload("./assets/portalPoint.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Bernice_Campbell.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
+
+// Maps
 ASSET_MANAGER.queueDownload("./maps/dev.json");
 ASSET_MANAGER.queueDownload("./maps/dev2.json");
 ASSET_MANAGER.queueDownload("./maps/house.json");
+ASSET_MANAGER.queueDownload("./maps/marysMap.json");
+ASSET_MANAGER.queueDownload("./assets/tileSheet_main.png");
 
 // All Grandmas (32 x 32)
 ASSET_MANAGER.queueDownload("./assets/grandmas/Mary_Yott.png");
@@ -41,7 +45,6 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/targetPointer.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/attackTransparent.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/defendTransparent.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/specialTransparent.png");
-ASSET_MANAGER.queueDownload("./assets/battleScene/button.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/attack.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/special.png");
