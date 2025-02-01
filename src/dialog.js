@@ -1,7 +1,7 @@
 class Dialog {
     constructor(game, scene, text) {
         Object.assign(this, {game, scene, text});
-        this.z = 5;
+        this.z = 10;
         this.textSpeed = 0.2; // characters per second
         this.timeElapsed = 0;
         this.dText = '';
