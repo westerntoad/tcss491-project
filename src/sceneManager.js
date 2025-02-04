@@ -15,6 +15,8 @@ const DUNGEON_ENCOUNTERS = {
                     specialRate: 0
                 } */
         { name: "L0neb0ne",
+            attackRange: 1,
+            granny: false,
             maxHp: 50,
             hp: 50,
             attack: 10,
@@ -27,6 +29,8 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/L0neb0ne.png"
          },
         { name: "D3pr3ss0",
+            attackRange: 1,
+            granny: false,
             maxHp: 25,
             hp: 25,
             attack: 25,
@@ -39,6 +43,8 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/D3pr3ss0.png"
          },
         { name: "Mad@Chu",
+            attackRange: 1,
+            granny: false,
             maxHp: 30,
             hp: 30,
             attack: 15,

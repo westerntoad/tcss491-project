@@ -59,7 +59,8 @@ ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
 
 gameEngine.grannies = [
     {
-        granny: "true",
+        attackRange: 1,
+        granny: true,
         name: "Mary Yott",
         asset: "./assets/grandmas/Mary_Yott.png",
         maxHp: 100,
@@ -79,7 +80,8 @@ gameEngine.grannies = [
     }
     , 
     {
-        granny: "true",
+        attackRange: 1,
+        granny: true,
         name: "Bernice Campbell",
         asset: "./assets/grandmas/Bernice_Campbell.png",
         maxHp: 100,
@@ -90,7 +92,8 @@ gameEngine.grannies = [
     }
     , 
     {
-        granny: "true",
+        attackRange: 1,
+        granny: true,
         name: "Pearl Martinez",
         asset: "./assets/grandmas/Pearl_Martinez.png",
         maxHp: 100,

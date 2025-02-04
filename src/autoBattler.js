@@ -11,6 +11,8 @@ class AutoBattler{
         this.sceneManager = sceneManager;
         this.players = players;
         this.enemies = enemies;
+
+        this.frameRate = 60;
         this.toDraw = 0;
         this.buttonPressed = false;
         this.eventListener = [];
@@ -24,6 +26,7 @@ class AutoBattler{
         this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
         this.spaceWidth = this.isoBlock.width;
         this.spaceHeight = 24; // hard value from image 32x32
+        this.spaceHeightAdjusted = 15;
         this.scale = 3;
         this.nextX = 16; // the nextX for the next block.
         this.nextY = 8; // the nextY for the next block
@@ -109,7 +112,61 @@ class AutoBattler{
         if(this.nextSequence.length > 0) {
             this.game.addEntity(this.nextSequence[0]);
             this.nextSequence.shift();
+        } // image, block, spaceHeightAdjusted, size
+        if(this.countDown == 0) {
+
+
+                this.game.addEntity(new Entity(
+                    Object.assign({}, this.players[0]),
+                    this.allBlocks[6][0].block, 
+                    this.spaceHeightAdjusted, 
+                    this.spaceWidth,
+                    6, 3, 
+                    this.allBlocks, 
+                    this.frameRate));
+                this.game.addEntity(new Entity(
+                    Object.assign({}, this.players[1]),
+                    this.allBlocks[6][0].block, 
+                    this.spaceHeightAdjusted, 
+                    this.spaceWidth,
+                    5, 2, 
+                    this.allBlocks, 
+                    this.frameRate));
+                this.game.addEntity(new Entity(
+                    Object.assign({}, this.players[2]),
+                    this.allBlocks[6][0].block, 
+                    this.spaceHeightAdjusted, 
+                    this.spaceWidth,
+                    4, 4, 
+                    this.allBlocks, 
+                    this.frameRate));
+                    
+                    this.game.addEntity(new Entity(
+                        Object.assign({}, this.enemies[0]),
+                        this.allBlocks[0][1].block, 
+                        this.spaceHeightAdjusted, 
+                        this.spaceWidth,
+                        0, 1, 
+                        this.allBlocks, 
+                        this.frameRate));
+                    this.game.addEntity(new Entity(
+                        Object.assign({}, this.enemies[1]),
+                        this.allBlocks[0][1].block, 
+                        this.spaceHeightAdjusted, 
+                        this.spaceWidth,
+                        0, 2, 
+                        this.allBlocks, 
+                        this.frameRate));
+                    this.game.addEntity(new Entity(
+                        Object.assign({}, this.enemies[2]),
+                        this.allBlocks[0][1].block, 
+                        this.spaceHeightAdjusted, 
+                        this.spaceWidth,
+                        0, 3, 
+                        this.allBlocks, 
+                        this.frameRate));    
         }
+        this.countDown--;
 
     }
     draw(ctx){
@@ -153,16 +210,143 @@ class AutoBattler{
     }
 }
 class Entity {
-    constructor(){
-        Object.assign(this, {});
+    constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate) {
+      Object.assign(this, { entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate });
+      this.z = this.block.z;
+      this.x = this.block.x + this.block.width * this.block.scale / 2;
+      this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
+      this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / size;
+      this.currentFrame = 0;
+      this.block.occupied = this;
+      this.ticker = 0;
+      this.attacking = false;
     }
-    update(){
-
+  
+    update() {
+        if(this.entity.hp <= 0){
+            this.block.occupied = null;
+            this.removeFromWorld = true;
+        }
+      // Every 60 ticks, decide what to do.
+      if (this.ticker % (this.frameRate/2) === 0) {
+        const startX = this.blockX;
+        const startY = this.blockY;
+        const attackRange = this.entity.attackRange;
+        // For a non-granny entity (enemy), targetTeam should be true (i.e. granny entities).
+        const targetTeam = !this.entity.granny;
+        
+        // Initialize BFS.
+        const queue = [];
+        const visited = new Set();
+        queue.push({ x: startX, y: startY, dist: 0, path: [] });
+        visited.add(`${startX},${startY}`);
+        
+        let found = null;
+        
+        // Run BFS.
+        while (queue.length) {
+          const current = queue.shift();
+          // Retrieve the block at (current.x, current.y)
+          const currentBlockData = this.allBlocks[current.y][current.x];
+          const currentBlock = currentBlockData.block;
+          
+          // If the block is occupied by some entity other than ourselves…
+          if (currentBlock.occupied && currentBlock.occupied !== this) {
+            // If that entity is our target (e.g., granny), we have found a candidate.
+            if (currentBlock.occupied.entity.granny === targetTeam) {
+              found = current;
+              break;
+            }
+            // Otherwise, treat this block as an obstacle; skip expanding it.
+            continue;
+          }
+          
+          // Expand neighbors (up, down, left, right).
+          const directions = [
+            { dx: 0, dy: -1 },
+            { dx: 0, dy: 1 },
+            { dx: -1, dy: 0 },
+            { dx: 1, dy: 0 }
+          ];
+          for (const d of directions) {
+            const nx = current.x + d.dx;
+            const ny = current.y + d.dy;
+            if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7) continue;
+            const key = `${nx},${ny}`;
+            if (visited.has(key)) continue;
+            visited.add(key);
+            queue.push({
+              x: nx,
+              y: ny,
+              dist: current.dist + 1,
+              path: current.path.concat({ x: nx, y: ny })
+            });
+          }
+        }
+        
+        // Decision making:
+        if (found) {
+          if (found.dist <= attackRange) {
+            console.log(`Target within range at (${found.x}, ${found.y}). Attack!`);
+            // Insert attack logic here.
+            this.attacking = true;
+            this.allBlocks[found.y][found.x].block.occupied.entity.hp -= this.entity.attack;
+          } else {
+            this.attacking = false;
+            // Move one block along the BFS path.
+            // We choose the first step in the found path.
+            const nextBlockPos = found.path[0];
+            console.log(`Moving from (${startX}, ${startY}) to (${nextBlockPos.x}, ${nextBlockPos.y}).`);
+            
+            // Unoccupy the current block.
+            this.block.occupied = null;
+            
+            // Update grid coordinates.
+            this.blockX = nextBlockPos.x;
+            this.blockY = nextBlockPos.y;
+            this.block = this.allBlocks[this.blockY][this.blockX].block;
+            
+            // Mark the new block as occupied.
+            this.block.occupied = this;
+            
+            // Update pixel coordinates (assuming center of the block).
+            this.x = this.block.x + this.block.width * this.block.scale / 2;
+            this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
+            
+            // Update the entity’s z to match the new block.
+            this.z = this.block.z;
+          }
+        } else {
+            this.attacking = false;
+          console.log("No opposing unit found via BFS.");
+        }
+      }
+      this.ticker++;
     }
-    draw(){
-
+  
+    draw(ctx) {
+        if(this.ticker % (this.frameRate / 4) === 0 && this.attacking){
+            if(this.currentFrame >= this.frames -1) this.currentFrame = 0;
+            else this.currentFrame++;
+        }
+        // draw the hp?
+        
+        ctx.drawImage(
+            ASSET_MANAGER.getAsset(this.entity.asset),
+            this.currentFrame * this.size,
+            0,
+            this.size,
+            this.size,
+            this.x - this.size * this.block.scale / 2,
+            (this.y - this.size * this.block.scale) +
+            (this.block.hovered ? this.block.height * this.block.scale / 4 : 0),
+            this.size * this.block.scale,
+            this.size * this.block.scale
+        );
     }
-}
+  }
+  
+  
 class Projectile{
     constructor(x, y, velocityX, velocityY){
         Object.assign(this, {x, y, velocityX, velocityY});
