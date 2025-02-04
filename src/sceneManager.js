@@ -79,8 +79,10 @@ class SceneManager {
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
 
-        this.map = {};
-        this.marysMain();
+        this.battleScene(false);
+        // this.map = {};
+        // this.marysMain();
+        
     }
 
 
@@ -347,8 +349,8 @@ class SceneManager {
         console.log('Players:', players);
 
         this.game.entities = []; // Clear current entities
-        this.game.addEntity(new BattleScene(this.game, this, players, enemies));
-        ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Chapter 1"));
+        // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
         console.log("Restoring Overworld State");

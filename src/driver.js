@@ -53,6 +53,9 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 // MUSIC 
 ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
 
+// For Auto Battler
+ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
+
 
 gameEngine.grannies = [
     {
