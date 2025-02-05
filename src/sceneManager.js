@@ -81,61 +81,12 @@ class SceneManager {
         this.savedMap = null; // save map state
 
         this.map = new Map(this.game, this, MAPS.marysRoom(this));
+        this.player.dir = 2;
         this.game.addEntity(this.map);
 
         this.game.addEntity(this);
     }
 
-
-    /*lukeLoad() {
-    if(this.map.type === "Grass") {
-        let grassTile = [];
-        for(let i = 0; i < 2; i++){
-            for(let j = 0; j < 3; j++){
-                grassTile.push(
-                    {
-                        sy: 32 + i * 16,
-                        sx: 96 + j * 16
-                    });
-            }
-        }
-        for(let i = 0; i < map.height; i++){
-            for(let j = 0; j < map.width; j++){
-                let sw = 16;
-                let sh = 16;
-                // scene, isTraversable, x, y, z, asset, sx, sy, sw, sh
-                const randomGrass = grassTile[Math.floor(Math.random() * 6)];
-                // const entity = new Tile(this, true, j, i, -5, ASSET_MANAGER.getAsset("./assets/tileSheet_main.png"), 
-                //     0, 0, sw, sh);
-                const tile = new Tile(this, true, j, i, -2, "./assets/tileSheet_main.png", 
-                    randomGrass.sx, randomGrass.sy, sw, sh);
-
-                this.map.tiles.push(tile);
-                this.game.addEntity(tile);
-            }
-        }
-    }
-
-    for (let i = 0; i < map.tiles.length; i++) {
-        const tile = map.tiles[i];
-        let sw = 16;
-        let sh = 16;
-        const entity = new Tile(this, tile.traversable, tile.x, tile.y, tile.z, tile.asset, 
-            tile.sx ? tile.sx : 0, tile.sy ? tile.sy : 0, sw, sh);
-
-        this.map.tiles.push(entity);
-        this.game.addEntity(entity);
-        }
-
-        if (!this.player) {
-            this.player = new Player(this.game, this, map.player.x, map.player.y);
-            this.game.addEntity(this.player);
-            this.game.addEntity(this);
-        } else {
-            this.player.x = map.player.x;
-            this.player.y = map.player.y;
-        }
-    }*/
 
     getTile(x, y) {
         let tiles = [];

@@ -106,7 +106,8 @@ MAPS.marysRoom = (scene) => {
     const portalPoint = new Tile(scene, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        scene.map.changeMap(MAPS.marysMap(scene), 2, 2);
+        scene.map.changeMap(MAPS.marysMap(scene), 6, 6);
+        scene.player.dir = 2;
     };
     map.specialTiles.push(portalPoint);
 
