@@ -91,6 +91,7 @@ class SceneManager {
         this.game.addEntity(this.map);
 
         this.game.addEntity(this);
+        //this.battleScene(false);
     }
 
 
@@ -181,7 +182,7 @@ class SceneManager {
         console.log('Players:', players);
 
         this.game.entities = []; // Clear current entities
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Chapter 1"));
+        this.game.addEntity(new AutoBattler(this.game, this, this.game.grannies, enemies, "Round 1"));
         // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
