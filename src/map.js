@@ -4,6 +4,7 @@ class Map {
         this.z = -5;
 
         this.specialTiles = [];
+        this.mainTileSheet = "./assets/tileSheet_main.png";
         
         this.changeMap(map, 3, 2);
     }
@@ -19,18 +20,40 @@ class Map {
         // load tiles from JSON
         for (let i = 0; i < map.tiles.length; i++) {
             const tile = map.tiles[i];
-            const entity = new Tile(this.scene, tile.traversable, tile.x, tile.y, tile.z, tile.asset);
+            const entity = new Tile(
+                this.scene, tile.traversable,
+                tile.x, tile.y, tile.z,
+                tile.asset, tile.sx, tile.sy
+            );
 
             this.tiles.push(entity);
             this.game.addEntity(entity);
         }
 
-        // load special tiles
+        // load special tiles from function
         this.specialTiles = map.specialTiles;
         this.specialTiles.forEach(tile => {
             this.tiles.push(tile);
             this.game.addEntity(tile);
         });
+
+        // add a grass tile for each tile within the map width and height
+        for (let i = 0; i < map.width * map.height; i++) {
+            const x = i % map.width;
+            const y = Math.floor(i / map.width);
+            const randIdx = Math.floor(Math.random() * 6);
+            const sx = 96 +           (randIdx % 3) * 16;
+            const sy = 32 + Math.floor(randIdx / 3) * 16;
+
+            const entity = new Tile(
+                this.scene, true,
+                x, y, -10,
+                this.mainTileSheet, sx, sy
+            );
+
+            this.tiles.push(entity);
+            this.game.addEntity(entity);
+        }
 
         // place player at given x and y
         this.scene.player.x = x;
@@ -63,7 +86,7 @@ class Map {
  * this method.
  */
 const MAPS = {}
-MAPS.maryHouse = (scene) => {
+MAPS.marysRoom = (scene) => {
     // initialize map from JSON asset
     const map = ASSET_MANAGER.getAsset("./maps/house.json");
     map.specialTiles = [];
@@ -83,12 +106,20 @@ MAPS.maryHouse = (scene) => {
     const portalPoint = new Tile(scene, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        scene.map.changeMap(MAPS.dev(scene), 2, 2);
+        scene.map.changeMap(MAPS.marysMap(scene), 2, 2);
     };
     map.specialTiles.push(portalPoint);
 
     return map;
 };
+
+MAPS.marysMap = (scene) => {
+    const map = ASSET_MANAGER.getAsset("./maps/marysMap.json");
+
+    map.specialTiles = [];
+
+    return map;
+}
 
 MAPS.dev = (scene) => {
     const map = ASSET_MANAGER.getAsset("./maps/dev.json");
@@ -105,3 +136,4 @@ MAPS.dev = (scene) => {
     
     return map;
 }
+

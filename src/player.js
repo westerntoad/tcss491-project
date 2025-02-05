@@ -12,7 +12,7 @@ class Player {
 
         this.realX = () => this.x + Math.min(this.dx, 1);
         this.realY = () => this.y + Math.min(this.dy, 1);
-        this.encounterRate = 1.00; // 100% chance of battle
+        this.encounterRate = 0; // 100% chance of battle
         
     }
 
@@ -64,6 +64,7 @@ class Player {
                         this.scene.battleScene(false); // true if boss type
                     }
                 }
+                console.log("x: " + this.x + " | y: " + this.y);
             }
         } else if (!this.disableMovement) {
             if (this.game.keys['ArrowRight']) {

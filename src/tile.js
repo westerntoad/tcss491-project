@@ -27,3 +27,6 @@ class Tile {
         }
     }
 }
+
+const TILES = {};
+TILES.grass = () => {};
