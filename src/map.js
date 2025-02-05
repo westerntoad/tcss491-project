@@ -119,6 +119,13 @@ MAPS.marysMap = (scene) => {
 
     map.specialTiles = [];
 
+    // temporary special tile to start auto battler
+    const autobattlerTest = new Tile(scene, true, 8, 8, 0, './assets/portalPoint.png');
+    autobattlerTest.stepOn = () => {
+        scene.battleScene(false);
+    };
+    map.specialTiles.push(autobattlerTest);
+
     return map;
 }
 

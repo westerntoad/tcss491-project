@@ -15,6 +15,8 @@ const DUNGEON_ENCOUNTERS = {
                     specialRate: 0
                 } */
         { name: "L0neb0ne",
+            attackRange: 1,
+            granny: false,
             maxHp: 50,
             hp: 50,
             attack: 10,
@@ -27,6 +29,8 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/L0neb0ne.png"
          },
         { name: "D3pr3ss0",
+            attackRange: 1,
+            granny: false,
             maxHp: 25,
             hp: 25,
             attack: 25,
@@ -39,6 +43,8 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/D3pr3ss0.png"
          },
         { name: "Mad@Chu",
+            attackRange: 1,
+            granny: false,
             maxHp: 30,
             hp: 30,
             attack: 15,
@@ -175,8 +181,8 @@ class SceneManager {
         console.log('Players:', players);
 
         this.game.entities = []; // Clear current entities
-        this.game.addEntity(new BattleScene(this.game, this, players, enemies));
-        ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Chapter 1"));
+        // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
         console.log("Restoring Overworld State");
