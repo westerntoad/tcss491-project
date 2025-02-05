@@ -1,3 +1,4 @@
+const ENTITY_SIZE = 24;
 class AutoBattler{
     constructor(game, sceneManager, players, enemies, text) {
         this.prevTextAlign = game.ctx.textAlign;
@@ -69,7 +70,8 @@ class AutoBattler{
                     this.spaceHeight, 
                     this.scale, 
                     position, 
-                    z
+                    z,
+                    j, i
                 );
 
                 // Store block in 2D array
@@ -87,7 +89,7 @@ class AutoBattler{
             let isoX = (i - 8) * this.spaceWidth * this.scale / 2 + 500;
             let isoY = (i + 8) * this.spaceHeight * this.scale / 3 + 200;
 
-            const position = Animate.bounceSpace(0, isoY, 60); 
+            const position = Animate.bounceSpace(1050, isoY, 90); 
             const space = new Block(
                 this.isoBlock, 
                 isoX,  
@@ -106,29 +108,56 @@ class AutoBattler{
             this.nextSequence.push(space);
             z++;
         }
-        // const selectSpotInMap = (event) => {
-        //     let mouseX = event.offsetX;
-        //     let mouseY = event.offsetY;
+        /*
+        const selectEntity = (event) => {
+            let mouseX = event.offsetX;
+            let mouseY = event.offsetY;
 
-        //     let found = false;
-        //     for (let i = 0; i < 7; i++) {
-        //         for (let j = 0; j < 7; j++) {
-        //             let block = this.allBlocks[i][j];
-        //             if (!found && this.isMouseOverTile(mouseX, mouseY, block)) {
-        //                 console.log("x: " + j + " | y: " + i);
-        //                 block.block.hovered = true;
-        //                 found = true;
-        //             } else {
-        //                 block.block.hovered = false;
-        //             }
-        //         }
-        //     }
-        // }
-        // // remove the eventListener when something is selected?
-        // const selectFromBench = (event) =>{
-        //     let mouseX = event.offsetX;
-        //     let mouseY = event.offsetY;
-        // }
+            let found = false
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 7; j++) {
+                    let block = this.allBlocks[i][j];
+                    if (!found && this.isMouseOverTile(mouseX, mouseY, block)) {
+                    } else {
+                        block.block.hovered = false;
+                    }
+                }
+            }
+        }
+        const selectedSpot = (event, type) => {
+            let mouseX = event.offsetX;
+            let mouseY = event.offsetY;
+
+            let clickedBlock = null;
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 9; j++) {
+                    let block = this.allBlocks[i][j];
+                    if(!block) continue;
+                    if (!clickedBlock && this.isMouseOverTile(mouseX, mouseY, block)) {
+                        if(type == 0 && block.block.occupied 
+                            && block.block.occupied.entity.granny){
+                            console.log("SelectedEntity => x: " + j + " | y: " + i);
+                            block.block.hovered = true;
+                            clickedBlock = block;
+                        } else if (type == 1 && !block.block.occupied){
+                            clickedBlock = block;
+                        }
+                    }
+                }
+            }
+            if(clickedBlock) {
+                if(type == 0){
+                    this.selected = [clickedBlock];
+                    this.getSelectedLocation();
+                    this.removeSelected();
+                } else {
+                    this.selected.push(clickedBlock);
+                    this.removeSelectedLocation();
+                }
+            }
+        }
+            */ //UNUSED FOR NOW, WILL HAVE TO SET HOVEREABLE WHEN IN ROUND PREP
+        this.selectedSpot = false;
         this.game.ctx.canvas.addEventListener("mousemove", (event) => {
             let mouseX = event.offsetX;
             let mouseY = event.offsetY;
@@ -155,74 +184,143 @@ class AutoBattler{
         //     this.scale, position, 5)); // x, width, height, scale, position, z
     }
     update(){
+        // const readyButton = (event) => {
+        //     const rect = this.game.ctx.canvas.getBoundingClientRect();
+        //     const mouseX = event.clientX - 
+        // }
+
         // if we move to next round, we can kill everything, place it back into stands
         // two states: set up grandmas, play>
         if(this.nextSequence.length > 0) {
             this.game.addEntity(this.nextSequence[0]);
             this.nextSequence.shift();
         } // image, block, spaceHeightAdjusted, size
-        
+        // drop entities, select entities
         if(!this.ready){
             // start show? crowd 
-            this.setUnits = [];
-            
+            this.setUnits = new Set();
+            for(let i = 0; i < this.players.length && i < 7; i++){
+                console.log("here");
+                // ctx.drawImage(
+                //     ASSET_MANAGER.getAsset(this.entity.asset),
+                //     this.currentFrame * this.size,
+                //     0,
+                //     this.size,
+                //     this.size,
+                //     this.x - this.size * this.block.scale / 2,
+                //     (this.y - this.size * this.block.scale) +
+                //     (this.block.hovered ? this.block.height * this.block.scale / 4 : 0),
+                //     this.size * this.block.scale,
+                //     this.size * this.block.scale
+                // );
+                this.game.addEntity(new Entity(
+                    this.players[i],
+                    this.allBlocks[i][8].block, 
+                    this.spaceHeightAdjusted, 
+                    ENTITY_SIZE,
+                    i, 8, 
+                    this.allBlocks, 
+                    this.frameRate));
+
+            }
+            const checkEntity = (new Entity(
+                Object.assign({}, this.enemies[0]),
+                this.allBlocks[6][0].block, 
+                this.spaceHeightAdjusted, 
+                ENTITY_SIZE,
+                6, 0, 
+                this.allBlocks, 
+                this.frameRate));
+            this.game.addEntity(checkEntity);
+            this.game.addEntity(new Entity(
+                Object.assign({}, this.enemies[1]),
+                this.allBlocks[6][1].block, 
+                this.spaceHeightAdjusted, 
+                ENTITY_SIZE,
+                6, 1, 
+                this.allBlocks, 
+                this.frameRate));
+            this.game.addEntity(new Entity(
+                Object.assign({}, this.enemies[2]),
+                this.allBlocks[6][2].block, 
+                this.spaceHeightAdjusted, 
+                ENTITY_SIZE,
+                6, 2, 
+                this.allBlocks, 
+                this.frameRate)); 
             this.ready = true;
         }
-        if(this.countDown == 0 && this.ready) {
-
-
-                this.game.addEntity(new Entity(
-                    Object.assign({}, this.players[0]),
-                    this.allBlocks[0][0].block, 
-                    this.spaceHeightAdjusted, 
-                    this.spaceWidth,
-                    0, 0, 
-                    this.allBlocks, 
-                    this.frameRate));
-                this.game.addEntity(new Entity(
-                    Object.assign({}, this.players[1]),
-                    this.allBlocks[0][1].block, 
-                    this.spaceHeightAdjusted, 
-                    this.spaceWidth,
-                    0, 1, 
-                    this.allBlocks, 
-                    this.frameRate));
-                this.game.addEntity(new Entity(
-                    Object.assign({}, this.players[2]),
-                    this.allBlocks[0][2].block, 
-                    this.spaceHeightAdjusted, 
-                    this.spaceWidth,
-                    0, 2, 
-                    this.allBlocks, 
-                    this.frameRate));
-                    
-                    const checkEntity = (new Entity(
-                        Object.assign({}, this.enemies[0]),
-                        this.allBlocks[6][0].block, 
-                        this.spaceHeightAdjusted, 
-                        this.spaceWidth,
-                        6, 0, 
-                        this.allBlocks, 
-                        this.frameRate));
-                    this.game.addEntity(checkEntity);
-                    console.log(this.allBlocks[6][0].block.x + " " + this.allBlocks[6][0].block.y);
-                    console.log(checkEntity.block.x + " " + checkEntity.block.y);
-                    this.game.addEntity(new Entity(
-                        Object.assign({}, this.enemies[1]),
-                        this.allBlocks[6][1].block, 
-                        this.spaceHeightAdjusted, 
-                        this.spaceWidth,
-                        6, 1, 
-                        this.allBlocks, 
-                        this.frameRate));
-                    this.game.addEntity(new Entity(
-                        Object.assign({}, this.enemies[2]),
-                        this.allBlocks[6][2].block, 
-                        this.spaceHeightAdjusted, 
-                        this.spaceWidth,
-                        6, 2, 
-                        this.allBlocks, 
-                        this.frameRate));    
+        if(this.ready) {  
+            if(this.selectedSpot) return; 
+            const selectedSpot = (event, type) => {
+                let mouseX = event.offsetX;
+                let mouseY = event.offsetY;
+    
+                let clickedBlock = null;
+                for (let i = 0; i < 7; i++) {
+                    for (let j = 0; j < 9; j++) {
+                        let block = this.allBlocks[i][j];
+                        if(!block) continue;
+                        if (!clickedBlock && this.isMouseOverTile(mouseX, mouseY, block)) {
+                            if(type == 0 && block.block.occupied 
+                                && block.block.occupied.entity.granny){
+                                console.log("SelectedEntity => x: " + j + " | y: " + i);
+                                block.block.selected = true;
+                                clickedBlock = block;
+                            } else if (type == 1 && !block.block.occupied){
+                                clickedBlock = block;
+                            }
+                        }
+                    }
+                }
+                if(clickedBlock) {
+                    if(type == 0){
+                        this.selected = [clickedBlock];
+                        this.getSelectedLocation();
+                        this.removeSelected();
+                    } else {
+                        this.selected.push(clickedBlock);
+                        this.removeSelectedLocation();
+                        this.selectedSpot = false;
+                    }
+                }
+            }
+            // set up all the eventListeners here.
+            const x = (e) => selectedSpot(e, 0);
+            const y = (e) => selectedSpot(e, 1);
+            this.getSelectedLocation = () => {
+                this.game.ctx.canvas.addEventListener("click", y);
+            }
+            this.removeSelected = () => {
+                this.game.ctx.canvas.removeEventListener("click", x);
+            }
+            this.removeSelectedLocation = () => {
+                this.game.ctx.canvas.removeEventListener("click", y);
+                const entity = this.selected[0].block.occupied;
+                entity.blockMove(this.selected[1].block);
+                this.setUnits.add(entity);
+            }
+            this.game.ctx.canvas.addEventListener("click", x);
+            this.selectedSpot = true;
+            
+        } if(this.setUnits.size == this.players.length){
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 9; j++) {
+                    let block = this.allBlocks[i][j];
+                    if(!block) continue;
+                    if(block.block.occupied) {
+                        console.log(block.block.occupied.entity.name
+                            + " => x: " + j + " | y: " + i
+                        );
+                        // start the battle.
+                        // block.block.occupied.ready = true;
+                    }
+                }
+            }
+            console.log(this.allBlocks);
+            // this.setUnits.forEach((unit) => {
+            //     unit.ready = true;
+            // })
         }
         this.countDown--;
 
@@ -278,7 +376,8 @@ class Entity {
       this.block.occupied = this;
       this.ticker = 0;
       this.attacking = false;
-      this.ready = 60;
+      this.ready = false;
+      this.assetSize = ASSET_MANAGER.getAsset(this.entity.asset).height;
     }
   
     update() {
@@ -287,7 +386,7 @@ class Entity {
             this.removeFromWorld = true;
         }
       // Every 60 ticks, decide what to do.
-      if (this.ticker % (this.frameRate/2) === 0 && this.ready <= 0) {
+      if (this.ticker % (this.frameRate/2) === 0 && this.ready) {
         const startX = this.blockX;
         const startY = this.blockY;
         const attackRange = this.entity.attackRange;
@@ -376,8 +475,6 @@ class Entity {
         } else {
             this.attacking = false;
         }
-      } else {
-        this.ready --;
       }
       this.ticker++;
     }
@@ -387,20 +484,74 @@ class Entity {
             if(this.currentFrame >= this.frames -1) this.currentFrame = 0;
             else this.currentFrame++;
         }
+
         // draw the hp?
-        
+        const img = ASSET_MANAGER.getAsset(
+            (this.entity.granny ? "./assets/battleScene/allyHp.png" :
+                "./assets/battleScene/enemyHealth.png"
+            ));
+        // const adjustedX =
+        const hpY = this.size / 4;
+        // draw blackHp first
+        ctx.drawImage( // magic numbers are hard defined just for hp.
+            img,
+            1,
+            5,
+            30,
+            26,
+            this.block.x + this.block.width * this.block.scale / 2
+                + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
+                - this.size * this.block.scale) - hpY *2 +
+                (this.block.hovered || this.block.selected ? 
+                    this.block.height * this.block.scale / 4 : 0),
+            this.size / 4 * this.block.scale,
+            Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
+        );
+        // draw realHp
+        const currHpBar = this.entity.hp / this.entity.maxHp;
+        const pHeight = 5 + currHpBar * 26;
+
+        ctx.drawImage(
+            img,
+            1,
+            5,
+            30,
+            26,
+            this.block.x + this.block.width * this.block.scale / 2
+                + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
+                - this.size * this.block.scale) - hpY *2 +
+                (this.block.hovered || this.block.selected ? 
+                    this.block.height * this.block.scale / 4 : 0),
+            this.size / 4 * this.block.scale,
+            Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
+        );
+
         ctx.drawImage(
             ASSET_MANAGER.getAsset(this.entity.asset),
-            this.currentFrame * this.size,
+            this.currentFrame * this.assetSize,
             0,
-            this.size,
-            this.size,
-            this.x - this.size * this.block.scale / 2,
-            (this.y - this.size * this.block.scale) +
-            (this.block.hovered ? this.block.height * this.block.scale / 4 : 0),
+            this.assetSize,
+            this.assetSize,
+            this.block.x + this.block.width * this.block.scale / 2
+                - this.size * this.block.scale / 2,
+            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
+                - this.size * this.block.scale) +
+                (this.block.hovered || this.block.selected ? 
+                    this.block.height * this.block.scale / 4 : 0),
             this.size * this.block.scale,
             this.size * this.block.scale
         );
+    }
+    blockMove(newBlock){
+        this.block.occupied = null;
+        this.block.selected = false;
+        this.z = newBlock.z;
+        this.block = newBlock;
+        this.block.occupied = this;
+        this.blockX = this.block.blockX;
+        this.blockY = this.block.blockY;
     }
   }
   
@@ -457,9 +608,10 @@ class Text {
     }
 }
 class Block {
-    constructor(isoBlock, x, width, height, scale, position, z){
-        Object.assign(this, {isoBlock, x, width, height, scale, position, z});
-        this.hovered = false
+    constructor(isoBlock, x, width, height, scale, position, z, blockX, blockY){
+        Object.assign(this, {isoBlock, x, width, height, scale, position, z, blockX, blockY});
+        this.hovered = false;
+        this.selected = false;
     }
     update(){
         if(this.position.length > 0){
@@ -470,7 +622,7 @@ class Block {
     draw(ctx){
         
         ctx.drawImage(this.isoBlock, 0, 0, this.width, this.height,
-            this.x, this.y + (this.hovered == true ?
+            this.x, this.y + (this.hovered || this.selected ?
             this.height * this.scale / 4 : 0), // if hovered
             this.width * this.scale, this.height * this.scale);
     }
