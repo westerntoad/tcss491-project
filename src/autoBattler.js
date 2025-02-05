@@ -12,6 +12,7 @@ class AutoBattler{
         this.players = players;
         this.enemies = enemies;
 
+        this.ready = false;
         this.frameRate = 60;
         this.toDraw = 0;
         this.buttonPressed = false;
@@ -31,7 +32,7 @@ class AutoBattler{
         this.nextX = 16; // the nextX for the next block.
         this.nextY = 8; // the nextY for the next block
 
-        this.allBlocks = Array.from({ length: 7 }, () => Array(7).fill(null));
+        this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.init(text);
     }
     
@@ -82,16 +83,63 @@ class AutoBattler{
                 z++;
             }
         }
+        for(let i = 0; i < 7; i++){
+            let isoX = (i - 8) * this.spaceWidth * this.scale / 2 + 500;
+            let isoY = (i + 8) * this.spaceHeight * this.scale / 3 + 200;
 
+            const position = Animate.bounceSpace(0, isoY, 60); 
+            const space = new Block(
+                this.isoBlock, 
+                isoX,  
+                this.spaceWidth, 
+                this.spaceHeight, 
+                this.scale, 
+                position, 
+                z
+            );
+
+            this.allBlocks[i][8] = {
+                x: isoX,
+                y: isoY,
+                block: space
+            };
+            this.nextSequence.push(space);
+            z++;
+        }
+        // const selectSpotInMap = (event) => {
+        //     let mouseX = event.offsetX;
+        //     let mouseY = event.offsetY;
+
+        //     let found = false;
+        //     for (let i = 0; i < 7; i++) {
+        //         for (let j = 0; j < 7; j++) {
+        //             let block = this.allBlocks[i][j];
+        //             if (!found && this.isMouseOverTile(mouseX, mouseY, block)) {
+        //                 console.log("x: " + j + " | y: " + i);
+        //                 block.block.hovered = true;
+        //                 found = true;
+        //             } else {
+        //                 block.block.hovered = false;
+        //             }
+        //         }
+        //     }
+        // }
+        // // remove the eventListener when something is selected?
+        // const selectFromBench = (event) =>{
+        //     let mouseX = event.offsetX;
+        //     let mouseY = event.offsetY;
+        // }
         this.game.ctx.canvas.addEventListener("mousemove", (event) => {
             let mouseX = event.offsetX;
             let mouseY = event.offsetY;
 
             let found = false;
             for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 7; j++) {
+                for (let j = 0; j < 9; j++) {
                     let block = this.allBlocks[i][j];
+                    if(!block) continue;
                     if (!found && this.isMouseOverTile(mouseX, mouseY, block)) {
+                        console.log("x: " + j + " | y: " + i);
                         block.block.hovered = true;
                         found = true;
                     } else {
@@ -113,56 +161,66 @@ class AutoBattler{
             this.game.addEntity(this.nextSequence[0]);
             this.nextSequence.shift();
         } // image, block, spaceHeightAdjusted, size
-        if(this.countDown == 0) {
+        
+        if(!this.ready){
+            // start show? crowd 
+            this.setUnits = [];
+            
+            this.ready = true;
+        }
+        if(this.countDown == 0 && this.ready) {
 
 
                 this.game.addEntity(new Entity(
                     Object.assign({}, this.players[0]),
-                    this.allBlocks[6][0].block, 
+                    this.allBlocks[0][0].block, 
                     this.spaceHeightAdjusted, 
                     this.spaceWidth,
-                    6, 3, 
+                    0, 0, 
                     this.allBlocks, 
                     this.frameRate));
                 this.game.addEntity(new Entity(
                     Object.assign({}, this.players[1]),
-                    this.allBlocks[6][0].block, 
+                    this.allBlocks[0][1].block, 
                     this.spaceHeightAdjusted, 
                     this.spaceWidth,
-                    5, 2, 
+                    0, 1, 
                     this.allBlocks, 
                     this.frameRate));
                 this.game.addEntity(new Entity(
                     Object.assign({}, this.players[2]),
-                    this.allBlocks[6][0].block, 
+                    this.allBlocks[0][2].block, 
                     this.spaceHeightAdjusted, 
                     this.spaceWidth,
-                    4, 4, 
+                    0, 2, 
                     this.allBlocks, 
                     this.frameRate));
                     
-                    this.game.addEntity(new Entity(
+                    const checkEntity = (new Entity(
                         Object.assign({}, this.enemies[0]),
-                        this.allBlocks[0][1].block, 
+                        this.allBlocks[6][0].block, 
                         this.spaceHeightAdjusted, 
                         this.spaceWidth,
-                        0, 1, 
+                        6, 0, 
                         this.allBlocks, 
                         this.frameRate));
+                    this.game.addEntity(checkEntity);
+                    console.log(this.allBlocks[6][0].block.x + " " + this.allBlocks[6][0].block.y);
+                    console.log(checkEntity.block.x + " " + checkEntity.block.y);
                     this.game.addEntity(new Entity(
                         Object.assign({}, this.enemies[1]),
-                        this.allBlocks[0][1].block, 
+                        this.allBlocks[6][1].block, 
                         this.spaceHeightAdjusted, 
                         this.spaceWidth,
-                        0, 2, 
+                        6, 1, 
                         this.allBlocks, 
                         this.frameRate));
                     this.game.addEntity(new Entity(
                         Object.assign({}, this.enemies[2]),
-                        this.allBlocks[0][1].block, 
+                        this.allBlocks[6][2].block, 
                         this.spaceHeightAdjusted, 
                         this.spaceWidth,
-                        0, 3, 
+                        6, 2, 
                         this.allBlocks, 
                         this.frameRate));    
         }
@@ -220,6 +278,7 @@ class Entity {
       this.block.occupied = this;
       this.ticker = 0;
       this.attacking = false;
+      this.ready = 60;
     }
   
     update() {
@@ -228,7 +287,7 @@ class Entity {
             this.removeFromWorld = true;
         }
       // Every 60 ticks, decide what to do.
-      if (this.ticker % (this.frameRate/2) === 0) {
+      if (this.ticker % (this.frameRate/2) === 0 && this.ready <= 0) {
         const startX = this.blockX;
         const startY = this.blockY;
         const attackRange = this.entity.attackRange;
@@ -287,7 +346,6 @@ class Entity {
         // Decision making:
         if (found) {
           if (found.dist <= attackRange) {
-            console.log(`Target within range at (${found.x}, ${found.y}). Attack!`);
             // Insert attack logic here.
             this.attacking = true;
             this.allBlocks[found.y][found.x].block.occupied.entity.hp -= this.entity.attack;
@@ -296,7 +354,6 @@ class Entity {
             // Move one block along the BFS path.
             // We choose the first step in the found path.
             const nextBlockPos = found.path[0];
-            console.log(`Moving from (${startX}, ${startY}) to (${nextBlockPos.x}, ${nextBlockPos.y}).`);
             
             // Unoccupy the current block.
             this.block.occupied = null;
@@ -318,8 +375,9 @@ class Entity {
           }
         } else {
             this.attacking = false;
-          console.log("No opposing unit found via BFS.");
         }
+      } else {
+        this.ready --;
       }
       this.ticker++;
     }
