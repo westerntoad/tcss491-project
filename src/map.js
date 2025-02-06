@@ -1,12 +1,46 @@
 class Map {
-    constructor(game, scene, map) {
+    constructor(game, scene) {
         Object.assign(this, { game, scene });
         this.z = -5;
-
         this.specialTiles = [];
         this.mainTileSheet = "./assets/tileSheet_main.png";
+
+        this.player = new Player(game, scene, this, 0, 0);
+        this.player.dir = 2; // set player facing south
+        this.game.addEntity(this.player);
         
-        this.changeMap(map, 3, 2);
+        this.changeMap(MAPS.marysRoom(this), 3, 2);
+    }
+
+    hide() {
+        this.tiles?.forEach(tile => tile.removeFromWorld = true);
+    }
+
+    show() {
+        this.tiles?.forEach(tile => this.game.addEntity(tile));
+    }
+
+    getTile(x, y) {
+        let tiles = [];
+        for (let i = 0; i < this.tiles.length; i++) {
+            const tile = this.tiles[i];
+            if (tile.x == x && tile.y == y) {
+                tiles.push(tile);
+            }
+        }
+
+        return tiles;
+    }
+
+    isTraversable(x, y) {
+        const tiles = this.getTile(x, y);
+        for (let i = 0; i < tiles.length; i++) {
+            if (!tiles[i].isTraversable) {
+                return false;
+            }
+        }
+
+        return x >= 0 && x < this.width && y >= 0 && y < this.height;
     }
 
     changeMap(map, x, y) {
@@ -21,7 +55,7 @@ class Map {
         for (let i = 0; i < map.tiles.length; i++) {
             const tile = map.tiles[i];
             const entity = new Tile(
-                this.scene, tile.traversable,
+                this, tile.traversable,
                 tile.x, tile.y, tile.z,
                 tile.asset, tile.sx, tile.sy
             );
@@ -46,7 +80,7 @@ class Map {
             const sy = 32 + Math.floor(randIdx / 3) * 16;
 
             const entity = new Tile(
-                this.scene, true,
+                this, true,
                 x, y, -10,
                 this.mainTileSheet, sx, sy
             );
@@ -56,22 +90,32 @@ class Map {
         }
 
         // place player at given x and y
-        this.scene.player.x = x;
-        this.scene.player.y = y;
+        this.player.x = x;
+        this.player.y = y;
     }
 
-    update() { /* ~ unused */ }
+    update() {
+        if (this.game.pressed['z']) {
+            if (!this.scene.dialog) {
+                const facedTile = this.player.facingTile();
+                const presentTiles = this.getTile(facedTile.x, facedTile.y);
+                for (let i = 0; i < presentTiles.length; i++) {
+                    presentTiles[i].interact?.();
+                }
+            }
+        }
+    }
 
     draw(ctx) {
+        // draw tile outlines
         for (let i = 0; i < this.width * this.height; i++) {
             const x = i % this.width;
             const y = Math.floor(i / this.width);
             
-            // draw tile outlines
             ctx.strokeRect(
-                (x - this.scene.player.x - this.scene.player.dx) * this.scene.cellSize + (PARAMS.canvasWidth  - this.scene.cellSize) / 2,
-                (y - this.scene.player.y - this.scene.player.dy) * this.scene.cellSize + (PARAMS.canvasHeight - this.scene.cellSize) / 2,
-                this.scene.cellSize, this.scene.cellSize
+                (x - this.player.x - this.player.dx) * PARAMS.cellSize + (PARAMS.canvasWidth  - PARAMS.cellSize) / 2,
+                (y - this.player.y - this.player.dy) * PARAMS.cellSize + (PARAMS.canvasHeight - PARAMS.cellSize) / 2,
+                PARAMS.cellSize, PARAMS.cellSize
             );
 
         }
@@ -86,62 +130,42 @@ class Map {
  * this method.
  */
 const MAPS = {}
-MAPS.marysRoom = (scene) => {
+MAPS.marysRoom = (map) => {
     // initialize map from JSON asset
-    const map = ASSET_MANAGER.getAsset("./maps/house.json");
-    map.specialTiles = [];
-
-    // set encounter rate
-    scene.player.encounterRate = map.encounterRate;
+    const json = ASSET_MANAGER.getAsset("./maps/house.json");
+    json.specialTiles = [];
 
     // TODO parse dialogue from JSON
 
     // SPECIAL TILES
     // Vera Mulberry
-    const interactable = new Tile(scene, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
-    interactable.interact = () => scene.showDialog("y'like my cats?");
-    map.specialTiles.push(interactable);
+    const interactable = new Tile(map, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
+    interactable.interact = () => map.scene.showDialog("y'like my cats?");
+    json.specialTiles.push(interactable);
 
     // Exit
-    const portalPoint = new Tile(scene, true, 8, 0, 0, './assets/portalPoint.png');
+    const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        scene.map.changeMap(MAPS.marysMap(scene), 6, 6);
-        scene.player.dir = 2;
+        map.changeMap(MAPS.marysMap(map), 6, 6);
+        map.player.dir = 2;
     };
-    map.specialTiles.push(portalPoint);
+    json.specialTiles.push(portalPoint);
 
-    return map;
+    return json;
 };
 
-MAPS.marysMap = (scene) => {
-    const map = ASSET_MANAGER.getAsset("./maps/marysMap.json");
+MAPS.marysMap = (map) => {
+    const json = ASSET_MANAGER.getAsset("./maps/marysMap.json");
 
-    map.specialTiles = [];
+    json.specialTiles = [];
 
     // temporary special tile to start auto battler
-    const autobattlerTest = new Tile(scene, true, 8, 8, 0, './assets/portalPoint.png');
+    const autobattlerTest = new Tile(map, true, 8, 8, 0, './assets/portalPoint.png');
     autobattlerTest.stepOn = () => {
-        scene.battleScene(false);
+        map.scene.battleScene(false);
     };
-    map.specialTiles.push(autobattlerTest);
+    json.specialTiles.push(autobattlerTest);
 
-    return map;
+    return json;
 }
-
-MAPS.dev = (scene) => {
-    const map = ASSET_MANAGER.getAsset("./maps/dev.json");
-    map.specialTiles = [];
-    scene.player.encounterRate = 0.01;
-
-
-    // SPECIAL TILES
-    const exit = new Tile(scene, true, 0, 0, 10, './assets/portalPoint.png');
-    exit.stepOn = () => {
-        // change to next map
-        scene.map.changeMap(MAPS.maryHouse(scene), 8, 1);
-    };
-    
-    return map;
-}
-

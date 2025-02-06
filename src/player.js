@@ -1,7 +1,7 @@
 
 class Player {
-    constructor(game, scene, x, y) {
-        Object.assign(this, { game, scene, x, y });
+    constructor(game, scene, map, x, y) {
+        Object.assign(this, { game, scene, map, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./assets/player.png");
         this.dir = 0; // 0 = north, 1 = east, 2 = south, 3 = west
         this.isMoving = false;
@@ -71,7 +71,7 @@ class Player {
                 this.dy = 0;
                 this.isMoving = false;
 
-                const tilesMovedOn = this.scene.getTile(this.x, this.y);
+                const tilesMovedOn = this.map.getTile(this.x, this.y);
                 tilesMovedOn.forEach((tile) => tile.stepOn?.());
 
                 //Check for random dungeon battles
@@ -86,22 +86,22 @@ class Player {
         } else if (!this.disableMovement) {
             // parse user input into movement
             if (this.game.keys['ArrowRight']) {
-                if (this.scene.isTraversable(this.x + 1, this.y)) {
+                if (this.map.isTraversable(this.x + 1, this.y)) {
                     this.isMoving = true;
                 }
                 this.dir = 1;
             } else  if (this.game.keys['ArrowLeft']) {
-                if (this.scene.isTraversable(this.x - 1, this.y)) {
+                if (this.map.isTraversable(this.x - 1, this.y)) {
                     this.isMoving = true;
                 }
                 this.dir = 3;
             } else if (this.game.keys['ArrowUp']) {
-                if (this.scene.isTraversable(this.x, this.y - 1)) {
+                if (this.map.isTraversable(this.x, this.y - 1)) {
                     this.isMoving = true;
                 }
                 this.dir = 0;
             } else if (this.game.keys['ArrowDown']) {
-                if (this.scene.isTraversable(this.x, this.y + 1)) {
+                if (this.map.isTraversable(this.x, this.y + 1)) {
                     this.isMoving = true;
                 }
                 this.dir = 2;
@@ -129,8 +129,8 @@ class Player {
             this.spritesheet,
             this.currStep * w, sy,
             w, h,
-            (PARAMS.canvasWidth - this.scene.cellSize) / 2, (PARAMS.canvasHeight - this.scene.cellSize) / 2,
-            this.scene.cellSize, this.scene.cellSize
+            (PARAMS.canvasWidth - PARAMS.cellSize) / 2, (PARAMS.canvasHeight - PARAMS.cellSize) / 2,
+            PARAMS.cellSize, PARAMS.cellSize
         );
     }
 }
