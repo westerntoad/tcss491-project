@@ -1,13 +1,6 @@
 const ENTITY_SIZE = 24;
-class AutoBattler{
+class AutoBattler {
     constructor(game, sceneManager, players, enemies, text) {
-        this.prevTextAlign = game.ctx.textAlign;
-        this.prevTextBaseline = game.ctx.textBaseline;
-        game.ctx.textAlign = "start";
-        game.ctx.textBaseline = "alphabetic";
-
-        // this.id = Math.random();
-        // console.log("ID for BattleScene: ", this.id);
         this.game = game;
         this.sceneManager = sceneManager;
         this.players = players;
@@ -20,7 +13,7 @@ class AutoBattler{
         this.eventListener = [];
         this.dialogue = null;
         this.game.ctx.font = "22px serif";
-        this.countDown = 0;
+        this.selectedSpot = false;
         this.arena = [[]];
         this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
         this.z = -5; // draw this first.
@@ -34,24 +27,19 @@ class AutoBattler{
         this.nextY = 8; // the nextY for the next block
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
-        this.init(text);
+        this.showText(text)
+        this.init();
     }
-    
-    init(text){ // show the starting Chapter ? 
-        this.game.ctx.save();
-        const textSize = 50; // modifiable
 
-        this.game.ctx.font = "" + this.size + "px serif";
+    showText(text) {
         const textWidth = this.game.ctx.measureText(this.text).width;
-
         const frames = 120; // modifiable
         const textStartFrames = Animate.easeInOut(-textWidth, this.game.height/2, this.game.width - textWidth, 
             this.game.height/2, frames);
-        this.game.addEntity(new Text(text, textStartFrames, textSize, frames));
-        this.countDown = frames;
-
-        this.game.ctx.restore();
-        
+        this.game.addEntity(new Text(text, textStartFrames, frames));
+    }
+    
+    init() {
         this.nextSequence = []; // create all blocks, let them fall then bounce
 
         let z = 0;
@@ -108,202 +96,74 @@ class AutoBattler{
             this.nextSequence.push(space);
             z++;
         }
-        /*
-        const selectEntity = (event) => {
-            let mouseX = event.offsetX;
-            let mouseY = event.offsetY;
-
-            let found = false
-            for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 7; j++) {
-                    let block = this.allBlocks[i][j];
-                    if (!found && this.isMouseOverTile(mouseX, mouseY, block)) {
-                    } else {
-                        block.block.hovered = false;
-                    }
-                }
-            }
-        }
-        const selectedSpot = (event, type) => {
-            let mouseX = event.offsetX;
-            let mouseY = event.offsetY;
-
-            let clickedBlock = null;
-            for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 9; j++) {
-                    let block = this.allBlocks[i][j];
-                    if(!block) continue;
-                    if (!clickedBlock && this.isMouseOverTile(mouseX, mouseY, block)) {
-                        if(type == 0 && block.block.occupied 
-                            && block.block.occupied.entity.granny){
-                            console.log("SelectedEntity => x: " + j + " | y: " + i);
-                            block.block.hovered = true;
-                            clickedBlock = block;
-                        } else if (type == 1 && !block.block.occupied){
-                            clickedBlock = block;
-                        }
-                    }
-                }
-            }
-            if(clickedBlock) {
-                if(type == 0){
-                    this.selected = [clickedBlock];
-                    this.getSelectedLocation();
-                    this.removeSelected();
-                } else {
-                    this.selected.push(clickedBlock);
-                    this.removeSelectedLocation();
-                }
-            }
-        }
-            */ //UNUSED FOR NOW, WILL HAVE TO SET HOVEREABLE WHEN IN ROUND PREP
-        this.selectedSpot = false;
-        this.game.ctx.canvas.addEventListener("mousemove", (event) => {
-            let mouseX = event.offsetX;
-            let mouseY = event.offsetY;
-
-            let found = false;
-            for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 9; j++) {
-                    let block = this.allBlocks[i][j];
-                    if(!block) continue;
-                    if (!found && this.isMouseOverTile(mouseX, mouseY, block)) {
-                        console.log("x: " + j + " | y: " + i);
-                        block.block.hovered = true;
-                        found = true;
-                    } else {
-                        block.block.hovered = false;
-                    }
-                }
-            }
-        });
-
 
         // const position = Animate.bounceSpace(0, 500, 60) // startY, endY, frames
         // this.nextSequence.push(new Space(this.isoBlock, 500, this.spaceWidth, this.spaceHeight, 
         //     this.scale, position, 5)); // x, width, height, scale, position, z
+
+        // initialize friendly units
+        this.setUnits = new Set();
+        for(let i = 0; i < this.players.length && i < 7; i++){
+            this.game.addEntity(new Entity(
+                this.players[i],
+                this.allBlocks[i][8].block, 
+                this.spaceHeightAdjusted, 
+                ENTITY_SIZE,
+                i, 8, 
+                this.allBlocks, 
+                this.frameRate
+            ));
+        }
+        // initialize enemy units
+        for (let i = 0; i < 3; i++) {
+            this.game.addEntity(new Entity(
+                Object.assign({}, this.enemies[0]),
+                this.allBlocks[6][i].block, 
+                this.spaceHeightAdjusted, 
+                ENTITY_SIZE,
+                6, 0, 
+                this.allBlocks, 
+                this.frameRate
+            ));
+        }
     }
     update(){
-        // const readyButton = (event) => {
-        //     const rect = this.game.ctx.canvas.getBoundingClientRect();
-        //     const mouseX = event.clientX - 
-        // }
+        // handle mouse input
+        let mouseX = this.game.mouse?.x;
+        let mouseY = this.game.mouse?.y;
+        for (let i = 0; i < 7; i++) {
+            for (let j = 0; j < 9; j++) {
+                let block = this.allBlocks[i][j];
+                if (!block) continue;
+                if (this.isMouseOverTile(mouseX, mouseY, block)) {
+                    console.log("x: " + j + " | y: " + i);
+                    block.block.hovered = true;
+                    if (this.game.click) {
+                        if (!this.selectedBlock && block.block.occupied && block.block.occupied.entity.granny) {
+                            block.block.selected = true;
+                            this.selectedBlock = block;
+                        } else if (this.selectedBlock && !block.block.occupied) {
+                            const entity = this.selectedBlock.block.occupied;
+                            entity.blockMove(block.block);
+                            this.setUnits.add(entity);
+                            this.selectedBlock = null;
+                        }
+                    }
+                } else {
+                    block.block.hovered = false;
+                }
+            }
+        }
 
         // if we move to next round, we can kill everything, place it back into stands
         // two states: set up grandmas, play>
         if(this.nextSequence.length > 0) {
             this.game.addEntity(this.nextSequence[0]);
             this.nextSequence.shift();
-        } // image, block, spaceHeightAdjusted, size
-        // drop entities, select entities
-        if(!this.ready){
-            // start show? crowd 
-            this.setUnits = new Set();
-            for(let i = 0; i < this.players.length && i < 7; i++){
-                console.log("here");
-                // ctx.drawImage(
-                //     ASSET_MANAGER.getAsset(this.entity.asset),
-                //     this.currentFrame * this.size,
-                //     0,
-                //     this.size,
-                //     this.size,
-                //     this.x - this.size * this.block.scale / 2,
-                //     (this.y - this.size * this.block.scale) +
-                //     (this.block.hovered ? this.block.height * this.block.scale / 4 : 0),
-                //     this.size * this.block.scale,
-                //     this.size * this.block.scale
-                // );
-                this.game.addEntity(new Entity(
-                    this.players[i],
-                    this.allBlocks[i][8].block, 
-                    this.spaceHeightAdjusted, 
-                    ENTITY_SIZE,
-                    i, 8, 
-                    this.allBlocks, 
-                    this.frameRate));
-
-            }
-            const checkEntity = (new Entity(
-                Object.assign({}, this.enemies[0]),
-                this.allBlocks[6][0].block, 
-                this.spaceHeightAdjusted, 
-                ENTITY_SIZE,
-                6, 0, 
-                this.allBlocks, 
-                this.frameRate));
-            this.game.addEntity(checkEntity);
-            this.game.addEntity(new Entity(
-                Object.assign({}, this.enemies[1]),
-                this.allBlocks[6][1].block, 
-                this.spaceHeightAdjusted, 
-                ENTITY_SIZE,
-                6, 1, 
-                this.allBlocks, 
-                this.frameRate));
-            this.game.addEntity(new Entity(
-                Object.assign({}, this.enemies[2]),
-                this.allBlocks[6][2].block, 
-                this.spaceHeightAdjusted, 
-                ENTITY_SIZE,
-                6, 2, 
-                this.allBlocks, 
-                this.frameRate)); 
-            this.ready = true;
         }
-        if(this.ready) {  
-            if(this.selectedSpot) return; 
-            const selectedSpot = (event, type) => {
-                let mouseX = event.offsetX;
-                let mouseY = event.offsetY;
-    
-                let clickedBlock = null;
-                for (let i = 0; i < 7; i++) {
-                    for (let j = 0; j < 9; j++) {
-                        let block = this.allBlocks[i][j];
-                        if(!block) continue;
-                        if (!clickedBlock && this.isMouseOverTile(mouseX, mouseY, block)) {
-                            if(type == 0 && block.block.occupied 
-                                && block.block.occupied.entity.granny){
-                                console.log("SelectedEntity => x: " + j + " | y: " + i);
-                                block.block.selected = true;
-                                clickedBlock = block;
-                            } else if (type == 1 && !block.block.occupied){
-                                clickedBlock = block;
-                            }
-                        }
-                    }
-                }
-                if(clickedBlock) {
-                    if(type == 0){
-                        this.selected = [clickedBlock];
-                        this.getSelectedLocation();
-                        this.removeSelected();
-                    } else {
-                        this.selected.push(clickedBlock);
-                        this.removeSelectedLocation();
-                        this.selectedSpot = false;
-                    }
-                }
-            }
-            // set up all the eventListeners here.
-            const x = (e) => selectedSpot(e, 0);
-            const y = (e) => selectedSpot(e, 1);
-            this.getSelectedLocation = () => {
-                this.game.ctx.canvas.addEventListener("click", y);
-            }
-            this.removeSelected = () => {
-                this.game.ctx.canvas.removeEventListener("click", x);
-            }
-            this.removeSelectedLocation = () => {
-                this.game.ctx.canvas.removeEventListener("click", y);
-                const entity = this.selected[0].block.occupied;
-                entity.blockMove(this.selected[1].block);
-                this.setUnits.add(entity);
-            }
-            this.game.ctx.canvas.addEventListener("click", x);
-            this.selectedSpot = true;
+        
             
-        } if(this.setUnits.size == this.players.length){
+        /*if(this.setUnits.size == this.players.length){
             for (let i = 0; i < 7; i++) {
                 for (let j = 0; j < 9; j++) {
                     let block = this.allBlocks[i][j];
@@ -321,8 +181,7 @@ class AutoBattler{
             // this.setUnits.forEach((unit) => {
             //     unit.ready = true;
             // })
-        }
-        this.countDown--;
+        }*/
 
     }
     draw(ctx){
@@ -337,6 +196,8 @@ class AutoBattler{
         return s >= 0 && t >= 0 && (s + t) <= 1;
     }
     isMouseOverTile(mouseX, mouseY, tile) {
+        if (!tile) return false;
+
         let { x, y } = tile; // Get tile properties
         const width = 32 * this.scale;
         const height = 15 * this.scale;
@@ -361,8 +222,6 @@ class AutoBattler{
         this.game.ctx.fillStyle = "white"; 
         this.game.ctx.fillRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
         this.sceneManager.restoreScene();
-        this.game.ctx.textAlign = this.prevTextAlign;
-        this.game.ctx.textBaseline = this.prevTextBaseline;
     }
 }
 class Entity {
@@ -577,8 +436,8 @@ class Text {
      * @param {number} size size of text
      * @param {number} expire time until text vanishes
      */
-    constructor(text, position, size, expire){
-        Object.assign(this, {text, position, size, expire});
+    constructor(text, position, expire){
+        Object.assign(this, {text, position, expire});
         this.z = 35; // highest, should come before everything
         this.vanish = this.expire / 2;
         this.vanishCounter = this.vanish;
@@ -591,6 +450,7 @@ class Text {
     }
     draw(ctx){
         ctx.save();
+
         if(this.expire < 2) {
             this.removeFromWorld = true;
             return;
@@ -599,9 +459,11 @@ class Text {
             ctx.globalAlpha = this.vanishCounter / this.vanish;
             this.vanishCounter --;
         }
-        ctx.font = "" + this.size + "px serif";
         const width = ctx.measureText(this.text).width;
-        // string, x, y
+        ctx.textAlign = "start";
+        ctx.textBaseline = "alphabetic";
+        const textSize = 50; // modifiable
+        ctx.font = "" + textSize + "px serif";
         ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
         this.expire--;

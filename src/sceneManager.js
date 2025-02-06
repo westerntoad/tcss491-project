@@ -12,7 +12,10 @@ class SceneManager {
         this.game.addEntity(this.map);
 
         this.game.addEntity(this);
-        //this.battleScene(false);
+
+        // debug
+        this.map.hide();
+        this.battleScene(false);
     }
 
     showDialog(text) {

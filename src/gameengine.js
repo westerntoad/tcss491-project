@@ -237,6 +237,7 @@ class GameEngine {
         this.draw();
 
         Object.keys(this.pressed).forEach(v => this.pressed[v] = false)
+        this.click = null;
     };
 
 };
