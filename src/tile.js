@@ -1,6 +1,6 @@
 class Tile {
-    constructor(scene, isTraversable, x, y, z, asset, sx, sy, sw, sh) {
-        Object.assign(this, { scene, isTraversable, x, y, z });
+    constructor(map, isTraversable, x, y, z, asset, sx, sy, sw, sh) {
+        Object.assign(this, { map, isTraversable, x, y, z });
         this.sx = sx || 0;
         this.sy = sy || 0;
         this.sw = sw || 16;
@@ -14,16 +14,16 @@ class Tile {
     update() { /* ~ unused ~ */ }
 
     draw(ctx) {
-        if (!this.scene.player) {
+        if (!this.map.player) {
             //console.log('returned');
             return;
         }
         
-        const x = (this.x - this.scene.player.x - this.scene.player.dx) * this.scene.cellSize + (PARAMS.canvasWidth - this.scene.cellSize) / 2;
-        const y = (this.y - this.scene.player.y - this.scene.player.dy) * this.scene.cellSize + (PARAMS.canvasHeight - this.scene.cellSize) / 2;
+        const x = (this.x - this.map.player.x - this.map.player.dx) * PARAMS.cellSize + (PARAMS.canvasWidth - PARAMS.cellSize) / 2;
+        const y = (this.y - this.map.player.y - this.map.player.dy) * PARAMS.cellSize + (PARAMS.canvasHeight - PARAMS.cellSize) / 2;
 
         if (this.img) {
-            ctx.drawImage(this.img, this.sx, this.sy, this.sw, this.sh, x, y, this.scene.cellSize, this.scene.cellSize);
+            ctx.drawImage(this.img, this.sx, this.sy, this.sw, this.sh, x, y, PARAMS.cellSize, PARAMS.cellSize);
         }
     }
 }

@@ -2,7 +2,6 @@
   "encounterRate": 0,
   "width": 12,
   "height": 7,
-  "player": { "x": 2, "y": 2 },
   "tiles": [
     { "x": 8, "y": 0, "z": -1, "traversable": true, "asset": "./assets/houseTiles.png" },
     { "x": 1, "y": 1, "z": -1, "traversable": true, "asset": "./assets/houseTiles.png" },

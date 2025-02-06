@@ -1,14 +1,49 @@
 class Map {
-    constructor(game, scene, map) {
+    constructor(game, scene) {
         Object.assign(this, { game, scene });
         this.z = -5;
-
         this.specialTiles = [];
+        this.mainTileSheet = "./assets/tileSheet_main.png";
+
+        this.player = new Player(game, scene, this, 0, 0);
+        this.player.dir = 2; // set player facing south
+        this.game.addEntity(this.player);
         
-        this.changeMap(map);
+        this.changeMap(MAPS.marysRoom(this), 3, 2);
     }
 
-    changeMap(map) {
+    hide() {
+        this.tiles?.forEach(tile => tile.removeFromWorld = true);
+    }
+
+    show() {
+        this.tiles?.forEach(tile => this.game.addEntity(tile));
+    }
+
+    getTile(x, y) {
+        let tiles = [];
+        for (let i = 0; i < this.tiles.length; i++) {
+            const tile = this.tiles[i];
+            if (tile.x == x && tile.y == y) {
+                tiles.push(tile);
+            }
+        }
+
+        return tiles;
+    }
+
+    isTraversable(x, y) {
+        const tiles = this.getTile(x, y);
+        for (let i = 0; i < tiles.length; i++) {
+            if (!tiles[i].isTraversable) {
+                return false;
+            }
+        }
+
+        return x >= 0 && x < this.width && y >= 0 && y < this.height;
+    }
+
+    changeMap(map, x, y) {
         // clear old map
         this.tiles?.forEach(tile => tile.removeFromWorld = true);
 
@@ -19,36 +54,68 @@ class Map {
         // load tiles from JSON
         for (let i = 0; i < map.tiles.length; i++) {
             const tile = map.tiles[i];
-            const entity = new Tile(this.scene, tile.traversable, tile.x, tile.y, tile.z, tile.asset);
+            const entity = new Tile(
+                this, tile.traversable,
+                tile.x, tile.y, tile.z,
+                tile.asset, tile.sx, tile.sy
+            );
 
             this.tiles.push(entity);
             this.game.addEntity(entity);
         }
 
-        // load special tiles
+        // load special tiles from function
         this.specialTiles = map.specialTiles;
         this.specialTiles.forEach(tile => {
             this.tiles.push(tile);
             this.game.addEntity(tile);
         });
 
+        // add a grass tile for each tile within the map width and height
+        for (let i = 0; i < map.width * map.height; i++) {
+            const x = i % map.width;
+            const y = Math.floor(i / map.width);
+            const randIdx = Math.floor(Math.random() * 6);
+            const sx = 96 +           (randIdx % 3) * 16;
+            const sy = 32 + Math.floor(randIdx / 3) * 16;
+
+            const entity = new Tile(
+                this, true,
+                x, y, -10,
+                this.mainTileSheet, sx, sy
+            );
+
+            this.tiles.push(entity);
+            this.game.addEntity(entity);
+        }
+
         // place player at given x and y
-        this.scene.player.x = map.player.x;
-        this.scene.player.y = map.player.y;
+        this.player.x = x;
+        this.player.y = y;
     }
 
-    update() { /* ~ unused */ }
+    update() {
+        if (this.game.pressed['z']) {
+            if (!this.scene.dialog) {
+                const facedTile = this.player.facingTile();
+                const presentTiles = this.getTile(facedTile.x, facedTile.y);
+                for (let i = 0; i < presentTiles.length; i++) {
+                    presentTiles[i].interact?.();
+                }
+            }
+        }
+    }
 
     draw(ctx) {
+        // draw tile outlines
         for (let i = 0; i < this.width * this.height; i++) {
             const x = i % this.width;
             const y = Math.floor(i / this.width);
             
-            // draw tile outlines
             ctx.strokeRect(
-                (x - this.scene.player.x - this.scene.player.dx) * this.scene.cellSize + (PARAMS.canvasWidth  - this.scene.cellSize) / 2,
-                (y - this.scene.player.y - this.scene.player.dy) * this.scene.cellSize + (PARAMS.canvasHeight - this.scene.cellSize) / 2,
-                this.scene.cellSize, this.scene.cellSize
+                (x - this.player.x - this.player.dx) * PARAMS.cellSize + (PARAMS.canvasWidth  - PARAMS.cellSize) / 2,
+                (y - this.player.y - this.player.dy) * PARAMS.cellSize + (PARAMS.canvasHeight - PARAMS.cellSize) / 2,
+                PARAMS.cellSize, PARAMS.cellSize
             );
 
         }
@@ -63,41 +130,42 @@ class Map {
  * this method.
  */
 const MAPS = {}
-MAPS.maryHouse = (scene) => {
+MAPS.marysRoom = (map) => {
     // initialize map from JSON asset
-    const map = ASSET_MANAGER.getAsset("./maps/house.json");
-    map.specialTiles = [];
-
-    // set encounter rate
-    scene.player.encounterRate = map.encounterRate;
+    const json = ASSET_MANAGER.getAsset("./maps/house.json");
+    json.specialTiles = [];
 
     // TODO parse dialogue from JSON
 
     // SPECIAL TILES
     // Vera Mulberry
-    const interactable = new Tile(scene, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
-    interactable.interact = () => scene.showDialog("y'like my cats?");
-    map.specialTiles.push(interactable);
+    const interactable = new Tile(map, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
+    interactable.interact = () => map.scene.showDialog("y'like my cats?");
+    json.specialTiles.push(interactable);
 
     // Exit
-    const portalPoint = new Tile(scene, true, 8, 0, 0, './assets/portalPoint.png');
-    map.specialTiles.push(portalPoint);
+    const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        scene.map.changeMap(MAPS.dev(scene));
+        map.changeMap(MAPS.marysMap(map), 6, 6);
+        map.player.dir = 2;
     };
+    json.specialTiles.push(portalPoint);
 
-    return map;
+    return json;
 };
 
-MAPS.dev = (scene) => {
-    const map = ASSET_MANAGER.getAsset("./maps/dev.json");
-    map.specialTiles = [];
-    scene.player.encounterRate = 0.01;
+MAPS.marysMap = (map) => {
+    const json = ASSET_MANAGER.getAsset("./maps/marysMap.json");
 
+    json.specialTiles = [];
 
-    // SPECIAL TILES
-    // ~ none ~
-    
-    return map;
+    // temporary special tile to start auto battler
+    const autobattlerTest = new Tile(map, true, 8, 8, 0, './assets/portalPoint.png');
+    autobattlerTest.stepOn = () => {
+        map.scene.battleScene(false);
+    };
+    json.specialTiles.push(autobattlerTest);
+
+    return json;
 }

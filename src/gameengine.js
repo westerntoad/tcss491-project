@@ -15,6 +15,9 @@ class GameEngine {
         this.wheel = null;
         this.keys = {};
 
+        this.keys = {};
+        this.pressed = {};
+
         //Player Movement in the Overworld -> Arrow Keys AND WASD movement support.
         this.left = false;
         this.A = false;
@@ -110,6 +113,7 @@ class GameEngine {
         this.mouseClick = mouseDebugClickListener;
 
         this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
+        this.ctx.canvas.addEventListener("keydown", event => this.pressed[event.key] = true);
         this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
         //this.ctx.canvas.addEventListener("mousemove", handleMouseMove);
 
@@ -227,10 +231,13 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        // draw and update things in order of z value
         this.entities.sort((a, b) => b.z - a.z);
+        this.ctx.canvas.addEventListener("keydown", event => this.pressed[event.key] = true);
         this.update();
         this.draw();
+
+        Object.keys(this.pressed).forEach(v => this.pressed[v] = false)
+        this.click = null;
     };
 
 };
