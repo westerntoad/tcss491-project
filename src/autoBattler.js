@@ -31,8 +31,10 @@ class AutoBattler {
 
     showText(text) {
         const textWidth = this.game.ctx.measureText(this.text).width;
-        const frames = 120; // modifiable
-        const textStartFrames = Animate.easeInOut(-textWidth, this.game.height/2, this.game.width - textWidth, 
+        const frames = 180; // modifiable
+        /** -textWidth, this.game.height/2, this.game.width - textWidth, 
+            this.game.height/2, frames */
+        const textStartFrames = Animate.moveExp(-textWidth, this.game.height/2, this.game.width / 2 - textWidth / 2, 
             this.game.height/2, frames);
         this.game.addEntity(new Text(text, textStartFrames, frames));
     }
@@ -47,7 +49,8 @@ class AutoBattler {
                 let isoY = (i + j) * this.spaceHeight * this.scale / 3 + 150;
 
                 // Make the blocks fall from higher up and bounce once
-                const position = Animate.bounceSpace(0, isoY, 60); 
+                // Animate.bounceSpace(1050, isoY, 90);
+                const position = Animate.moveExp(0, 0, 0, isoY, 60); 
 
                 const space = new Block(
                     this.isoBlock, 
@@ -75,7 +78,7 @@ class AutoBattler {
             let isoX = (i - 8) * this.spaceWidth * this.scale / 2 + 510;
             let isoY = (i + 8) * this.spaceHeight * this.scale / 3 + 150;
 
-            const position = Animate.bounceSpace(1050, isoY, 90); 
+            const position = Animate.moveExp(0, 1050, 0, isoY, 60);
             const space = new Block(
                 this.isoBlock, 
                 isoX,  
@@ -124,6 +127,12 @@ class AutoBattler {
                 this.frameRate
             ));
         }
+        // experimenting with card animation
+        this.card = new Card(
+            this.game.width *(3/4), this.game.height*(3/4),
+            ASSET_MANAGER.getAsset("./assets/cards/lifeAlert.png")
+        );
+        this.game.addEntity(this.card);
     }
     update(){
         // handle mouse input
@@ -152,7 +161,6 @@ class AutoBattler {
                 }
             }
         }
-
         // if we move to next round, we can kill everything, place it back into stands
         // two states: set up grandmas, play>
         if(this.nextSequence.length > 0) {
@@ -180,7 +188,11 @@ class AutoBattler {
             //     unit.ready = true;
             // })
         }*/
-
+       if(this.setUnits.size == this.players.length && !this.cardUsed) {
+            //x, y, position, image
+            this.cardUsed = true;
+            this.card.use();
+       }
     }
     draw(ctx){
         ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -207,7 +219,7 @@ class AutoBattler {
     
         return (
             this.isPointInTriangle(mouseX, mouseY, Tx, Ty, Lx, Ly, Rx, Ry) || 
-            this.isPointInTriangle(mouseX, mouseY, Bx, By, Lx, Ly, Rx, Ry)
+            thisisPointInTriangle(mouseX, mouseY, Bx, By, Lx, Ly, Rx, Ry)
         );
     }
     
@@ -361,7 +373,7 @@ class Entity {
             (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
                 - this.size * this.block.scale) - hpY *2 +
                 (this.block.hovered || this.block.selected ? 
-                    this.block.height * this.block.scale / 4 : 0) * 26/30,
+                    this.block.height * this.block.scale / 4 : 0),
             this.size / 4 * this.block.scale,
             Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
         );
@@ -500,22 +512,79 @@ class Block {
 
     // create spaces, see what is occupying the space, and attach it to the space?
 }
-class Enemy {
-    constructor(){
-        Object.assign(this, {})
+class Card {
+    constructor(x, y, image, scale = 5, flipFrames = 120) {
+        Object.assign(this, { x, y, image, scale });
+        this.spriteWidth = 32 * scale; // can be passed in as size;
+        this.spriteHeight = 32 * scale;
+        this.z = 50;
+        this.angleRad = 0;
+        this.useCard = false
+        this.radAngles = Animate.flipCardRad(flipFrames, 0, Math.PI * 2, true);
+        //startY, endY, frames
+        this.leavePosition = Animate.bounceSpace(this.y, -100, 120);
+        console.log(this.leavePosition);
+        this.vanish = 10;
     }
-    update(){
-
+  
+    update() {
+        if(this.useCard) {
+            if (this.radAngles.length > 0) {
+                this.angleRad = this.radAngles.shift();
+            } else {
+                this.vanish--;
+            }
+        }
     }
-    draw(ctx){
 
+    draw(ctx) {
+        if(this.useCard) {
+            if(this.radAngles.length > 0){
+                ctx.save();
+            
+                const pivotX = this.x + this.spriteWidth / 2;
+                const pivotY = this.y + this.spriteHeight / 2;
+                ctx.translate(pivotX, pivotY);
+                
+                const scaleX = Math.cos(this.angleRad);
+                ctx.scale(scaleX, 1);
+                ctx.drawImage(
+                    this.image,
+                    0, 0, 32, 32,
+                    -this.spriteWidth / 2, -this.spriteHeight / 2, 
+                    this.spriteWidth, this.spriteHeight         
+                );
+                
+                ctx.restore();
+            } else {
+                ctx.save();
+                ctx.globalAlpha = 0.1 * this.vanish;
+                ctx.drawImage(
+                    this.image,
+                    0, 0, 32, 32,
+                    this.x, this.y, 
+                    this.spriteWidth, this.spriteHeight         
+                );
+                ctx.restore();
+                if(this.vanish == 0) this.removeFromWorld = true;
+            }
+
+        } else {
+
+            ctx.drawImage(
+                this.image,
+                0, 0, 32, 32,
+                this.x, this.y, 
+                this.spriteWidth, this.spriteHeight         
+            );
+        }
+    }
+    use(){
+        this.useCard = true;
     }
 }
-class Ally {
-    constructor(){
+  
 
-    }
-}
 class Animate {
     constructor() {
         throw new Error("Animate is a static class and cannot be instantiated.");
@@ -613,7 +682,40 @@ class Animate {
     static easeOutQuad(t) {
         return 1 - (1 - t) * (1 - t);
     }
-    static hit() {
+        
+    /**
+     * Generates an array of radian values for a card flip.
+     * @param {number} frames - Total number of frames for the flip animation.
+     * @param {number} [startRad=0] - Starting angle in radians.
+     * @param {number} [endRad=Math.PI] - Ending angle in radians.
+     * @param {boolean} [eased=false] - Whether to apply an easing function.
+     * @return {number[]} Array of radian values.
+     */
+    static flipCardRad(frames, startRad = 0, endRad = Math.PI, eased = false) {
+        const radAngles = [];
+        for (let i = 0; i <= frames; i++) {
+        let progress = i / frames;
+        if (eased) {
+            progress = this.easeInOutQuad(progress);
+        }
+        const angle = startRad + (endRad - startRad) * progress;
+        radAngles.push(angle);
+        }
+        return radAngles;
+    }
+    static moveExp(startX, startY, endX, endY, frames) {
+        const positions = [];
+        for (let i = 0; i <= frames; i++) {
+          const t = i / frames;
 
+          const eased = Animate.easeOutExpo(t);
+          const x = startX + (endX - startX) * eased;
+          const y = startY + (endY - startY) * eased;
+          positions.push({ x, y });
+        }
+        return positions;
+    }
+    static easeOutExpo(t) {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
     }
 }

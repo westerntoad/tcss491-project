@@ -55,6 +55,9 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/special.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 
+// Cards (items)
+ASSET_MANAGER.queueDownload("./assets/cards/lifeAlert.png");
+ASSET_MANAGER.queueDownload("./assets/cards/sponge.png");
 // MUSIC 
 ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
 
