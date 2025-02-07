@@ -366,7 +366,7 @@ class Entity {
             Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
         );
         // draw realHp
-        const currHpBar = 0.25;
+        const currHpBar = this.entity.hp / this.entity.maxHp;
         const pHeight = 5 + currHpBar * 26;
 
         ctx.drawImage(
@@ -376,16 +376,16 @@ class Entity {
             30,
             Math.floor(26 * (this.entity.granny ? currHpBar : 1 - currHpBar)),
 
-            this.block.x + this.block.width * this.block.scale / 2
-                + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+            Math.floor(this.block.x + this.block.width * this.block.scale / 2
+                + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2),
 
-            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
+            Math.floor((this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
                 - this.size * this.block.scale) - hpY *2 +
                 (this.block.hovered || this.block.selected ? 
                     this.block.height * this.block.scale / 4 : 0) + 
                 (this.entity.granny ? 
                     (1-currHpBar) : currHpBar)
-                * (26/30) * this.size / 4 * this.block.scale,
+                * (26/30) * this.size / 4 * this.block.scale),
 
             this.size / 4 * this.block.scale,
 
