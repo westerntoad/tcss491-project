@@ -219,7 +219,7 @@ class AutoBattler {
     
         return (
             this.isPointInTriangle(mouseX, mouseY, Tx, Ty, Lx, Ly, Rx, Ry) || 
-            thisisPointInTriangle(mouseX, mouseY, Bx, By, Lx, Ly, Rx, Ry)
+            this.isPointInTriangle(mouseX, mouseY, Bx, By, Lx, Ly, Rx, Ry)
         );
     }
     
