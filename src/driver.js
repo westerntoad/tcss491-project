@@ -2,7 +2,10 @@
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const PARAMS = {
-    cellSize: 75
+    cellSize: 75,
+    spaceHeight: 24,
+    spaceHeightAdjusted: 15,
+    scale: 3
 };
 
 ASSET_MANAGER.queueDownload("./assets/arrow.png");

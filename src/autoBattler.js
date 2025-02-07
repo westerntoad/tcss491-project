@@ -6,7 +6,6 @@ class AutoBattler {
         this.players = players;
         this.enemies = enemies;
 
-        this.ready = false;
         this.frameRate = 60;
         this.toDraw = 0;
         this.buttonPressed = false;
@@ -19,6 +18,7 @@ class AutoBattler {
         this.z = -5; // draw this first.
 
         this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
+        PARAMS.spaceWidth = this.isoBlock.width; // TODO replace with hard value
         this.spaceWidth = this.isoBlock.width;
         this.spaceHeight = 24; // hard value from image 32x32
         this.spaceHeightAdjusted = 15;
@@ -42,59 +42,29 @@ class AutoBattler {
     init() {
         this.nextSequence = []; // create all blocks, let them fall then bounce
 
-        let z = 0;
-        for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < 7; j++) {
-                let isoX = (i - j) * this.spaceWidth * this.scale / 2 + 500;
-                let isoY = (i + j) * this.spaceHeight * this.scale / 3 + 200;
+        for (let i = 0; i < 7*7; i++) {
+            const block = new Block(i % 7, Math.floor(i / 7));
+            block.deltas = Animate.bounceSpace(-block.isoY, 0, 60);
+            block.delay = i;
+            this.allBlocks[block.mapY][block.mapX] = {
+                x: block.isoX,
+                y: block.isoY,
+                block: block
+            };
 
-                // Make the blocks fall from higher up and bounce once
-                const position = Animate.bounceSpace(0, isoY, 60); 
-
-                const space = new Block(
-                    this.isoBlock, 
-                    isoX,  
-                    this.spaceWidth, 
-                    this.spaceHeight, 
-                    this.scale, 
-                    position, 
-                    z,
-                    j, i
-                );
-
-                // Store block in 2D array
-                this.allBlocks[i][j] = {
-                    x: isoX,
-                    y: isoY,
-                    block: space
-                };
-
-                this.nextSequence.push(space);
-                z++;
-            }
+            this.game.addEntity(block);
         }
         for(let i = 0; i < 7; i++){
-            let isoX = (i - 8) * this.spaceWidth * this.scale / 2 + 500;
-            let isoY = (i + 8) * this.spaceHeight * this.scale / 3 + 200;
-
-            const position = Animate.bounceSpace(1050, isoY, 90); 
-            const space = new Block(
-                this.isoBlock, 
-                isoX,  
-                this.spaceWidth, 
-                this.spaceHeight, 
-                this.scale, 
-                position, 
-                z
-            );
-
-            this.allBlocks[i][8] = {
-                x: isoX,
-                y: isoY,
-                block: space
+            const block = new Block(8, i);
+            block.deltas = Animate.bounceSpace(1050 - block.isoY, 0, 90); 
+            block.delay = i + 64;
+            this.allBlocks[block.mapY][block.mapX] = {
+                x: block.isoX,
+                y: block.isoY,
+                block: block
             };
-            this.nextSequence.push(space);
-            z++;
+
+            this.game.addEntity(block);
         }
 
         // const position = Animate.bounceSpace(0, 500, 60) // startY, endY, frames
@@ -157,10 +127,10 @@ class AutoBattler {
 
         // if we move to next round, we can kill everything, place it back into stands
         // two states: set up grandmas, play>
-        if(this.nextSequence.length > 0) {
+        /*if(this.nextSequence.length > 0) {
             this.game.addEntity(this.nextSequence[0]);
             this.nextSequence.shift();
-        }
+        }*/
         
             
         /*if(this.setUnits.size == this.players.length){
@@ -470,23 +440,29 @@ class Text {
     }
 }
 class Block {
-    constructor(isoBlock, x, width, height, scale, position, z, blockX, blockY){
-        Object.assign(this, {isoBlock, x, width, height, scale, position, z, blockX, blockY});
+    constructor(mapX, mapY){
+        Object.assign(this, {mapX, mapY})
+        this.isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2 + 500;
+        this.isoY = (mapY + mapX) * PARAMS.spaceHeight * PARAMS.scale / 3 + 200;
+        this.z = this.isoY; // TODO better calculation
+
         this.hovered = false;
         this.selected = false;
+
+        this.asset = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
     }
     update(){
-        if(this.position.length > 0){
-            this.y = this.position[0].y;
-            this.position.shift();
+        if (this.delay) {
+            this.delay--;
+        } else if(this.deltas.length > 0){
+            this.dy = this.deltas.shift().y;
         }
     }
     draw(ctx){
         
-        ctx.drawImage(this.isoBlock, 0, 0, this.width, this.height,
-            this.x, this.y + (this.hovered || this.selected ?
-            this.height * this.scale / 4 : 0), // if hovered
-            this.width * this.scale, this.height * this.scale);
+        ctx.drawImage(this.asset, 0, 0, PARAMS.spaceWidth, PARAMS.spaceHeight,
+            this.isoX, this.isoY + this.dy + (this.hovered || this.selected ? PARAMS.spaceHeight * PARAMS.scale * 0.25 : 0), // if hovered
+            PARAMS.spaceWidth * PARAMS.scale, PARAMS.spaceHeight * PARAMS.scale);
     }
     position(position){
         this.position = position;
