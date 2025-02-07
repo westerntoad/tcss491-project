@@ -1,3 +1,4 @@
+
 class SceneManager {
     constructor(game, pxWidth, pxHeight) {
         this.game = game;
@@ -12,7 +13,7 @@ class SceneManager {
         this.game.addEntity(this.map);
 
         this.game.addEntity(this);
-
+        this.battleScene(false);
         // debug
         //this.map.hide();
         //this.battleScene(false);
@@ -59,7 +60,6 @@ class SceneManager {
         this.savedMap = this.map;
         
         const enemies = [];
-        const random = Math.floor(Math.random() * 2);
         let i = 2;
         while(i >= 0) {
             enemies.push(

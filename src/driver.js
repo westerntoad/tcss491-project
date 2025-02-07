@@ -33,6 +33,8 @@ ASSET_MANAGER.queueDownload("./assets/grandmas/Ye-soon_Kim.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Mad@Chu.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/D3pr3ss0.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/L0neb0ne.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/dearless.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/oblivisk.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
 
 // For BattleScene
@@ -115,7 +117,36 @@ const DUNGEON_ENCOUNTERS = {
             defendRate: 0.25,
             specialRate: 0,
             asset: "./assets/enemies/Mad@Chu.png"
+         },
+         { name: "dearless",
+            attackRange: 1,
+            granny: false,
+            maxHp: 30,
+            hp: 30,
+            attack: 15,
+            defense: 2,
+            speed: 2,
+            exp: 2,
+            attackRate: 0.75,
+            defendRate: 0.25,
+            specialRate: 0,
+            asset: "./assets/enemies/dearless.png"
+         },
+         { name: "oblivisk",
+            attackRange: 1,
+            granny: false,
+            maxHp: 30,
+            hp: 30,
+            attack: 15,
+            defense: 2,
+            speed: 2,
+            exp: 2,
+            attackRate: 0.75,
+            defendRate: 0.25,
+            specialRate: 0,
+            asset: "./assets/enemies/oblivisk.png"
          }
+
     ],
     "Ruins": [
         { name: "Skeleton", hp: 60, attack: 12 },
@@ -177,7 +208,7 @@ gameEngine.grannies = [
     }
     , 
     {
-        granny: "true",
+        granny: true,
         name: "Vera Mulberry",
         asset: "./assets/grandmas/Vera_Mulberry.png",
         maxHp: 100,
@@ -188,7 +219,7 @@ gameEngine.grannies = [
     }
     , 
     {
-        granny: "true",
+        granny: true,
         name: "Ye-soon Kim",
         asset: "./assets/grandmas/Ye-soon_Kim.png",
         maxHp: 100,

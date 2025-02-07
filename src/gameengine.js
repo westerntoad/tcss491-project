@@ -231,7 +231,19 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        this.entities.sort((a, b) => b.z - a.z);
+        this.entities.sort((a, b) => {
+            const zDifference = b.z - a.z;
+            if (zDifference !== 0) {
+              return zDifference;
+            }
+            if (a instanceof Entity && !(b instanceof Entity)) {
+                return -1; // a should come first
+            }
+            if (b instanceof Entity && !(a instanceof Entity)) {
+                return 1;  // b should come first
+            }
+            return 0;
+          });
         this.ctx.canvas.addEventListener("keydown", event => this.pressed[event.key] = true);
         this.update();
         this.draw();

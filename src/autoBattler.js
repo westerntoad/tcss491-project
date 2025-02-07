@@ -22,9 +22,7 @@ class AutoBattler {
         this.spaceWidth = this.isoBlock.width;
         this.spaceHeight = 24; // hard value from image 32x32
         this.spaceHeightAdjusted = 15;
-        this.scale = 3;
-        this.nextX = 16; // the nextX for the next block.
-        this.nextY = 8; // the nextY for the next block
+        this.scale = 4;
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text)
@@ -45,8 +43,8 @@ class AutoBattler {
         let z = 0;
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < 7; j++) {
-                let isoX = (i - j) * this.spaceWidth * this.scale / 2 + 500;
-                let isoY = (i + j) * this.spaceHeight * this.scale / 3 + 200;
+                let isoX = (i - j) * this.spaceWidth * this.scale / 2 + 510;
+                let isoY = (i + j) * this.spaceHeight * this.scale / 3 + 150;
 
                 // Make the blocks fall from higher up and bounce once
                 const position = Animate.bounceSpace(0, isoY, 60); 
@@ -74,8 +72,8 @@ class AutoBattler {
             }
         }
         for(let i = 0; i < 7; i++){
-            let isoX = (i - 8) * this.spaceWidth * this.scale / 2 + 500;
-            let isoY = (i + 8) * this.spaceHeight * this.scale / 3 + 200;
+            let isoX = (i - 8) * this.spaceWidth * this.scale / 2 + 510;
+            let isoY = (i + 8) * this.spaceHeight * this.scale / 3 + 150;
 
             const position = Animate.bounceSpace(1050, isoY, 90); 
             const space = new Block(
@@ -354,7 +352,7 @@ class Entity {
         // draw blackHp first
         ctx.drawImage( // magic numbers are hard defined just for hp.
             img,
-            1,
+            1 + 32,
             5,
             30,
             26,
@@ -363,28 +361,36 @@ class Entity {
             (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
                 - this.size * this.block.scale) - hpY *2 +
                 (this.block.hovered || this.block.selected ? 
-                    this.block.height * this.block.scale / 4 : 0),
+                    this.block.height * this.block.scale / 4 : 0) * 26/30,
             this.size / 4 * this.block.scale,
             Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
         );
         // draw realHp
-        const currHpBar = this.entity.hp / this.entity.maxHp;
+        const currHpBar = 0.25;
         const pHeight = 5 + currHpBar * 26;
 
         ctx.drawImage(
             img,
             1,
-            5,
+            (this.entity.granny ? 5 + ((1 - currHpBar) * 26) : pHeight ),
             30,
-            26,
+            Math.floor(26 * (this.entity.granny ? currHpBar : 1 - currHpBar)),
+
             this.block.x + this.block.width * this.block.scale / 2
                 + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+
             (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
                 - this.size * this.block.scale) - hpY *2 +
                 (this.block.hovered || this.block.selected ? 
-                    this.block.height * this.block.scale / 4 : 0),
+                    this.block.height * this.block.scale / 4 : 0) + 
+                (this.entity.granny ? 
+                    (1-currHpBar) : currHpBar)
+                * (26/30) * this.size / 4 * this.block.scale,
+
             this.size / 4 * this.block.scale,
-            Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
+
+            Math.floor(this.size / 4 * this.block.scale * (26/30) * 
+                (this.entity.granny ? currHpBar : (1 - currHpBar))) // raw ratio
         );
 
         ctx.drawImage(

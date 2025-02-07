@@ -142,7 +142,8 @@ class BattleScene {
                 //draw the red heart
             ctx.drawImage(this.allyHp, 1, 5 + ((1 - currentHp) * 26),
                 30, 26 * currentHp,
-                player.startX + spriteSize * (3/5) - this.game.width / 8, player.startY + Math.floor((1 - currentHp) * spriteSize * (26/30) * (3/5)),
+                player.startX + spriteSize * (3/5) - this.game.width / 8, 
+                player.startY + Math.floor((1 - currentHp) * spriteSize * (26/30) * (3/5)),
                 spriteSize * (3/5) , Math.floor((currentHp) * spriteSize * (26/30) * (3/5))
             );
 
