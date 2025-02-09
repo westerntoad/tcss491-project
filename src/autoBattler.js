@@ -120,7 +120,7 @@ class AutoBattler {
             ));
         }
         // initialize enemy units
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 7; i++) {
             const enemy = Object.assign({}, this.enemies[Math.floor(Math.random() * this.enemies.length)]);
             enemy.moveSpeed += this.getRandomSpeed(); // adds variance in moveSpeed
             this.game.addEntity(new Entity(
