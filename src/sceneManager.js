@@ -67,7 +67,7 @@ class SceneManager {
             );
             i--;
         }
-
+        console.log(enemies);
         const players = this.game.grannies;
 
         console.log('Enemies:', enemies);

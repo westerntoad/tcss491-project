@@ -82,73 +82,70 @@ const DUNGEON_ENCOUNTERS = {
         { name: "L0neb0ne",
             attackRange: 1,
             granny: false,
-            maxHp: 50,
-            hp: 50,
-            attack: 10,
+            maxHp: 100,
+            hp: 100,
+            attack: 1,
             defense: 5,
             speed: 1,
             exp: 3,
-            attackRate: 0.5,
-            defendRate: 0.5,
-            specialRate: 0,
+            moveSpeed: 0.6,
+            attackSpeed: 0.35,
             asset: "./assets/enemies/L0neb0ne.png"
          },
-        { name: "D3pr3ss0",
-            attackRange: 1,
-            granny: false,
-            maxHp: 25,
-            hp: 25,
-            attack: 25,
-            defense: 10,
-            speed: 2,
-            exp: 4,
-            attackRate: 0.9,
-            defendRate: 0.1,
-            specialRate: 0,
-            asset: "./assets/enemies/D3pr3ss0.png"
-         },
-        { name: "Mad@Chu",
-            attackRange: 1,
-            granny: false,
-            maxHp: 30,
-            hp: 30,
-            attack: 15,
-            defense: 2,
-            speed: 2,
-            exp: 2,
-            attackRate: 0.75,
-            defendRate: 0.25,
-            specialRate: 0,
-            asset: "./assets/enemies/Mad@Chu.png"
-         },
-         { name: "dearless",
-            attackRange: 1,
-            granny: false,
-            maxHp: 30,
-            hp: 30,
-            attack: 15,
-            defense: 2,
-            speed: 2,
-            exp: 2,
-            attackRate: 0.75,
-            defendRate: 0.25,
-            specialRate: 0,
-            asset: "./assets/enemies/dearless.png"
-         },
-         { name: "oblivisk",
-            attackRange: 1,
-            granny: false,
-            maxHp: 30,
-            hp: 30,
-            attack: 15,
-            defense: 2,
-            speed: 2,
-            exp: 2,
-            attackRate: 0.75,
-            defendRate: 0.25,
-            specialRate: 0,
-            asset: "./assets/enemies/oblivisk.png"
-         }
+        // { name: "D3pr3ss0",
+        //     attackRange: 1,
+        //     granny: false,
+        //     maxHp: 25,
+        //     hp: 25,
+        //     attack: 25,
+        //     defense: 10,
+        //     speed: 2,
+        //     exp: 4,
+        //     moveSpeed: 1.1,
+        //     attackSpeed: 1.1,
+        //     asset: "./assets/enemies/D3pr3ss0.png"
+        //  }
+        //  ,
+        // { name: "Mad@Chu",
+        //     attackRange: 1,
+        //     granny: false,
+        //     maxHp: 30,
+        //     hp: 30,
+        //     attack: 15,
+        //     defense: 2,
+        //     speed: 2,
+        //     exp: 2,
+        //     moveSpeed: 1.2,
+        //     attackSpeed: 1.2,
+        //     asset: "./assets/enemies/Mad@Chu.png"
+        //  }
+        //  ,
+        //  { name: "dearless",
+        //     attackRange: 1,
+        //     granny: false,
+        //     maxHp: 30,
+        //     hp: 30,
+        //     attack: 15,
+        //     defense: 2,
+        //     speed: 2,
+        //     exp: 2,
+        //     moveSpeed: 0.5,
+        //     attackSpeed: 1.3,
+        //     asset: "./assets/enemies/dearless.png"
+        //  },
+        //  { name: "oblivisk",
+        //     attackRange: 1,
+        //     granny: false,
+        //     maxHp: 30,
+        //     hp: 30,
+        //     attack: 15,
+        //     defense: 2,
+        //     speed: 2,
+        //     exp: 2,
+        //     moveSpeed: 0.55,
+        //     attackSpeed: 1.4,
+        //     asset: "./assets/enemies/oblivisk.png"
+        //  }
 
     ],
     "Ruins": [
@@ -183,7 +180,8 @@ gameEngine.grannies = [
 
             }
         },
-        speed: 1
+        moveSpeed: 0.5,
+        attackSpeed: 0.5,
     }
     , 
     {
@@ -195,7 +193,8 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        speed: 1
+        moveSpeed: 0.5,
+        attackSpeed: 0.5,
     }
     , 
     {
@@ -207,10 +206,12 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        speed: 1
+        moveSpeed: 0.5,
+        attackSpeed: 0.5,
     }
     , 
     {
+        attackRange: 1,
         granny: true,
         name: "Vera Mulberry",
         asset: "./assets/grandmas/Vera_Mulberry.png",
@@ -218,10 +219,12 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        speed: 1
+        moveSpeed: 0.5,
+        attackSpeed: 0.5,
     }
     , 
     {
+        attackRange: 1,
         granny: true,
         name: "Ye-soon Kim",
         asset: "./assets/grandmas/Ye-soon_Kim.png",
@@ -229,7 +232,8 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        speed: 1
+        moveSpeed: 0.5,
+        attackSpeed: 0.5,
     }
 ];
 ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager will jump straight into combat

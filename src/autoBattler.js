@@ -31,7 +31,7 @@ class AutoBattler {
 
     showText(text) {
         const textWidth = this.game.ctx.measureText(this.text).width;
-        const frames = 180; // modifiable
+        const frames = 150; // modifiable
         /** -textWidth, this.game.height/2, this.game.width - textWidth, 
             this.game.height/2, frames */
         const textStartFrames = Animate.moveExp(-textWidth, this.game.height/2, this.game.width / 2 - textWidth / 2, 
@@ -60,7 +60,7 @@ class AutoBattler {
                     this.scale, 
                     position, 
                     z,
-                    j, i
+                    i, j
                 );
 
                 // Store block in 2D array
@@ -85,8 +85,9 @@ class AutoBattler {
                 this.spaceWidth, 
                 this.spaceHeight, 
                 this.scale, 
-                position, 
-                z
+                position,
+                z,
+                i, 8
             );
 
             this.allBlocks[i][8] = {
@@ -105,26 +106,32 @@ class AutoBattler {
         // initialize friendly units
         this.setUnits = new Set();
         for(let i = 0; i < this.players.length && i < 7; i++){
+            const player = this.players[i];
+            player.moveSpeed += this.getRandomSpeed();
             this.game.addEntity(new Entity(
-                this.players[i],
+                player,
                 this.allBlocks[i][8].block, 
                 this.spaceHeightAdjusted, 
                 ENTITY_SIZE,
                 i, 8, 
                 this.allBlocks, 
-                this.frameRate
+                this.frameRate,
+                this.game
             ));
         }
         // initialize enemy units
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 6; i++) {
+            const enemy = Object.assign({}, this.enemies[Math.floor(Math.random() * this.enemies.length)]);
+            enemy.moveSpeed += this.getRandomSpeed(); // adds variance in moveSpeed
             this.game.addEntity(new Entity(
-                Object.assign({}, this.enemies[0]),
+                enemy,
                 this.allBlocks[6][i].block, 
                 this.spaceHeightAdjusted, 
                 ENTITY_SIZE,
-                6, 0, 
+                6, i, 
                 this.allBlocks, 
-                this.frameRate
+                this.frameRate,
+                this.game
             ));
         }
         // experimenting with card animation
@@ -143,7 +150,7 @@ class AutoBattler {
                 let block = this.allBlocks[i][j];
                 if (!block) continue;
                 if (this.isMouseOverTile(mouseX, mouseY, block)) {
-                    console.log("x: " + j + " | y: " + i);
+                    console.log("x: " + i + " | y: " + j);
                     block.block.hovered = true;
                     if (this.game.click) {
                         if (!this.selectedBlock && block.block.occupied && block.block.occupied.entity.granny) {
@@ -192,11 +199,21 @@ class AutoBattler {
             //x, y, position, image
             this.cardUsed = true;
             this.card.use();
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 9; j++) {
+                    let block = this.allBlocks[i][j];
+                    if(!block) continue;
+                    if(block.block.occupied)block.block.occupied.ready = true;
+                }
+            }
        }
     }
     draw(ctx){
         ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
         
+    }
+    getRandomSpeed(){
+        return Math.floor(Math.random() * 100) / 1000;
     }
     isPointInTriangle(px, py, ax, ay, bx, by, cx, cy) {
         let area = 0.5 * (-by * cx + ay * (-bx + cx) + ax * (by - cy) + bx * cy);
@@ -235,123 +252,197 @@ class AutoBattler {
     }
 }
 class Entity {
-    constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate) {
-      Object.assign(this, { entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate });
+    constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
+      Object.assign(this, { entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game });
       this.z = this.block.z;
       this.x = this.block.x + this.block.width * this.block.scale / 2;
       this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
-      this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / size;
+      this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / 32;
       this.currentFrame = 0;
       this.block.occupied = this;
       this.ticker = 0;
       this.attacking = false;
       this.ready = false;
       this.assetSize = ASSET_MANAGER.getAsset(this.entity.asset).height;
+      this.elapsedTime = 0;
+      this.drawTime = 0;
+      //atk speed for frequency of attack rate
+      //move speed for frequency of moving
     }
-  
-    update() {
-        if(this.entity.hp <= 0){
-            this.block.occupied = null;
-            this.removeFromWorld = true;
-        }
-      // Every 60 ticks, decide what to do.
-      if (this.ticker % (this.frameRate/2) === 0 && this.ready) {
-        const startX = this.blockX;
-        const startY = this.blockY;
-        const attackRange = this.entity.attackRange;
-        // For a non-granny entity (enemy), targetTeam should be true (i.e. granny entities).
-        const targetTeam = !this.entity.granny;
-        
-        // Initialize BFS.
-        const queue = [];
-        const visited = new Set();
-        queue.push({ x: startX, y: startY, dist: 0, path: [] });
-        visited.add(`${startX},${startY}`);
-        
-        let found = null;
-        
-        // Run BFS.
-        while (queue.length) {
-          const current = queue.shift();
-          // Retrieve the block at (current.x, current.y)
-          const currentBlockData = this.allBlocks[current.y][current.x];
-          const currentBlock = currentBlockData.block;
-          
-          // If the block is occupied by some entity other than ourselves…
-          if (currentBlock.occupied && currentBlock.occupied !== this) {
-            // If that entity is our target (e.g., granny), we have found a candidate.
-            if (currentBlock.occupied.entity.granny === targetTeam) {
-              found = current;
-              break;
-            }
-            // Otherwise, treat this block as an obstacle; skip expanding it.
-            continue;
-          }
-          
-          // Expand neighbors (up, down, left, right).
-          const directions = [
+    bfs(){ // return the dx, dy to move. also return the x and y of closest enemy.
+        const directions = [
             { dx: 0, dy: -1 },
             { dx: 0, dy: 1 },
             { dx: -1, dy: 0 },
             { dx: 1, dy: 0 }
-          ];
-          for (const d of directions) {
-            const nx = current.x + d.dx;
-            const ny = current.y + d.dy;
-            if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7) continue;
-            const key = `${nx},${ny}`;
-            if (visited.has(key)) continue;
-            visited.add(key);
-            queue.push({
-              x: nx,
-              y: ny,
-              dist: current.dist + 1,
-              path: current.path.concat({ x: nx, y: ny })
-            });
-          }
+        ];
+
+        const queue = [];
+        const visited = new Set();
+        queue.push ({x: this.block.blockX, y: this.block.blockY, dist: 0}) // just find the nearest enemy, then move using the initial direction.
+        while(queue.length) { //this'll stop, and when it does, we just return null;
+            const current = queue.shift();
+            const currBlock = this.allBlocks[current.x][current.y].block;
+
+            if(currBlock.occupied){
+                if(currBlock.occupied.entity.granny !== this.entity.granny) {
+                    return current;
+                }
+                // console.log("unit: "+ this.entity.name + " | found: " + currBlock.occupied.entity.name
+                //     + " @ [x: " + current.x + " | y:  " + current.y + " ]"
+                // );
+                // console.log(current);
+                else if(currBlock.occupied.entity !== this.entity) continue;
+            }
+
+            for (const d of directions) {
+                const nx = current.x + d.dx;
+                const ny = current.y + d.dy;
+                if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7) continue;
+                const key = `${nx},${ny}`;
+                if(visited.has(key)) continue;
+                visited.add(key);
+                queue.push({
+                    x: nx,
+                    y: ny,
+                    dist: current.dist + 1,
+                    initial: (current.initial ? current.initial : {x: d.dx, y: d.dy}) // check if current.initial exists.
+                });
+            }
         }
-        
-        // Decision making:
-        if (found) {
-          if (found.dist <= attackRange) {
-            // Insert attack logic here.
-            this.attacking = true;
-            this.allBlocks[found.y][found.x].block.occupied.entity.hp -= this.entity.attack;
-          } else {
-            this.attacking = false;
-            // Move one block along the BFS path.
-            // We choose the first step in the found path.
-            const nextBlockPos = found.path[0];
-            
-            // Unoccupy the current block.
+        return null;
+    }
+    update() {
+        if(!this.ready) return;
+        if(this.entity.hp <= 0){
             this.block.occupied = null;
-            
-            // Update grid coordinates.
-            this.blockX = nextBlockPos.x;
-            this.blockY = nextBlockPos.y;
-            this.block = this.allBlocks[this.blockY][this.blockX].block;
-            
-            // Mark the new block as occupied.
-            this.block.occupied = this;
-            
-            // Update pixel coordinates (assuming center of the block).
-            this.x = this.block.x + this.block.width * this.block.scale / 2;
-            this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
-            
-            // Update the entity’s z to match the new block.
-            this.z = this.block.z;
-          }
-        } else {
-            this.attacking = false;
+            this.removeFromWorld = true;
         }
-      }
-      this.ticker++;
+        // 2 modes of operation, moving or attacking.
+        // First, look for closest enemy location
+        const found = this.bfs(); // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
+        if(found) { // there are enemies on map
+            if(found.dist <= this.entity.attackRange) { // switch to attack if enemy is close
+                // check the atkSpeed
+                // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
+                this.elapsedTime += this.game.clockTick;
+                if(this.elapsedTime >= this.entity.attackSpeed) {
+                    this.target = this.allBlocks[found.x][found.y].block.occupied.entity;
+                    this.target.hp -= this.entity.attack;
+
+                    this.elapsedTime = 0;// how timer is used
+                    this.attacking = true;
+                }
+            } else{
+                this.elapsedTime += this.game.clockTick;
+                if(this.elapsedTime >= this.entity.moveSpeed){
+                    // check the moveSpeed
+                    this.blockMove(this.allBlocks[this.block.blockX + found.initial.x]
+                        [this.block.blockY + found.initial.y].block);
+                    this.elapsedTime = 0;// how timer is used
+                    this.attacking = false;
+                }
+            }
+        }
+    //   // Every 60 ticks, decide what to do.
+    //   if (this.ticker % (this.frameRate/2) === 0 && this.ready) {
+    //     const startX = this.blockX;
+    //     const startY = this.blockY;
+    //     const attackRange = this.entity.attackRange;
+    //     // For a non-granny entity (enemy), targetTeam should be true (i.e. granny entities).
+    //     const targetTeam = !this.entity.granny;
+        
+    //     // Initialize BFS.
+    //     const queue = [];
+    //     const visited = new Set();
+    //     queue.push({ x: startX, y: startY, dist: 0, path: [] });
+    //     visited.add(`${startX},${startY}`);
+        
+    //     let found = null;
+        
+    //     // Run BFS.
+    //     while (queue.length) {
+    //       const current = queue.shift();
+    //       // Retrieve the block at (current.x, current.y)
+    //       const currentBlockData = this.allBlocks[current.y][current.x];
+    //       const currentBlock = currentBlockData.block;
+          
+    //       // If the block is occupied by some entity other than ourselves…
+    //       if (currentBlock.occupied && currentBlock.occupied !== this) {
+    //         // If that entity is our target (e.g., granny), we have found a candidate.
+    //         if (currentBlock.occupied.entity.granny === targetTeam) {
+    //           found = current;
+    //           break;
+    //         }
+    //         // Otherwise, treat this block as an obstacle; skip expanding it.
+    //         continue;
+    //       }
+          
+    //       // Expand neighbors (up, down, left, right).
+    //       const directions = [
+    //         { dx: 0, dy: -1 },
+    //         { dx: 0, dy: 1 },
+    //         { dx: -1, dy: 0 },
+    //         { dx: 1, dy: 0 }
+    //       ];
+    //       for (const d of directions) {
+    //         const nx = current.x + d.dx;
+    //         const ny = current.y + d.dy;
+    //         if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7) continue;
+    //         const key = `${nx},${ny}`;
+    //         if (visited.has(key)) continue;
+    //         visited.add(key);
+    //         queue.push({
+    //           x: nx,
+    //           y: ny,
+    //           dist: current.dist + 1,
+    //           path: current.path.concat({ x: nx, y: ny })
+    //         });
+    //       }
+    //     }
+        
+    //     // Decision making:
+    //     if (found) {
+    //       if (found.dist <= attackRange) {
+    //         // Insert attack logic here.
+    //         this.attacking = true;
+    //         this.allBlocks[found.y][found.x].block.occupied.entity.hp -= this.entity.attack;
+    //       } else {
+    //         this.attacking = false;
+    //         // Move one block along the BFS path.
+    //         // We choose the first step in the found path.
+    //         const nextBlockPos = found.path[0];
+            
+    //         // Unoccupy the current block.
+    //         this.block.occupied = null;
+            
+    //         // Update grid coordinates.
+    //         this.blockX = nextBlockPos.x;
+    //         this.blockY = nextBlockPos.y;
+    //         this.block = this.allBlocks[this.blockY][this.blockX].block;
+            
+    //         // Mark the new block as occupied.
+    //         this.block.occupied = this;
+            
+    //         // Update pixel coordinates (assuming center of the block).
+    //         this.x = this.block.x + this.block.width * this.block.scale / 2;
+    //         this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
+            
+    //         // Update the entity’s z to match the new block.
+    //         this.z = this.block.z;
+    //       }
+    //     } else {
+    //         this.attacking = false;
+    //     }
+    //   }
     }
   
     draw(ctx) {
-        if(this.ticker % (this.frameRate / 4) === 0 && this.attacking){
+        this.drawTime += this.game.clockTick;
+        if(this.drawTime >= this.entity.attackSpeed && this.attacking){
             if(this.currentFrame >= this.frames -1) this.currentFrame = 0;
             else this.currentFrame++;
+            this.drawTime = 0 ;
         }
 
         // draw the hp?
@@ -422,13 +513,15 @@ class Entity {
         );
     }
     blockMove(newBlock){
-        this.block.occupied = null;
-        this.block.selected = false;
-        this.z = newBlock.z;
-        this.block = newBlock;
-        this.block.occupied = this;
-        this.blockX = this.block.blockX;
-        this.blockY = this.block.blockY;
+        if(!newBlock.occupied){
+            this.block.occupied = null;
+            this.block.selected = false;
+            this.z = newBlock.z;
+            this.block = newBlock;
+            this.block.occupied = this;
+            this.blockX = this.block.blockX;
+            this.blockY = this.block.blockY;
+        }
     }
   }
   
@@ -523,7 +616,6 @@ class Card {
         this.radAngles = Animate.flipCardRad(flipFrames, 0, Math.PI * 2, true);
         //startY, endY, frames
         this.leavePosition = Animate.bounceSpace(this.y, -100, 120);
-        console.log(this.leavePosition);
         this.vanish = 10;
     }
   
