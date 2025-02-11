@@ -40,64 +40,40 @@ class AutoBattler {
     }
     
     init() {
-        this.nextSequence = []; // create all blocks, let them fall then bounce
-
+        // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
             const block = new Block(i % 7, Math.floor(i / 7));
-            block.deltas = Animate.bounceSpace(-block.isoY, 0, 60);
-            block.delay = i;
-            this.allBlocks[block.mapY][block.mapX] = {
-                x: block.isoX,
-                y: block.isoY,
-                block: block
-            };
+            block.animate(Animate.bounceSpace(-block.isoY, 0, 60), i);
+            console.log(block);
+            this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
         }
-        for(let i = 0; i < 7; i++){
+
+        // initialize all blocks on bench
+        for(let i = 0; i < 7; i++) {
             const block = new Block(8, i);
-            block.deltas = Animate.bounceSpace(1050 - block.isoY, 0, 90); 
-            block.delay = i + 64;
-            this.allBlocks[block.mapY][block.mapX] = {
-                x: block.isoX,
-                y: block.isoY,
-                block: block
-            };
+            block.animate(Animate.bounceSpace(1050 - block.isoY, 0, 90), i + 64);
+            this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
         }
 
-        // const position = Animate.bounceSpace(0, 500, 60) // startY, endY, frames
-        // this.nextSequence.push(new Space(this.isoBlock, 500, this.spaceWidth, this.spaceHeight, 
-        //     this.scale, position, 5)); // x, width, height, scale, position, z
-
-        // initialize friendly units
-        this.setUnits = new Set();
-        for(let i = 0; i < this.players.length && i < 7; i++){
-            this.game.addEntity(new Entity(
-                this.players[i],
-                this.allBlocks[i][8].block, 
-                this.spaceHeightAdjusted, 
-                ENTITY_SIZE,
-                i, 8, 
-                this.allBlocks, 
-                this.frameRate
-            ));
+        // initialize all friendly units and place on bench
+        for(let i = 0; i < this.players.length && i < 7; i++) {
+            const block = this.allBlocks[i][8];
+            block.unit = new CombatEntity(this.players[i], this, block);
+            this.game.addEntity(block.unit);
         }
-        // initialize enemy units
+        // initialize all enemy units and place onto battlefield
         for (let i = 0; i < 3; i++) {
-            this.game.addEntity(new Entity(
-                Object.assign({}, this.enemies[0]),
-                this.allBlocks[6][i].block, 
-                this.spaceHeightAdjusted, 
-                ENTITY_SIZE,
-                6, 0, 
-                this.allBlocks, 
-                this.frameRate
-            ));
+            const block = this.allBlocks[6][i];
+            block.unit = new CombatEntity(this.enemies[i], this, block);
+            this.game.addEntity(block.unit);
         }
     }
-    update(){
+
+    update() {
         // handle mouse input
         let mouseX = this.game.mouse?.x;
         let mouseY = this.game.mouse?.y;
@@ -107,9 +83,9 @@ class AutoBattler {
                 if (!block) continue;
                 if (this.isMouseOverTile(mouseX, mouseY, block)) {
                     console.log("x: " + j + " | y: " + i);
-                    block.block.hovered = true;
+                    block.hovered = true;
                     if (this.game.click) {
-                        if (!this.selectedBlock && block.block.occupied && block.block.occupied.entity.granny) {
+                        if (!this.selectedBlock && block.unit?.granny) {
                             block.block.selected = true;
                             this.selectedBlock = block;
                         } else if (this.selectedBlock && !block.block.occupied) {
@@ -120,19 +96,11 @@ class AutoBattler {
                         }
                     }
                 } else {
-                    block.block.hovered = false;
+                    block.hovered = false;
                 }
             }
         }
 
-        // if we move to next round, we can kill everything, place it back into stands
-        // two states: set up grandmas, play>
-        /*if(this.nextSequence.length > 0) {
-            this.game.addEntity(this.nextSequence[0]);
-            this.nextSequence.shift();
-        }*/
-        
-            
         /*if(this.setUnits.size == this.players.length){
             for (let i = 0; i < 7; i++) {
                 for (let j = 0; j < 9; j++) {
@@ -168,7 +136,11 @@ class AutoBattler {
     isMouseOverTile(mouseX, mouseY, tile) {
         if (!tile) return false;
 
-        let { x, y } = tile; // Get tile properties
+        let x = tile.isoX;
+        let y = tile.isoY;
+        if (tile.hovered || tile.selected) {
+            y -= tile.height * 0.25;
+        }
         const width = 32 * this.scale;
         const height = 15 * this.scale;
     
@@ -194,7 +166,7 @@ class AutoBattler {
         this.sceneManager.restoreScene();
     }
 }
-class Entity {
+class CombatEntity {
     constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate) {
       Object.assign(this, { entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate });
       this.z = this.block.z;
@@ -347,11 +319,8 @@ class Entity {
             5,
             30,
             26,
-            this.block.x + this.block.width * this.block.scale / 2
-                + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
-            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
-                - this.size * this.block.scale) - hpY *2 +
-                (this.block.hovered || this.block.selected ? 
+            this.block.x + this.block.width * this.block.scale / 2 + (this.entity.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2 - this.size * this.block.scale) - hpY *2 + (this.block.hovered || this.block.selected ? 
                     this.block.height * this.block.scale / 4 : 0),
             this.size / 4 * this.block.scale,
             Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
@@ -363,11 +332,8 @@ class Entity {
             0,
             this.assetSize,
             this.assetSize,
-            this.block.x + this.block.width * this.block.scale / 2
-                - this.size * this.block.scale / 2,
-            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2
-                - this.size * this.block.scale) +
-                (this.block.hovered || this.block.selected ? 
+            this.block.x + this.block.width * this.block.scale / 2 - this.size * this.block.scale / 2,
+            (this.block.y + this.spaceHeightAdjusted * this.block.scale / 2 - this.size * this.block.scale) + (this.block.hovered || this.block.selected ? 
                     this.block.height * this.block.scale / 4 : 0),
             this.size * this.block.scale,
             this.size * this.block.scale
@@ -382,22 +348,8 @@ class Entity {
         this.blockX = this.block.blockX;
         this.blockY = this.block.blockY;
     }
-  }
-  
-  
-class Projectile{
-    constructor(x, y, velocityX, velocityY){
-        Object.assign(this, {x, y, velocityX, velocityY});
-        this.velocityX;
-        this.velocityY;
-    }
-    update(){
-        // keep moving 
-    }
-    draw(){
-
-    }
 }
+  
 class Text {
     /**
      * 
@@ -406,19 +358,19 @@ class Text {
      * @param {number} size size of text
      * @param {number} expire time until text vanishes
      */
-    constructor(text, position, expire){
+    constructor(text, position, expire) {
         Object.assign(this, {text, position, expire});
         this.z = 35; // highest, should come before everything
         this.vanish = this.expire / 2;
         this.vanishCounter = this.vanish;
         this.index = 0;
     }
-    update(){ // update position of the text
+    update() { // update position of the text
         this.x = this.position[this.index].x;
         this.y = this.position[this.index].y;
         this.index++;
     }
-    draw(ctx){
+    draw(ctx) {
         ctx.save();
 
         if(this.expire < 2) {
@@ -437,153 +389,5 @@ class Text {
         ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
         this.expire--;
-    }
-}
-class Block {
-    constructor(mapX, mapY){
-        Object.assign(this, {mapX, mapY})
-        this.isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2 + 500;
-        this.isoY = (mapY + mapX) * PARAMS.spaceHeight * PARAMS.scale / 3 + 200;
-        this.z = this.isoY; // TODO better calculation
-
-        this.hovered = false;
-        this.selected = false;
-
-        this.asset = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
-    }
-    update(){
-        if (this.delay) {
-            this.delay--;
-        } else if(this.deltas.length > 0){
-            this.dy = this.deltas.shift().y;
-        }
-    }
-    draw(ctx){
-        
-        ctx.drawImage(this.asset, 0, 0, PARAMS.spaceWidth, PARAMS.spaceHeight,
-            this.isoX, this.isoY + this.dy + (this.hovered || this.selected ? PARAMS.spaceHeight * PARAMS.scale * 0.25 : 0), // if hovered
-            PARAMS.spaceWidth * PARAMS.scale, PARAMS.spaceHeight * PARAMS.scale);
-    }
-    position(position){
-        this.position = position;
-    }
-
-    // create spaces, see what is occupying the space, and attach it to the space?
-}
-class Enemy {
-    constructor(){
-        Object.assign(this, {})
-    }
-    update(){
-
-    }
-    draw(ctx){
-
-    }
-}
-class Ally {
-    constructor(){
-
-    }
-}
-class Animate {
-    constructor() {
-        throw new Error("Animate is a static class and cannot be instantiated.");
-    }
-
-    static textDisplay(text) {
-        // return the entire x and y value of the text?
-    }
-
-    static easeInOut(startX, startY, endX, endY, frames) {
-        let positions = [];
-
-        for (let i = 0; i < frames; i++) {
-            let progress = i / frames; // Normalize progress (0 to 1)
-            let bounceEffect = this.easeInOutQuad(progress);
-
-            let currentX = startX + (endX - startX) * bounceEffect;
-            let currentY = startY + (endY - startY) * bounceEffect;
-
-            positions.push({ x: currentX, y: currentY });
-        }
-
-        return positions;
-    }
-
-    static easeInOutQuad(t) {
-        return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-    }
-
-    /**
-     * Simulates a falling effect with a single bounce.
-     * @param {number} startY - The initial Y position (higher up).
-     * @param {number} endY - The final Y position where the object lands.
-     * @param {number} frames - Total number of frames for the animation.
-     * @param {number} overshootFactor - How much below endY the object falls before bouncing.
-     * @return {Array} - Returns an array of {x, y} positions for animation.
-     */
-    static bounceSpace(startY, endY, frames, overshootFactor = 0.2) {
-        let positions = [];
-        let overshootY = endY + (endY - startY) * overshootFactor; // Overshoot below endY
-
-        let halfFrames = Math.floor(frames * 0.6); // Time to reach overshoot
-        let bounceFrames = frames - halfFrames; // Remaining frames for bounce
-
-        // Falling to overshoot
-        for (let i = 0; i < halfFrames; i++) {
-            let progress = i / halfFrames; // Normalize 0 to 1
-            let easedProgress = this.easeInQuad(progress); // Fall fast
-            let currentY = startY + (overshootY - startY) * easedProgress;
-            positions.push({ x: 0, y: currentY });
-        }
-
-        // Bouncing up to settle at endY
-        for (let i = 0; i < bounceFrames; i++) {
-            let progress = i / bounceFrames; // Normalize 0 to 1
-            let easedProgress = this.easeOutQuad(progress); // Bounce slows down
-            let currentY = overshootY + (endY - overshootY) * easedProgress;
-            positions.push({ x: 0, y: currentY });
-        }
-
-        return positions;
-    }
-
-    /**
-     * Ease-in function (falling phase, starts slow, speeds up)
-     */
-    static easeInQuad(t) {
-        return t * t;
-    }
-    
-    /**
-     * Simulates a skew effect that peaks at the midpoint of an animation.
-     * @param {number} frames - Total frames for animation.
-     * @return {Array} - Returns an array of skew values.
-     */
-    static skewEffect(frames) {
-        let skews = [];
-        
-        for (let i = 0; i < frames; i++) {
-            let progress = i / frames; // Normalize progress (0 to 1)
-            
-            // Skew peaks at 50% progress, then eases back to 0
-            let skewAmount = Math.sin(progress * Math.PI) * 0.5; // Max skew = ±0.5
-            
-            skews.push(skewAmount);
-        }
-        
-        return skews;
-    }
-
-
-    /**
-     * Ease-out function (bounce phase, starts fast, slows down)
-     */
-    static easeOutQuad(t) {
-        return 1 - (1 - t) * (1 - t);
-    }
-    static hit() {
-
     }
 }
