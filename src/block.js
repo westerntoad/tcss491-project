@@ -1,6 +1,7 @@
 class Block {
     constructor(mapX, mapY) {
         Object.assign(this, {mapX, mapY})
+        this.scale = PARAMS.scale;
         this.width = PARAMS.spaceWidth * PARAMS.scale;
         this.height = PARAMS.spaceHeight * PARAMS.scale;
         this.isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2 + 500;
