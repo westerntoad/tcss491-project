@@ -2,7 +2,8 @@ class CombatEntity {
     //constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
     //block.unit = new CombatEntity(this.enemies[i], this, block);
     constructor(raw, battle, block) {
-        this.raw = raw
+        this.granny = raw.granny;
+        this.raw = raw;
         this.entity = raw;
         this.block = block;
         this.spaceHeightAdjusted = PARAMS.spaceHeightAdjusted; 
@@ -179,13 +180,13 @@ class CombatEntity {
     }
     blockMove(newBlock){
         if(!newBlock.occupied){
-            this.block.occupied = null;
+            this.block.unit = null;
             this.block.selected = false;
-            this.z = newBlock.z;
+            this.z = newBlock.z + 1;
             this.block = newBlock;
-            this.block.occupied = this;
-            this.blockX = this.block.blockX;
-            this.blockY = this.block.blockY;
+            this.block.unit = this;
+            this.blockX = this.block.mapX;
+            this.blockY = this.block.mapY;
         }
     }
 }
