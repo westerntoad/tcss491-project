@@ -142,6 +142,37 @@ class AutoBattler {
         this.game.addEntity(this.card);
     }
     update(){
+        /** Options:
+         * 1) go to next Round if all enemies are dead
+         *      - Clear the board.
+         * 2) go to Overworld if players are dead
+         *
+         */
+        
+        const set = new Set();
+        for(let i = 0; i < 7; i++){
+            for(let j = 0; j < 7; j++){
+                if(this.allBlocks[i][j].block.occupied && 
+                    !this.allBlocks[i][j].block.occupied.entity.granny) set.add(`${i}, ${j}`);
+            }
+        }
+        // Option 1: Kill board
+        if(set.size <= 0) {
+            for(let i = 0; i < 7; i++){
+                for(let j = 0; j < 9; j++){
+                    let block = this.allBlocks[i][j];
+                    if (!block) continue;
+                    if(block.block.occupied) {
+                        block.block.occupied.removeFromWorld = true;
+                    }
+                    block.block.removeFromWorld = true;
+                }
+            }
+            this.init();
+        }
+
+
+
         // handle mouse input
         let mouseX = this.game.mouse?.x;
         let mouseY = this.game.mouse?.y;
@@ -195,7 +226,7 @@ class AutoBattler {
             //     unit.ready = true;
             // })
         }*/
-       if(this.setUnits.size == this.players.length && !this.cardUsed) {
+       if(this.setUnits.size == this.players.length) {
             //x, y, position, image
             this.cardUsed = true;
             this.card.use();
@@ -253,19 +284,19 @@ class AutoBattler {
 }
 class Entity {
     constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
-      Object.assign(this, { entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game });
-      this.z = this.block.z;
-      this.x = this.block.x + this.block.width * this.block.scale / 2;
-      this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
-      this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / 32;
-      this.currentFrame = 0;
-      this.block.occupied = this;
-      this.ticker = 0;
-      this.attacking = false;
-      this.ready = false;
-      this.assetSize = ASSET_MANAGER.getAsset(this.entity.asset).height;
-      this.elapsedTime = 0;
-      this.drawTime = 0;
+        Object.assign(this, { entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game });
+        this.z = this.block.z;
+        this.x = this.block.x + this.block.width * this.block.scale / 2;
+        this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
+        this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / 32;
+        this.currentFrame = 0;
+        this.block.occupied = this;
+        this.ticker = 0;
+        this.attacking = false;
+        this.ready = false;
+        this.assetSize = ASSET_MANAGER.getAsset(this.entity.asset).height;
+        this.elapsedTime = 0;
+        this.drawTime = 0;
       //atk speed for frequency of attack rate
       //move speed for frequency of moving
     }
@@ -344,97 +375,6 @@ class Entity {
                 }
             }
         }
-    //   // Every 60 ticks, decide what to do.
-    //   if (this.ticker % (this.frameRate/2) === 0 && this.ready) {
-    //     const startX = this.blockX;
-    //     const startY = this.blockY;
-    //     const attackRange = this.entity.attackRange;
-    //     // For a non-granny entity (enemy), targetTeam should be true (i.e. granny entities).
-    //     const targetTeam = !this.entity.granny;
-        
-    //     // Initialize BFS.
-    //     const queue = [];
-    //     const visited = new Set();
-    //     queue.push({ x: startX, y: startY, dist: 0, path: [] });
-    //     visited.add(`${startX},${startY}`);
-        
-    //     let found = null;
-        
-    //     // Run BFS.
-    //     while (queue.length) {
-    //       const current = queue.shift();
-    //       // Retrieve the block at (current.x, current.y)
-    //       const currentBlockData = this.allBlocks[current.y][current.x];
-    //       const currentBlock = currentBlockData.block;
-          
-    //       // If the block is occupied by some entity other than ourselves…
-    //       if (currentBlock.occupied && currentBlock.occupied !== this) {
-    //         // If that entity is our target (e.g., granny), we have found a candidate.
-    //         if (currentBlock.occupied.entity.granny === targetTeam) {
-    //           found = current;
-    //           break;
-    //         }
-    //         // Otherwise, treat this block as an obstacle; skip expanding it.
-    //         continue;
-    //       }
-          
-    //       // Expand neighbors (up, down, left, right).
-    //       const directions = [
-    //         { dx: 0, dy: -1 },
-    //         { dx: 0, dy: 1 },
-    //         { dx: -1, dy: 0 },
-    //         { dx: 1, dy: 0 }
-    //       ];
-    //       for (const d of directions) {
-    //         const nx = current.x + d.dx;
-    //         const ny = current.y + d.dy;
-    //         if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7) continue;
-    //         const key = `${nx},${ny}`;
-    //         if (visited.has(key)) continue;
-    //         visited.add(key);
-    //         queue.push({
-    //           x: nx,
-    //           y: ny,
-    //           dist: current.dist + 1,
-    //           path: current.path.concat({ x: nx, y: ny })
-    //         });
-    //       }
-    //     }
-        
-    //     // Decision making:
-    //     if (found) {
-    //       if (found.dist <= attackRange) {
-    //         // Insert attack logic here.
-    //         this.attacking = true;
-    //         this.allBlocks[found.y][found.x].block.occupied.entity.hp -= this.entity.attack;
-    //       } else {
-    //         this.attacking = false;
-    //         // Move one block along the BFS path.
-    //         // We choose the first step in the found path.
-    //         const nextBlockPos = found.path[0];
-            
-    //         // Unoccupy the current block.
-    //         this.block.occupied = null;
-            
-    //         // Update grid coordinates.
-    //         this.blockX = nextBlockPos.x;
-    //         this.blockY = nextBlockPos.y;
-    //         this.block = this.allBlocks[this.blockY][this.blockX].block;
-            
-    //         // Mark the new block as occupied.
-    //         this.block.occupied = this;
-            
-    //         // Update pixel coordinates (assuming center of the block).
-    //         this.x = this.block.x + this.block.width * this.block.scale / 2;
-    //         this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
-            
-    //         // Update the entity’s z to match the new block.
-    //         this.z = this.block.z;
-    //       }
-    //     } else {
-    //         this.attacking = false;
-    //     }
-    //   }
     }
   
     draw(ctx) {
