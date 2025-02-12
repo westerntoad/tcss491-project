@@ -76,15 +76,19 @@ class AutoBattler {
 
 
         this.startButton = new StartButton(this.game, () => {
-            
             this.allUnits.forEach(unit => {
-                if (unit.mapY == 8)
+                if (unit.blockX == 8)
                     return false;
             });
 
             return true;
         }, () => {
-            alert("Game start!");
+            this.allUnits.forEach(unit => {
+                unit.ready = true;
+            });
+            console.log(this.allBlocks);
+            console.log(this.allUnits);
+            console.log('game started');
         });
         this.game.addEntity(this.startButton);
     }
@@ -98,7 +102,6 @@ class AutoBattler {
                 let block = this.allBlocks[i][j];
                 if (!block) continue;
                 if (this.isMouseOverTile(mouseX, mouseY, block)) {
-                    console.log("x: " + j + " | y: " + i);
                     block.hovered = true;
                     if (this.game.click) {
                         console.log(block);
@@ -211,7 +214,6 @@ class StartButton {
 
     draw(ctx) {
         ctx.save();
-        console.log(this.enabled);
         if (this.enabled)
             ctx.fillStyle = 'green';
         else
