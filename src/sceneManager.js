@@ -4,6 +4,7 @@ class SceneManager {
         this.z = 100;
         this.backgroundColor = '#ffffff';
         this.isDungeon = false;
+        this.party = new Party(this);
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state

@@ -84,9 +84,10 @@ const DUNGEON_ENCOUNTERS = {
             hp: 50,
             attack: 10,
             defense: 5,
-            attackSpeed: 2,
-            moveSpeed: 2,
+            speed: 1,
             exp: 3,
+            attackSpeed: 1,
+            moveSpeed: 1,
             asset: "./assets/enemies/L0neb0ne.png"
          },
         { name: "D3pr3ss0",
@@ -96,9 +97,10 @@ const DUNGEON_ENCOUNTERS = {
             hp: 25,
             attack: 25,
             defense: 10,
-            attackSpeed: 2,
-            moveSpeed: 2,
+            speed: 2,
             exp: 4,
+            attackSpeed: 1,
+            moveSpeed: 1,
             asset: "./assets/enemies/D3pr3ss0.png"
          },
         { name: "Mad@Chu",
@@ -108,9 +110,10 @@ const DUNGEON_ENCOUNTERS = {
             hp: 30,
             attack: 15,
             defense: 2,
-            attackSpeed: 2,
-            moveSpeed: 2,
+            speed: 2,
             exp: 2,
+            attackSpeed: 1,
+            moveSpeed: 1,
             asset: "./assets/enemies/Mad@Chu.png"
          }
     ],
@@ -159,8 +162,7 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        moveSpeed: 1,
-        attackSpeed: 1
+        speed: 1
     }
     , 
     {
@@ -172,8 +174,7 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        moveSpeed: 1,
-        attackSpeed: 1
+        speed: 1
     }
     , 
     {
@@ -184,8 +185,7 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        moveSpeed: 1,
-        attackSpeed: 1
+        speed: 1
     }
     , 
     {
@@ -196,8 +196,7 @@ gameEngine.grannies = [
         hp: 100,
         attack: 10,
         defense: 5,
-        moveSpeed: 1,
-        attackSpeed: 1
+        speed: 1
     }
 ];
 ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager will jump straight into combat
