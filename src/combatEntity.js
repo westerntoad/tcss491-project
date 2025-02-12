@@ -41,7 +41,7 @@ class CombatEntity {
         queue.push ({x: this.block.mapX, y: this.block.mapY, dist: 0}) // just find the nearest enemy, then move using the initial direction.
         while(queue.length) { //this'll stop, and when it does, we just return null;
             const current = queue.shift();
-            const currBlock = this.allBlocks[current.x][current.y];
+            const currBlock = this.allBlocks[current.y][current.x];
 
             if(currBlock.unit){
                 if(currBlock.unit.raw.granny !== this.raw.granny) {
@@ -89,7 +89,7 @@ class CombatEntity {
                     if(this.target.unit) {
                         this.target.unit.raw.hp -= this.raw.attack;
                     } else {
-                        this.target = this.allBlocks[found.x][found.y];
+                        this.target = this.allBlocks[found.y][found.x];
                     }
 
                     this.elapsedTime = 0;// how timer is used
@@ -99,8 +99,8 @@ class CombatEntity {
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.moveSpeed){
                     // check the moveSpeed
-                    this.blockMove(this.allBlocks[this.block.mapX + found.initial.x]
-                        [this.block.mapY + found.initial.y]);
+                    this.blockMove(this.allBlocks[this.block.mapY + found.initial.y]
+                        [this.block.mapX + found.initial.x]);
                     this.elapsedTime = 0;// how timer is used
                     this.attacking = false;
                 }
