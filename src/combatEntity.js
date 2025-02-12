@@ -41,7 +41,7 @@ class CombatEntity {
         queue.push ({x: this.block.mapX, y: this.block.mapY, dist: 0}) // just find the nearest enemy, then move using the initial direction.
         while(queue.length) { //this'll stop, and when it does, we just return null;
             const current = queue.shift();
-            const currBlock = this.allBlocks[current.x][current.y];
+            const currBlock = this.allBlocks[current.y][current.x];
 
             if(currBlock.unit){
                 if(currBlock.unit.raw.granny !== this.raw.granny) {
@@ -73,7 +73,7 @@ class CombatEntity {
     }
     update() {
         if(!this.ready) return;
-        if(this.entity.hp <= 0){
+        if(this.raw.hp <= 0){
             this.block.unit = null;
             this.removeFromWorld = true;
         }
@@ -86,18 +86,21 @@ class CombatEntity {
                 // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.attackSpeed) {
-                    this.target = this.allBlocks[found.x][found.y].unit.raw;
-                    this.target.hp -= this.raw.attack;
+                    if(this.target?.unit) {
+                        this.target.unit.raw.hp -= this.raw.attack;
+                    } else {
+                        this.target = this.allBlocks[found.y][found.x];
+                    }
 
                     this.elapsedTime = 0;// how timer is used
                     this.attacking = true;
                 }
-            } else{
+            } else {
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.moveSpeed){
                     // check the moveSpeed
-                    this.blockMove(this.allBlocks[this.block.mapX + found.initial.x]
-                        [this.block.mapY + found.initial.y]);
+                    this.blockMove(this.allBlocks[this.block.mapY + found.initial.y]
+                        [this.block.mapX + found.initial.x]);
                     this.elapsedTime = 0;// how timer is used
                     this.attacking = false;
                 }
