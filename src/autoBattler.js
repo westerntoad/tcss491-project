@@ -84,14 +84,13 @@ class AutoBattler {
                     console.log("x: " + j + " | y: " + i);
                     block.hovered = true;
                     if (this.game.click) {
+                        console.log(block);
                         if (!this.selectedBlock && block.unit && block.unit.granny) {
-                            console.log("HELLOOOOOO");
                             block.selected = true;
                             this.selectedBlock = block;
                         } else if (this.selectedBlock && !block.unit) {
-                            const entity = this.selectedBlock.block.occupied;
-                            entity.blockMove(block.block);
-                            this.setUnits.add(entity);
+                            const entity = this.selectedBlock.unit;
+                            entity.blockMove(block);
                             this.selectedBlock = null;
                         }
                     }
