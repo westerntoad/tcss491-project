@@ -86,8 +86,11 @@ class CombatEntity {
                 // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.attackSpeed) {
-                    this.target = this.allBlocks[found.x][found.y].unit.raw;
-                    this.target.hp -= this.raw.attack;
+                    if(this.target.unit) {
+                        this.target.unit.raw.hp -= this.raw.attack;
+                    } else {
+                        this.allBlocks[found.x][found.y];
+                    }
 
                     this.elapsedTime = 0;// how timer is used
                     this.attacking = true;
