@@ -135,7 +135,7 @@ class CombatEntity {
             Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
         );
         // draw realHp
-        const currHpBar = this.entity.hp / this.entity.maxHp;
+        const currHpBar = this.raw.hp / this.raw.maxHp;
         const pHeight = 5 + currHpBar * 26;
 
         ctx.drawImage(
