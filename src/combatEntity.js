@@ -81,11 +81,11 @@ class CombatEntity {
         // First, look for closest enemy location
         const found = this.bfs(); // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
         if(found) { // there are enemies on map
-            if(found.dist <= this.entity.attackRange) { // switch to attack if enemy is close
+            if(found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
                 // check the atkSpeed
                 // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
                 this.elapsedTime += this.game.clockTick;
-                if(this.elapsedTime >= this.entity.attackSpeed) {
+                if(this.elapsedTime >= this.raw.attackSpeed) {
                     this.target = this.allBlocks[found.x][found.y].unit.raw;
                     this.target.hp -= this.raw.attack;
 
@@ -94,7 +94,7 @@ class CombatEntity {
                 }
             } else{
                 this.elapsedTime += this.game.clockTick;
-                if(this.elapsedTime >= this.entity.moveSpeed){
+                if(this.elapsedTime >= this.raw.moveSpeed){
                     // check the moveSpeed
                     this.blockMove(this.allBlocks[this.block.mapX + found.initial.x]
                         [this.block.mapY + found.initial.y]);
