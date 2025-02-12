@@ -89,7 +89,7 @@ class CombatEntity {
                     if(this.target.unit) {
                         this.target.unit.raw.hp -= this.raw.attack;
                     } else {
-                        this.allBlocks[found.x][found.y];
+                        this.target = this.allBlocks[found.x][found.y];
                     }
 
                     this.elapsedTime = 0;// how timer is used
