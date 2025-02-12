@@ -73,7 +73,7 @@ class CombatEntity {
     }
     update() {
         if(!this.ready) return;
-        if(this.entity.hp <= 0){
+        if(this.raw.hp <= 0){
             this.block.unit = null;
             this.removeFromWorld = true;
         }
