@@ -27,6 +27,7 @@ class AutoBattler {
         this.nextY = 8; // the nextY for the next block
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
+        this.allUnits = [];
         this.showText(text)
         this.init();
     }
@@ -62,14 +63,30 @@ class AutoBattler {
         for(let i = 0; i < this.players.length && i < 7; i++) {
             const block = this.allBlocks[i][8];
             block.unit = new CombatEntity(this.players[i], this, block);
+            this.allUnits.push(block.unit);
             this.game.addEntity(block.unit);
         }
         // initialize all enemy units and place onto battlefield
         for (let i = 0; i < 3; i++) {
             const block = this.allBlocks[6][i];
             block.unit = new CombatEntity(this.enemies[i], this, block);
+            this.allUnits.push(block.unit);
             this.game.addEntity(block.unit);
         }
+
+
+        this.startButton = new StartButton(this.game, () => {
+            
+            this.allUnits.forEach(unit => {
+                if (unit.mapY == 8)
+                    return false;
+            });
+
+            return true;
+        }, () => {
+            alert("Game start!");
+        });
+        this.game.addEntity(this.startButton);
     }
 
     update() {
@@ -121,7 +138,7 @@ class AutoBattler {
         }*/
 
     }
-    draw(ctx){
+    draw(ctx) {
         ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
         
     }
@@ -155,7 +172,7 @@ class AutoBattler {
     }
     
     
-    lose(){
+    lose() {
         
     }
     endGame() {
@@ -163,6 +180,45 @@ class AutoBattler {
         this.game.ctx.fillStyle = "white"; 
         this.game.ctx.fillRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
         this.sceneManager.restoreScene();
+    }
+}
+
+class StartButton {
+    constructor(game, isEnabled, onClick) {
+        this.game = game;
+        this.onClick = onClick;
+        this.isEnabled = isEnabled;
+        this.enabled = isEnabled();
+        this.z = 100;
+        this.x = 100;
+        this.y = 100;
+        this.width = 100;
+        this.height = 100;
+    }
+
+    update() {
+        this.enabled = this.isEnabled();
+
+        const x = this.game.mouse?.x;
+        const y = this.game.mouse?.y;
+        if (this.game.click && this.enabled
+                && clamp(this.x, x, this.x + this.width ) == x
+                && clamp(this.y, y, this.y + this.height) == y) {
+
+            this.onClick();
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        console.log(this.enabled);
+        if (this.enabled)
+            ctx.fillStyle = 'green';
+        else
+            ctx.fillStyle = 'red';
+
+        ctx.fillRect(100, 100, 100, 100);
+        ctx.restore();
     }
 }
   
@@ -176,7 +232,7 @@ class Text {
      */
     constructor(text, position, expire) {
         Object.assign(this, {text, position, expire});
-        this.z = 35; // highest, should come before everything
+        this.z = 100; // highest, should come before everything
         this.vanish = this.expire / 2;
         this.vanishCounter = this.vanish;
         this.index = 0;
