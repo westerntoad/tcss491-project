@@ -15,6 +15,9 @@ ASSET_MANAGER.queueDownload("./assets/portalPoint.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Bernice_Campbell.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
 
+//Title screen
+ASSET_MANAGER.queueDownload("./assets/titleBackgroundTemp.png");
+
 // Maps
 ASSET_MANAGER.queueDownload("./maps/dev.json");
 ASSET_MANAGER.queueDownload("./maps/dev2.json");
@@ -209,6 +212,8 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
     gameEngine.height = canvas.height; 
 
     gameEngine.init(ctx);
+
+    gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
 
     gameEngine.start();
 
