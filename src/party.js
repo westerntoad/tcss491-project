@@ -188,3 +188,24 @@ class PartyGUI {
     }
     // handle click the same as autoBattler refactored by Abe
 }
+class TextCreator{
+    constructor(){
+        error("You can't construct this bro");
+    }
+    static getText(string){
+        // parse string
+        // return an array of img object? ->
+        /**
+         * {
+         * x: left
+         * y: top
+         * sx:
+         * sy:
+         * sw: defaults
+         * sh: defaults
+         * // we can also scale, then match with 
+         * }
+         * 
+         */
+    }
+}
