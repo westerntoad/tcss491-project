@@ -216,7 +216,7 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
 
     gameEngine.init(ctx);
 
-    gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
+    //gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
 
     gameEngine.start();
 
