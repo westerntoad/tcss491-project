@@ -4,7 +4,6 @@ class SceneManager {
         this.z = 100;
         this.backgroundColor = '#ffffff';
         this.isDungeon = false;
-        this.party = new Party(this);
 
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
@@ -15,8 +14,27 @@ class SceneManager {
         this.game.addEntity(this);
 
         // debug
-        this.map.hide();
-        this.battleScene(false);
+        // this.map.hide();
+
+        this.party = new Party(this.game);
+        this.party.addMember(new Character("Mary Yott"));// initial party. 
+        this.addToParty(); //test function for Luek.
+    }
+    addToParty(){
+        const names = ["Bernice Campbell", "Pearl Martinez",
+            "Vera Mulberry", "Ye-soon Kim"];
+        names.forEach((name) =>{
+            this.party.addMember(new Character(name));
+        });
+    }
+
+    showParty(){
+        this.party.showParty();
+        this.map.player.disableMovement = true;
+    }
+    hideParty(){
+        this.party.hideParty();
+        this.map.player.disableMovement = false;
     }
 
     showDialog(text) {
@@ -37,6 +55,15 @@ class SceneManager {
             if (this.dialog) {
                 this.hideDialog();
                 this.game.pressed['z'] = false;
+            }
+        } else if (this.game.pressed['x']){
+            if(!this.dialog) {
+                if(!this.party.partyGUI) {
+                    this.showParty();
+                } else {
+                    this.hideParty();
+                    this.game.pressed['x'] = false;
+                }
             }
         }
     }
@@ -69,13 +96,18 @@ class SceneManager {
             i--;
         }
 
-        const players = this.game.grannies;
+        const players = [];
+        for(let i = 0; i < this.party.members.length; i++){
+            const player = this.party.members[i];
+            player.maxHp = player.hp;
+            players.push(Object.assign({}, player));
+        }
 
         console.log('Enemies:', enemies);
         console.log('Players:', players);
 
         this.game.entities = []; // Clear current entities
-        this.game.addEntity(new AutoBattler(this.game, this, this.game.grannies, enemies, "Round 1"));
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Round 1"));
         // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {

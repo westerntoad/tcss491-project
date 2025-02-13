@@ -15,8 +15,10 @@ ASSET_MANAGER.queueDownload("./assets/singlegrass.png");
 ASSET_MANAGER.queueDownload("./assets/black-rect.png");
 ASSET_MANAGER.queueDownload("./assets/houseTiles.png");
 ASSET_MANAGER.queueDownload("./assets/portalPoint.png");
-ASSET_MANAGER.queueDownload("./assets/grandmas/Bernice_Campbell.png");
-ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
+ASSET_MANAGER.queueDownload("./assets/baseBorders.png");
+ASSET_MANAGER.queueDownload("./assets/minus.png");
+ASSET_MANAGER.queueDownload("./assets/plus.png");
+
 
 // Maps
 ASSET_MANAGER.queueDownload("./maps/dev.json");

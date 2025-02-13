@@ -298,7 +298,7 @@ class BattleScene {
              * 0 = awaiting moves | 1 = attack | 2 = defend | 3 = special move
              */
             // (img, startX/Y of img, w/h of img, canvas-coord, resize);
-                // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+            // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
             
             this.players.forEach((player) => { // drawing options
 

@@ -87,7 +87,10 @@ class CombatEntity {
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.attackSpeed) {
                     if(this.target?.unit) {
-                        this.target.unit.raw.hp -= this.raw.attack;
+                        this.target.unit.raw.hp -= 
+                            Math.round((this.target.unit.raw.defense ? 
+                                1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
+                                 : 1) * this.raw.attack);
                     } else {
                         this.target = this.allBlocks[found.y][found.x];
                     }
@@ -105,7 +108,7 @@ class CombatEntity {
                     this.attacking = false;
                 }
             }
-        }
+        } else this.attacking = false;
     }
   
     draw(ctx) {
@@ -135,7 +138,7 @@ class CombatEntity {
             (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
                 - this.size * this.block.scale) - hpY * 2,
             this.size / 4 * this.block.scale,
-            Math.floor(this.size / 4 * this.block.scale * (26/30)) // raw ratio
+            this.size / 4 * this.block.scale * (26/30) // raw ratio
         );
         // draw realHp
         const currHpBar = this.raw.hp / this.raw.maxHp;
@@ -146,20 +149,20 @@ class CombatEntity {
             1,
             (this.raw.granny ? 5 + ((1 - currHpBar) * 26) : pHeight ),
             30,
-            Math.floor(26 * (this.raw.granny ? currHpBar : 1 - currHpBar)),
+            26 * (this.raw.granny ? currHpBar : 1 - currHpBar),
 
-            Math.floor(this.block.isoX + this.block.width / 2
-                + (this.raw.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2),
+            this.block.isoX + this.block.width / 2
+                + (this.raw.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
 
-            Math.floor((this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
+            (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
                 - this.size * this.block.scale) - hpY *2 + 
                 (this.raw.granny ? 
                     (1-currHpBar) : currHpBar)
-                * (26/30) * this.size / 4 * this.block.scale),
+                * (26/30) * this.size / 4 * this.block.scale,
 
             this.size / 4 * this.block.scale,
 
-            Math.floor(this.size / 4 * this.block.scale * (26/30) * 
+            (this.size / 4 * this.block.scale * (26/30) * 
                 (this.raw.granny ? currHpBar : (1 - currHpBar))) // raw ratio
         );
 
