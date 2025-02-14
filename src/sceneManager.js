@@ -37,10 +37,14 @@ class SceneManager {
         this.map.player.disableMovement = false;
     }
 
-    showDialog(text, speaker) {
-        this.dialog = new Dialog(this.game, this, text, speaker);
+    showDialog(textArr) { //changed to accomodate an array of dialog.
+        this.dialogArr = textArr;
+        this.dialogIndex = 0;
+        this.dialog = new Dialog(this.game, this, this.dialogArr[this.dialogIndex].content, 
+            this.dialogArr[this.dialogIndex].speaking);
         this.game.addEntity(this.dialog);
         this.map.player.disableMovement = true;
+        this.dialogIndex++;
     }
 
     hideDialog() {
@@ -53,7 +57,15 @@ class SceneManager {
         // if a dialog is on screen, advance the dialog.
         if (this.game.pressed['z']) {
             if (this.dialog) {
-                this.hideDialog();
+                if(this.dialogIndex < this.dialogArr.length){
+                    this.dialog.removeFromWorld = true;
+                    this.dialog = new Dialog(this.game, this, this.dialogArr[this.dialogIndex].content, 
+                        this.dialogArr[this.dialogIndex].speaking);
+                    this.game.addEntity(this.dialog);
+                    this.dialogIndex++;
+                } else {
+                    this.hideDialog();
+                }
                 this.game.pressed['z'] = false;
             }
         } else if (this.game.pressed['x']){
