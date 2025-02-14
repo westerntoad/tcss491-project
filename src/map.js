@@ -146,7 +146,7 @@ MAPS.marysRoom = (map) => {
     // interactable.interact = () => map.scene.showDialog("So, after she told me, I decided to whip up some of my best cookies this morning and head in while they’re fresh to speak with this Derek King.", "Vera");
     // interactable.interact = () => map.scene.showDialog("y'like my cats?");
     interactable.interact = () => { // make it so the next npc holds the key to the next index.
-        map.scene.showDialog(dialog.chapter1[map.globalDialogIndex]);
+        map.scene.showDialog(dialog.chapter1[map.globalDialogIndex++]);
     };
     /**
      * interactable.interact = () => {
@@ -159,7 +159,7 @@ MAPS.marysRoom = (map) => {
     const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        map.changeMap(MAPS.marysMap(map), 6, 6);
+        map.changeMap(MAPS.marysMap(map), 6, 7);
         map.player.dir = 2;
     };
     json.specialTiles.push(portalPoint);
@@ -178,6 +178,15 @@ MAPS.marysMap = (map) => {
         map.scene.battleScene(false);
     };
     json.specialTiles.push(autobattlerTest);
+
+    // to test.
+    const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
+    marysRoom.stepOn = () => {
+        map.changeMap(MAPS.marysRoom(map), 8, 1);
+        map.player.dir = 2;
+    };
+    json.specialTiles.push(marysRoom);
+    //
 
     return json;
 }
