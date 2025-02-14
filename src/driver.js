@@ -26,7 +26,7 @@ ASSET_MANAGER.queueDownload("./maps/dev2.json");
 ASSET_MANAGER.queueDownload("./maps/house.json");
 ASSET_MANAGER.queueDownload("./maps/marysMap.json");
 ASSET_MANAGER.queueDownload("./assets/tileSheet_main.png");
-ASSET_MANAGER.queueDownload("./dialogLoad.json");
+ASSET_MANAGER.queueDownload("./maps/dialogLoad.json");
 
 // All Grandmas (32 x 32)
 ASSET_MANAGER.queueDownload("./assets/grandmas/Mary_Yott.png");

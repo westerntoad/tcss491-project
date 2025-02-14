@@ -140,7 +140,7 @@ MAPS.marysRoom = (map) => {
 
     // SPECIAL TILES
     // Vera Mulberry
-    const dialog = ASSET_MANAGER.getAsset("./dialogLoad.json");
+    const dialog = ASSET_MANAGER.getAsset("./maps/dialogLoad.json");
     console.log(dialog);
     const interactable = new Tile(map, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
     // interactable.interact = () => map.scene.showDialog("So, after she told me, I decided to whip up some of my best cookies this morning and head in while they’re fresh to speak with this Derek King.", "Vera");
