@@ -37,8 +37,8 @@ class SceneManager {
         this.map.player.disableMovement = false;
     }
 
-    showDialog(text) {
-        this.dialog = new Dialog(this.game, this, text);
+    showDialog(text, speaker) {
+        this.dialog = new Dialog(this.game, this, text, speaker);
         this.game.addEntity(this.dialog);
         this.map.player.disableMovement = true;
     }

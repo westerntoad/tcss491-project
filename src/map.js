@@ -8,8 +8,9 @@ class Map {
         this.player = new Player(game, scene, this, 0, 0);
         this.player.dir = 2; // set player facing south
         this.game.addEntity(this.player);
-        
+        this.dialogs = {};
         this.changeMap(MAPS.marysRoom(this), 3, 2);
+        this.globalDialogIndex = 0;
     }
 
     hide() {
@@ -139,8 +140,21 @@ MAPS.marysRoom = (map) => {
 
     // SPECIAL TILES
     // Vera Mulberry
+    const dialog = ASSET_MANAGER.getAsset("./dialogLoad.json");
+    console.log(dialog);
     const interactable = new Tile(map, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
-    interactable.interact = () => map.scene.showDialog("y'like my cats?");
+    // interactable.interact = () => map.scene.showDialog("So, after she told me, I decided to whip up some of my best cookies this morning and head in while they’re fresh to speak with this Derek King.", "Vera");
+    // interactable.interact = () => map.scene.showDialog("y'like my cats?");
+    interactable.interact = () => {
+        console.log(dialog.chapter1.length);
+        console.log(dialog.chapter1[map.globalDialogIndex]);
+        map.scene.showDialog(dialog.chapter1[map.globalDialogIndex]);
+    };
+    /**
+     * interactable.interact = () => {
+     * let i = 0;
+     * }
+     */
     json.specialTiles.push(interactable);
 
     // Exit
@@ -169,3 +183,4 @@ MAPS.marysMap = (map) => {
 
     return json;
 }
+
