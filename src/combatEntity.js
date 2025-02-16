@@ -16,7 +16,9 @@ class CombatEntity {
 
         this.z = this.block.z + 1;
         this.x = this.block.x + this.block.width * this.block.scale / 2;
+        this.dx = 0;
         this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
+        this.dy = 0;
         this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / 32;
         this.currentFrame = 0;
         this.ticker = 0;
@@ -28,7 +30,8 @@ class CombatEntity {
       //atk speed for frequency of attack rate
       //move speed for frequency of moving
     }
-    bfs(){ // return the dx, dy to move. also return the x and y of closest enemy.
+
+    bfs() { // return the dx, dy to move. also return the x and y of closest enemy.
         const directions = [
             { dx: 0, dy: -1 },
             { dx: 0, dy: 1 },
@@ -72,6 +75,8 @@ class CombatEntity {
         return null;
     }
     update() {
+        this.dx = 0;
+        this.dy = 0;
         if(!this.ready) return;
         if(this.raw.hp <= 0) {
             PLAY.death();
@@ -120,13 +125,26 @@ class CombatEntity {
                     this.attacking = true;
                 }
             } else {
+                const block = this.allBlocks[this.block.mapY + found.initial.y]
+                    [this.block.mapX + found.initial.x];
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.moveSpeed){
                     // check the moveSpeed
-                    this.blockMove(this.allBlocks[this.block.mapY + found.initial.y]
-                        [this.block.mapX + found.initial.x]);
-                    this.elapsedTime = 0;// how timer is used
+                    this.blockMove(block);
+                    this.elapsedTime -= this.raw.moveSpeed;// how timer is used
                     this.attacking = false;
+                } else {
+                    // calculate movement interpolation
+                    if (block.unit) return;
+                    const prog = (this.elapsedTime / this.raw.moveSpeed);
+                    const mapX = found.initial.x;
+                    const mapY = found.initial.y;
+                    const isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2;
+                    const isoY = (mapY + mapX) * PARAMS.spaceHeight * PARAMS.scale / 3;
+                    console.log(isoX, isoY);
+                    this.dx = isoX * prog;
+                    this.dy = isoY * prog;
+                    this.z = Math.max(this.z, block.z + 1)
                 }
             }
         } else this.attacking = false;
@@ -187,6 +205,7 @@ class CombatEntity {
                 (this.raw.granny ? currHpBar : (1 - currHpBar))) // raw ratio
         );
 
+        // actual unit drawing
         ctx.drawImage(
             ASSET_MANAGER.getAsset(this.raw.asset),
             this.currentFrame * this.assetSize,
@@ -194,9 +213,11 @@ class CombatEntity {
             this.assetSize,
             this.assetSize,
             this.block.isoX + this.block.width / 2
-                - this.size * this.block.scale / 2,
+                - this.size * this.block.scale / 2
+                + this.dx,
             (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
-                - this.size * this.block.scale),
+                - this.size * this.block.scale)
+                + this.dy,
             this.size * this.block.scale,
             this.size * this.block.scale
         );
