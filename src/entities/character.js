@@ -43,7 +43,7 @@ class Character {
                 this.attackRange = 1; // default val for melees
                 this.defense = 0;
                 this.attackSpeed = 0.2; // atk & moveSpd currently is x * 1000 ms.
-                this.moveSpeed = 1; // so this is 1000ms.
+                this.moveSpeed = 0.25; // so this is 1000ms.
                 this.hpGrowth = 0.5; // specify the distribution rate
                 this.attackGrowth = 0.5;
                 this.hpCap = 50;

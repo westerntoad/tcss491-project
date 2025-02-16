@@ -136,7 +136,7 @@ class CombatEntity {
                 } else {
                     // calculate movement interpolation
                     if (block.unit) return;
-                    const prog = (this.elapsedTime / this.raw.moveSpeed);
+                    const prog = Math.sqrt(this.elapsedTime) / Math.sqrt(this.raw.moveSpeed);
                     const mapX = found.initial.x;
                     const mapY = found.initial.y;
                     const isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2;
