@@ -76,6 +76,10 @@ ASSET_MANAGER.queueDownload("./assets/death.wav");
 ASSET_MANAGER.queueDownload("./assets/hit1.wav");
 ASSET_MANAGER.queueDownload("./assets/hit2.wav");
 
+// Fonts
+// NOTE: fonts must not start with './'
+ASSET_MANAGER.queueDownload("assets/runescape.ttf");
+
 const DUNGEON_ENCOUNTERS = {
     "Grass": [
         /**{

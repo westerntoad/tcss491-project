@@ -115,6 +115,7 @@ class AutoBattler {
                             const entity = this.selectedBlock.unit;
                             entity.blockMove(block);
                             this.selectedBlock = null;
+                            PLAY.hit1();
                         }
                     }
                 } else {
@@ -263,16 +264,19 @@ class StartButton {
     draw(ctx) {
         ctx.save();
         // background
-        if (this.enabled)
+        let decoration = '';
+        if (this.enabled) {
             ctx.fillStyle = 'green';
-        else
+            decoration += 'bold '
+        } else {
             ctx.fillStyle = 'red';
+        }
 
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
         // text
         ctx.fillStyle = '#000000';
-        ctx.font = '32px bold monospace';
+        ctx.font = `${decoration}32px monospace`;
         ctx.textAlign = "center";
         ctx.textBaseline = "center";
         ctx.fillText('Start', this.x + this.width * 0.5, this.y + this.height * 0.5 + 10);

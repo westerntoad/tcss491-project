@@ -39,13 +39,10 @@ class Character {
             case "Mary Yott":
                 this.granny = true;
                 this.hp = 100; // can just create maxHp when passing off to autoBattler
-                //this.hp = 10; // debug to practice autobattler loss
-                this.attack = 2;
+                this.attack = 1;
                 this.attackRange = 1; // default val for melees
-                //this.attackRange = 10; // debug to practice autobattler win
                 this.defense = 0;
                 this.attackSpeed = 0.2; // atk & moveSpd currently is x * 1000 ms.
-                //this.attackSpeed = 0.001; // debug to practice autobattler win
                 this.moveSpeed = 1; // so this is 1000ms.
                 this.hpGrowth = 0.5; // specify the distribution rate
                 this.attackGrowth = 0.5;

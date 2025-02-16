@@ -2,6 +2,7 @@ class CombatEntity {
     //constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
     //block.unit = new CombatEntity(this.enemies[i], this, block);
     constructor(raw, battle, block) {
+        this.block = block;
         this.granny = raw.granny;
         this.raw = raw;
         this.entity = raw;
@@ -87,6 +88,23 @@ class CombatEntity {
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.attackSpeed) {
                     if(this.target?.unit) {
+                        const damage = Math.round((this.target.unit.raw.defense ? 
+                                1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
+                                 : 1) * this.raw.attack);
+                        this.target.unit.raw.hp -= damage;
+
+                        const origX  = this.block.isoX + this.block.width * 0.5;
+                        const origY  = this.block.isoY - this.block.height * 0.2;
+                        const destX  = this.target.isoX + this.target.width * 0.5;
+                        const destY  = this.target.isoY + this.target.height * 0.2;
+                        // damage number gen
+                        this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
+
+                        // if ranged, shoot beam
+                        if (this.raw.attackRange > 1) {
+                            this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+                        }
+
                         // temporary code - will replace with sounds unique to each combat entity
                         // DEBUG
                         if (Math.random() < 0.5) {
@@ -94,10 +112,6 @@ class CombatEntity {
                         } else {
                             PLAY.hit2();
                         }
-                        this.target.unit.raw.hp -= 
-                            Math.round((this.target.unit.raw.defense ? 
-                                1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
-                                 : 1) * this.raw.attack);
                     } else {
                         this.target = this.allBlocks[found.y][found.x];
                     }
@@ -199,4 +213,3 @@ class CombatEntity {
         }
     }
 }
-
