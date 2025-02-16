@@ -85,14 +85,14 @@ class CombatEntity {
             this.removeFromWorld = true;
         }
 
-        if (this.prevBlock || !this.attacking) {
-            this.moveElapsed += this.game.clockTick;
-        }
 
         // 2 modes of operation, moving or attacking.
         // First, look for closest enemy location
         const found = this.bfs(); // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
         if (found) { // there are enemies on map
+            if (this.prevBlock || !this.attacking) {
+                this.moveElapsed += this.game.clockTick;
+            }
             if (found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
                 // check the atkSpeed
                 // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.

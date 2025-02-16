@@ -18,9 +18,9 @@ class SceneManager {
         this.party.addMember(new Character("Mary Yott"));// initial party. 
 
         // debug
-        //this.addToParty();
-        this.map.hide();
-        this.battleScene(false);
+        this.addToParty();
+        //this.map.hide();
+        //this.battleScene(false);
         
     }
     addToParty(){
