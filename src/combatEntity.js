@@ -18,7 +18,6 @@ class CombatEntity {
         this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
         this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / 32;
         this.currentFrame = 0;
-        this.block.occupied = this;
         this.ticker = 0;
         this.attacking = false;
         this.ready = false;
@@ -73,7 +72,8 @@ class CombatEntity {
     }
     update() {
         if(!this.ready) return;
-        if(this.raw.hp <= 0){
+        if(this.raw.hp <= 0) {
+            PLAY.death();
             this.block.unit = null;
             this.removeFromWorld = true;
         }
@@ -87,6 +87,13 @@ class CombatEntity {
                 this.elapsedTime += this.game.clockTick;
                 if(this.elapsedTime >= this.raw.attackSpeed) {
                     if(this.target?.unit) {
+                        // temporary code - will replace with sounds unique to each combat entity
+                        // DEBUG
+                        if (Math.random() < 0.5) {
+                            PLAY.hit1();
+                        } else {
+                            PLAY.hit2();
+                        }
                         this.target.unit.raw.hp -= 
                             Math.round((this.target.unit.raw.defense ? 
                                 1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
@@ -181,7 +188,7 @@ class CombatEntity {
         );
     }
     blockMove(newBlock){
-        if(!newBlock.occupied){
+        if(!newBlock.unit){
             this.block.unit = null;
             this.block.selected = false;
             this.z = newBlock.z + 1;

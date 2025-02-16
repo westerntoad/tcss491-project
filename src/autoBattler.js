@@ -6,16 +6,11 @@ class AutoBattler {
         this.players = players;
         this.enemies = enemies;
 
-        this.frameRate = 60;
-        this.toDraw = 0;
-        this.buttonPressed = false;
-        this.eventListener = [];
-        this.dialogue = null;
-        this.game.ctx.font = "22px serif";
-        this.selectedSpot = false;
-        this.arena = [[]];
         this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
         this.z = -5; // draw this first.
+
+        this.currRound = 1;
+        this.totalRounds = 2;
 
         this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
         PARAMS.spaceWidth = this.isoBlock.width; // TODO replace with hard value
@@ -27,7 +22,6 @@ class AutoBattler {
         this.nextY = 8; // the nextY for the next block
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
-        this.allUnits = [];
         this.showText(text)
         this.init();
     }
@@ -38,6 +32,18 @@ class AutoBattler {
         const textStartFrames = Animate.easeInOut(-textWidth, this.game.height/2, this.game.width - textWidth, 
             this.game.height/2, frames);
         this.game.addEntity(new Text(text, textStartFrames, frames));
+    }
+
+    // return all units within each block
+    units() {
+        let arr = [];
+        this.allBlocks.forEach(column => column.forEach(block => {
+            if (block?.unit) {
+                arr.push(block.unit);
+            }
+        }));
+
+        return arr;
     }
     
     init() {
@@ -63,34 +69,32 @@ class AutoBattler {
         for(let i = 0; i < this.players.length && i < 7; i++) {
             const block = this.allBlocks[i][8];
             block.unit = new CombatEntity(this.players[i], this, block);
-            this.allUnits.push(block.unit);
             this.game.addEntity(block.unit);
         }
         // initialize all enemy units and place onto battlefield
         for (let i = 0; i < 3; i++) {
             const block = this.allBlocks[6][i];
             block.unit = new CombatEntity(this.enemies[i], this, block);
-            this.allUnits.push(block.unit);
             this.game.addEntity(block.unit);
         }
 
 
         this.startButton = new StartButton(this.game, () => {
-            this.allUnits.forEach(unit => {
-                if (unit.blockX == 8)
-                    return false;
+            let canStart = true;
+            this.units().forEach(unit => {
+                if (unit.blockX == 8 || unit.ready)
+                    canStart = false;
             });
 
-            return true;
+            return canStart;
         }, () => {
-            this.allUnits.forEach(unit => {
+            this.units().forEach(unit => {
                 unit.ready = true;
             });
-            console.log(this.allBlocks);
-            console.log(this.allUnits);
-            console.log('game started');
+
         });
         this.game.addEntity(this.startButton);
+        PLAY.battle1();
     }
 
     update() {
@@ -101,10 +105,9 @@ class AutoBattler {
             for (let j = 0; j < 9; j++) {
                 let block = this.allBlocks[i][j];
                 if (!block) continue;
-                if (this.isMouseOverTile(mouseX, mouseY, block)) {
+                if (this.isMouseOverTile(mouseX, mouseY, block) && !this.disableControl) {
                     block.hovered = true;
                     if (this.game.click) {
-                        console.log(block);
                         if (!this.selectedBlock && block.unit && block.unit.granny) {
                             block.selected = true;
                             this.selectedBlock = block;
@@ -120,27 +123,78 @@ class AutoBattler {
             }
         }
 
-        /*if(this.setUnits.size == this.players.length){
-            for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 9; j++) {
-                    let block = this.allBlocks[i][j];
-                    if(!block) continue;
-                    if(block.block.occupied) {
-                        console.log(block.block.occupied.entity.name
-                            + " => x: " + j + " | y: " + i
-                        );
-                        // start the battle.
-                        // block.block.occupied.ready = true;
-                    }
-                }
-            }
-            console.log(this.allBlocks);
-            // this.setUnits.forEach((unit) => {
-            //     unit.ready = true;
-            // })
-        }*/
 
+        // count the total number of enemies & players.
+        let numAlivePlayers = 0;
+        this.units().forEach(unit => {
+            if (unit.granny) {
+                numAlivePlayers++;
+            }
+        });
+        const numAliveEnemies = this.units().length - numAlivePlayers;
+
+        // player wins
+        if (numAliveEnemies == 0 && !this.showingDialog) {
+            this.currRound++;
+
+            const finalRound = this.currRound > this.totalRounds;
+            const title = finalRound ?                  // if final round
+                `Boss complete` :                       // boss complete
+                `Round ${this.currRound - 1} complete`; // otherwise, current round complete
+            
+            const callback = finalRound ? () => {
+                this.cleanup();
+                this.sceneManager.restoreScene();
+            } : () => {
+                let i = 0;
+                this.units().forEach(unit => {
+                    console.log(unit);
+                    unit.blockMove(this.allBlocks[i][8]);
+                    unit.ready = false;
+                    i++;
+                });
+                this.showingDialog = false;
+                this.disableControl = false;
+
+                // TODO pass multiple round enemies from constructor
+                // DEBUG
+                const enemy = new CombatEntity(this.sceneManager.getRandomEncounter("Grass"), this, this.allBlocks[0][0]);
+                this.allBlocks[0][0].unit = enemy;
+                this.game.addEntity(enemy);
+            }
+
+            let buttonLabel = ``;
+            if (this.currRound < this.totalRounds) {
+                buttonLabel = `Next Round`;
+            } else if (this.currRound == this.totalRounds) {
+                buttonLabel = `Start Boss`;
+            } else {
+                buttonLabel = `Return to Home`;
+            }
+
+            this.showingDialog = true;
+            this.disableControl = true;
+            this.game.addEntity(new RoundComplete(this.game, title, 500, buttonLabel, callback));
+        }
+
+        // enemy wins
+        if (numAlivePlayers == 0) {
+            // game over
+            
+            this.cleanup();
+            STOP.battle1();
+            PLAY.gameover();
+            this.game.addEntity(new GameOver(this.game, this.sceneManager));
+        }
     }
+
+    cleanup() {
+        this.units().forEach(unit => unit.removeFromWorld = true);
+        this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
+        this.startButton ? this.startButton.removeFromWorld = true : void 0;
+        this.removeFromWorld = true;
+    }
+
     draw(ctx) {
         ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
         
@@ -173,17 +227,6 @@ class AutoBattler {
             this.isPointInTriangle(mouseX, mouseY, Bx, By, Lx, Ly, Rx, Ry)
         );
     }
-    
-    
-    lose() {
-        
-    }
-    endGame() {
-        this.game.entities = [];
-        this.game.ctx.fillStyle = "white"; 
-        this.game.ctx.fillRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
-        this.sceneManager.restoreScene();
-    }
 }
 
 class StartButton {
@@ -192,11 +235,11 @@ class StartButton {
         this.onClick = onClick;
         this.isEnabled = isEnabled;
         this.enabled = isEnabled();
-        this.z = 100;
-        this.x = 100;
-        this.y = 100;
-        this.width = 100;
-        this.height = 100;
+        this.z = 100_000;
+        this.x = 750;
+        this.y = 570;
+        this.width = 200;
+        this.height = 75;
     }
 
     update() {
@@ -204,22 +247,176 @@ class StartButton {
 
         const x = this.game.mouse?.x;
         const y = this.game.mouse?.y;
-        if (this.game.click && this.enabled
+        if (this.game.click
                 && clamp(this.x, x, this.x + this.width ) == x
                 && clamp(this.y, y, this.y + this.height) == y) {
 
-            this.onClick();
+            if (this.enabled) {
+                this.onClick();
+                PLAY.select();
+            } else {
+                PLAY.invalid();
+            }
         }
     }
 
     draw(ctx) {
         ctx.save();
+        // background
         if (this.enabled)
             ctx.fillStyle = 'green';
         else
             ctx.fillStyle = 'red';
 
-        ctx.fillRect(100, 100, 100, 100);
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+
+        // text
+        ctx.fillStyle = '#000000';
+        ctx.font = '32px bold monospace';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "center";
+        ctx.fillText('Start', this.x + this.width * 0.5, this.y + this.height * 0.5 + 10);
+        ctx.restore();
+    }
+}
+
+class RoundComplete {
+    constructor(game, title, adoration, buttonLabel, callback) {
+        Object.assign(this, { game, title, adoration, buttonLabel, callback });
+        this.z = 100_000;
+        this.elapsed = 0;
+        this.titleDelay = 1;
+        this.adorationDelay = 2;
+        this.buttonDelay = 3;
+    }
+
+    update() {
+        this.elapsed += this.game.clockTick;
+
+        // is player's mouse hovered over the button?
+        const mX = this.game.mouse?.x;
+        const mY = this.game.mouse?.y;
+        this.buttonHighlighted = mX > this.buttonX && mX < this.buttonX + this.buttonWidth
+            && mY > this.buttonY && mY < this.buttonY + this.buttonHeight;
+
+        // if hovered & player clicked, return to Mary's House.
+        if (this.game.click && this.buttonHighlighted) {
+            this.removeFromWorld = true;
+            this.callback();
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        // background
+        const backgroundWidth = 500;
+        const backgroundHeight = 300;
+        const backgroundX = (PARAMS.canvasWidth - backgroundWidth) * 0.5;
+        const backgroundY = (PARAMS.canvasHeight - backgroundHeight) * 0.5;
+        ctx.fillStyle = '#ffffff99';
+        ctx.fillRect(
+            backgroundX, backgroundY,
+            backgroundWidth, backgroundHeight
+        );
+
+        // header text
+        if (this.elapsed >= this.titleDelay) {
+            ctx.fillStyle = '#00ff00';
+            ctx.font = '40px monospace';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "center";
+            ctx.fillText(this.title, PARAMS.canvasWidth * 0.5, backgroundY + 50);
+        }
+
+        // adoration
+        if (this.elapsed >= this.adorationDelay) {
+            const adorationDisplaySpeed = 320;
+            const deltaAdoration = Math.min(this.adoration, Math.round((this.elapsed - this.adorationDelay) * adorationDisplaySpeed));
+            ctx.fillStyle = '#44ff44';
+            ctx.font = '24px monospace';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "center";
+            ctx.fillText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 80);
+        }
+
+        // callback button
+        if (this.elapsed >= this.buttonDelay) {
+            // background
+            this.buttonWidth = 300;
+            this.buttonHeight = 100;
+            this.buttonX = (PARAMS.canvasWidth - this.buttonWidth) * 0.5;
+            this.buttonY = backgroundY + 160;
+            ctx.fillStyle = this.buttonHighlighted ? '#aaaaaa' : '#ffffff';
+            ctx.fillRect(this.buttonX, this.buttonY, this.buttonWidth, this.buttonHeight);
+            ctx.fillStyle = '#000000';
+            ctx.strokeRect(this.buttonX, this.buttonY, this.buttonWidth, this.buttonHeight);
+
+            // text
+            ctx.fillStyle = '#000000';
+            ctx.font = '32px monospace';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "center";
+            ctx.fillText(this.buttonLabel, PARAMS.canvasWidth * 0.5, this.buttonY + this.buttonHeight * 0.5);
+        }
+
+
+        ctx.restore();
+    }
+}
+
+class GameOver {
+    constructor(game, scene) {
+        Object.assign(this, { game, scene });
+        
+
+        this.buttonWidth = 300;
+        this.buttonHeight = 75;
+        this.buttonX = (PARAMS.canvasWidth - this.buttonWidth) * 0.5;
+        this.buttonY = PARAMS.canvasHeight * 0.5 + 50;
+        this.buttonHighlighted = false;
+    }
+
+    update() {
+        // is player's mouse hovered over the button?
+        const mX = this.game.mouse?.x;
+        const mY = this.game.mouse?.y;
+        this.buttonHighlighted = mX > this.buttonX && mX < this.buttonX + this.buttonWidth
+            && mY > this.buttonY && mY < this.buttonY + this.buttonHeight;
+
+        // if hovered & player clicked, return to Mary's House.
+        if (this.game.click && this.buttonHighlighted) {
+            this.removeFromWorld = true;
+            this.scene.restoreScene();
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        // background
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, PARAMS.canvasWidth, PARAMS.canvasHeight);
+
+        // game over text
+        ctx.fillStyle = '#ff0000';
+        ctx.font = '50px monospace';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "center";
+        ctx.fillText("Game Over", PARAMS.canvasWidth * 0.5, PARAMS.canvasHeight * 0.5 - 100);
+
+        // button
+        ctx.fillStyle = this.buttonHighlighted ? '#aaaaaa' : '#ffffff';
+        ctx.fillRect(
+            this.buttonX, // x
+            this.buttonY, // y
+            this.buttonWidth, this.buttonHeight            // width, height
+        );
+        // button text
+        ctx.fillStyle = '#00ff00'
+        ctx.font = '20px monospace';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "center";
+        ctx.fillText("Return to Mary's House", PARAMS.canvasWidth * 0.5, (PARAMS.canvasHeight + this.buttonHeight) * 0.5 + 50);
+
         ctx.restore();
     }
 }
@@ -234,16 +431,18 @@ class Text {
      */
     constructor(text, position, expire) {
         Object.assign(this, {text, position, expire});
-        this.z = 100; // highest, should come before everything
+        this.z = 100000; // highest, should come before everything
         this.vanish = this.expire / 2;
         this.vanishCounter = this.vanish;
         this.index = 0;
     }
+
     update() { // update position of the text
         this.x = this.position[this.index].x;
         this.y = this.position[this.index].y;
         this.index++;
     }
+
     draw(ctx) {
         ctx.save();
 
@@ -260,6 +459,7 @@ class Text {
         ctx.textBaseline = "alphabetic";
         const textSize = 50; // modifiable
         ctx.font = "" + textSize + "px serif";
+        ctx.fillStyle = '#cccccc'
         ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
         this.expire--;

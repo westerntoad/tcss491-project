@@ -13,12 +13,15 @@ class SceneManager {
 
         this.game.addEntity(this);
 
-        // debug
-        // this.map.hide();
 
         this.party = new Party(this.game);
         this.party.addMember(new Character("Mary Yott"));// initial party. 
-        this.addToParty(); //test function for Luek.
+
+        // debug
+        this.addToParty();
+        //this.map.hide();
+        //this.battleScene(false);
+        
     }
     addToParty(){
         const names = ["Bernice Campbell", "Pearl Martinez",
@@ -70,6 +73,10 @@ class SceneManager {
 
     draw(ctx) { /* ~ unused ~ */ }
 
+    startCombat() {
+        
+    }
+
     getRandomEncounter(dungeonType) {
         const enemies = DUNGEON_ENCOUNTERS[dungeonType]; // Get the array of enemies
     
@@ -114,6 +121,5 @@ class SceneManager {
         console.log("Restoring Overworld State");
         this.game.entities = this.savedState;
         this.map = this.savedMap;
-        console.log("Restored Overworld");
     }
 }
