@@ -2,6 +2,7 @@
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const PARAMS = {
+    altMusic: true,
     cellSize: 75,
     spaceHeight: 24,
     spaceHeightAdjusted: 15,
