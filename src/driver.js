@@ -2,6 +2,7 @@
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const PARAMS = {
+    altMusic: true,
     cellSize: 75,
     spaceHeight: 24,
     spaceHeightAdjusted: 15,
@@ -63,9 +64,22 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 
 // MUSIC 
 ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
+ASSET_MANAGER.queueDownload("./assets/gameover.wav");
+ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 
 // For Auto Battler
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
+
+// Sound effects
+ASSET_MANAGER.queueDownload("./assets/select.wav");
+ASSET_MANAGER.queueDownload("./assets/invalid.wav");
+ASSET_MANAGER.queueDownload("./assets/death.wav");
+ASSET_MANAGER.queueDownload("./assets/hit1.wav");
+ASSET_MANAGER.queueDownload("./assets/hit2.wav");
+
+// Fonts
+// NOTE: fonts must not start with './'
+ASSET_MANAGER.queueDownload("assets/runescape.ttf");
 
 const DUNGEON_ENCOUNTERS = {
     "Grass": [
@@ -141,8 +155,8 @@ gameEngine.grannies = [
         granny: true,
         name: "Mary Yott",
         asset: "./assets/grandmas/Mary_Yott.png",
-        maxHp: 100,
-        hp: 100,
+        maxHp: 1,
+        hp: 1,
         attack: 10,
         defense: 5,
         special: {

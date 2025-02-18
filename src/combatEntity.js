@@ -2,6 +2,7 @@ class CombatEntity {
     //constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
     //block.unit = new CombatEntity(this.enemies[i], this, block);
     constructor(raw, battle, block) {
+        this.block = block;
         this.granny = raw.granny;
         this.raw = raw;
         this.entity = raw;
@@ -15,20 +16,23 @@ class CombatEntity {
 
         this.z = this.block.z + 1;
         this.x = this.block.x + this.block.width * this.block.scale / 2;
+        this.dx = 0;
         this.y = this.block.y + this.spaceHeightAdjusted * this.block.scale / 2;
+        this.dy = 0;
         this.frames = ASSET_MANAGER.getAsset(this.entity.asset).width / 32;
         this.currentFrame = 0;
-        this.block.occupied = this;
         this.ticker = 0;
         this.attacking = false;
         this.ready = false;
         this.assetSize = ASSET_MANAGER.getAsset(this.entity.asset).height;
-        this.elapsedTime = 0;
+        this.attackElapsed = 0;
+        this.moveElapsed = 0;
         this.drawTime = 0;
       //atk speed for frequency of attack rate
       //move speed for frequency of moving
     }
-    bfs(){ // return the dx, dy to move. also return the x and y of closest enemy.
+
+    bfs() { // return the dx, dy to move. also return the x and y of closest enemy.
         const directions = [
             { dx: 0, dy: -1 },
             { dx: 0, dy: 1 },
@@ -72,43 +76,96 @@ class CombatEntity {
         return null;
     }
     update() {
+        this.dx = 0;
+        this.dy = 0;
         if(!this.ready) return;
-        if(this.raw.hp <= 0){
+        if(this.raw.hp <= 0) {
+            PLAY.death();
             this.block.unit = null;
             this.removeFromWorld = true;
         }
+
+
         // 2 modes of operation, moving or attacking.
         // First, look for closest enemy location
         const found = this.bfs(); // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
-        if(found) { // there are enemies on map
-            if(found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
+        if (found) { // there are enemies on map
+            if (this.prevBlock || !this.attacking) {
+                this.moveElapsed += this.game.clockTick;
+            }
+            if (found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
                 // check the atkSpeed
                 // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
-                this.elapsedTime += this.game.clockTick;
-                if(this.elapsedTime >= this.raw.attackSpeed) {
+                this.attackElapsed += this.game.clockTick;
+                if(this.attackElapsed >= this.raw.attackSpeed) {
                     if(this.target?.unit) {
-                        this.target.unit.raw.hp -= 
-                            Math.round((this.target.unit.raw.defense ? 
+                        const damage = Math.round((this.target.unit.raw.defense ? 
                                 1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
                                  : 1) * this.raw.attack);
+                        this.target.unit.raw.hp -= damage;
+
+                        const origX  = this.block.isoX + this.block.width * 0.5;
+                        const origY  = this.block.isoY - this.block.height * 0.2;
+                        const destX  = this.target.isoX + this.target.width * 0.5;
+                        const destY  = this.target.isoY + this.target.height * 0.2;
+                        // damage number gen
+                        this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
+
+                        // if ranged, shoot beam
+                        if (this.raw.attackRange > 1) {
+                            this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+                        }
+
+                        // temporary code - will replace with sounds unique to each combat entity
+                        // DEBUG
+                        if (Math.random() < 0.5) {
+                            PLAY.hit1();
+                        } else {
+                            PLAY.hit2();
+                        }
                     } else {
                         this.target = this.allBlocks[found.y][found.x];
                     }
 
-                    this.elapsedTime = 0;// how timer is used
+                    this.attackElapsed = 0;
                     this.attacking = true;
                 }
             } else {
-                this.elapsedTime += this.game.clockTick;
-                if(this.elapsedTime >= this.raw.moveSpeed){
+                const block = this.allBlocks[this.block.mapY + found.initial.y]
+                    [this.block.mapX + found.initial.x];
+                if(this.moveElapsed >= this.raw.moveSpeed){
                     // check the moveSpeed
-                    this.blockMove(this.allBlocks[this.block.mapY + found.initial.y]
-                        [this.block.mapX + found.initial.x]);
-                    this.elapsedTime = 0;// how timer is used
+                    this.prevBlock = this.block;
+                    this.blockMove(block);
+                    this.moveElapsed -= this.raw.moveSpeed;// how timer is used
                     this.attacking = false;
-                }
+                } 
             }
-        } else this.attacking = false;
+        } else {
+            this.attacking = false;
+        }
+
+        if (this.prevBlock) {
+            // calculate movement interpolation
+            //const prog = Math.sqrt(this.elapsedTime) / Math.sqrt(this.raw.moveSpeed);
+            const prog = Math.pow(this.raw.moveSpeed - this.moveElapsed, 2) / Math.pow(this.raw.moveSpeed, 2);
+            const mapX = this.block.mapX - this.prevBlock.mapX;
+            const mapY = this.block.mapY - this.prevBlock.mapY;
+            //const mapX = found.initial.x;
+            //const mapY = found.initial.y;
+            const isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2;
+            const isoY = (mapY + mapX) * PARAMS.spaceHeight * PARAMS.scale / 3;
+            this.dx = -isoX * prog;
+            this.dy = -isoY * prog;
+            this.z = Math.max(this.z, this.prevBlock.z + 1)
+
+            if (this.moveElapsed >= this.raw.moveSpeed) {
+                this.prevBlock = undefined;
+                this.dx = 0;
+                this.dy = 0;
+            }
+            
+        }
     }
   
     draw(ctx) {
@@ -134,9 +191,11 @@ class CombatEntity {
             30,
             26,
             this.block.isoX + this.block.width /2
-                + (this.raw.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+                + (this.raw.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2
+                + this.dx,
             (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
-                - this.size * this.block.scale) - hpY * 2,
+                - this.size * this.block.scale) - hpY * 2
+                + this.dy,
             this.size / 4 * this.block.scale,
             this.size / 4 * this.block.scale * (26/30) // raw ratio
         );
@@ -152,13 +211,15 @@ class CombatEntity {
             26 * (this.raw.granny ? currHpBar : 1 - currHpBar),
 
             this.block.isoX + this.block.width / 2
-                + (this.raw.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2,
+                + (this.raw.granny ? -1 : 1/2 ) * this.size * this.block.scale / 2
+                + this.dx,
 
             (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
-                - this.size * this.block.scale) - hpY *2 + 
+                - this.size * this.block.scale) - hpY * 2 + 
                 (this.raw.granny ? 
                     (1-currHpBar) : currHpBar)
-                * (26/30) * this.size / 4 * this.block.scale,
+                * (26/30) * this.size / 4 * this.block.scale
+                + this.dy,
 
             this.size / 4 * this.block.scale,
 
@@ -166,6 +227,7 @@ class CombatEntity {
                 (this.raw.granny ? currHpBar : (1 - currHpBar))) // raw ratio
         );
 
+        // actual unit drawing
         ctx.drawImage(
             ASSET_MANAGER.getAsset(this.raw.asset),
             this.currentFrame * this.assetSize,
@@ -173,15 +235,17 @@ class CombatEntity {
             this.assetSize,
             this.assetSize,
             this.block.isoX + this.block.width / 2
-                - this.size * this.block.scale / 2,
+                - this.size * this.block.scale / 2
+                + this.dx,
             (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
-                - this.size * this.block.scale),
+                - this.size * this.block.scale)
+                + this.dy,
             this.size * this.block.scale,
             this.size * this.block.scale
         );
     }
     blockMove(newBlock){
-        if(!newBlock.occupied){
+        if(!newBlock.unit){
             this.block.unit = null;
             this.block.selected = false;
             this.z = newBlock.z + 1;
@@ -192,4 +256,3 @@ class CombatEntity {
         }
     }
 }
-

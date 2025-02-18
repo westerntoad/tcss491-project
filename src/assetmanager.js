@@ -21,6 +21,8 @@ class AssetManager {
             const path = this.downloadQueue[i];
             const split = path.split(".");
             const ext = split[split.length - 1];
+            const nameSplit = split[0].split("/");
+            const name = nameSplit[nameSplit.length - 1];
 
             switch (ext) {
                 case 'jpg':
@@ -82,6 +84,18 @@ class AssetManager {
 
                     this.cache[path] = aud;
                     break;
+              case 'ttf':
+                  const f = new FontFace(name, `url(${path})`);
+                  
+                  f.load().then(() => {
+                      console.log(`Loaded ${path}`);
+                      this.successCount++;
+                      if (this.isDone()) callback();
+                  });
+
+                  
+                  this.cache[path] = f;
+                  break;
             }
         }
     }
