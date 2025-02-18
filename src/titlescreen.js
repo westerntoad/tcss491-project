@@ -103,7 +103,7 @@ class TitleScreen {
         ctx.fillStyle = "white";
         ctx.font = "48px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Your Game Title", this.width / 2, this.height / 3);
+        ctx.fillText("Grandmas vs. Unhappiness", this.width / 2, this.height / 3);
         
         // Draw buttons
         this.buttons.forEach(button => {
