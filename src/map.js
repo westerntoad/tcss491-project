@@ -147,6 +147,11 @@ MAPS.marysRoom = (map) => {
     };
     json.specialTiles.push(portalPoint);
 
+    const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
+    portals.stepOn = () => {
+        map.scene.battleScene(false);
+    };
+    json.specialTiles.push(portals);
     return json;
 };
 

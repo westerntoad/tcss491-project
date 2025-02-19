@@ -244,5 +244,5 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
 
     gameEngine.start();
 
-    const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
+    //const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
 });

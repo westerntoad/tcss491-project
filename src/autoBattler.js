@@ -185,7 +185,7 @@ class AutoBattler {
             this.cleanup();
             STOP.battle1();
             PLAY.gameover();
-            this.game.addEntity(new GameOver(this.game, this.sceneManager));
+            this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
         }
     }
 
@@ -369,8 +369,8 @@ class RoundComplete {
 }
 
 class GameOver {
-    constructor(game, scene) {
-        Object.assign(this, { game, scene });
+    constructor(game, scene, battle) {
+        Object.assign(this, { game, scene, battle });
         
 
         this.buttonWidth = 300;
@@ -389,7 +389,7 @@ class GameOver {
 
         // if hovered & player clicked, return to Mary's House.
         if (this.game.click && this.buttonHighlighted) {
-            this.removeFromWorld = true;
+            this.battle.cleanup();
             this.scene.restoreScene();
         }
     }
