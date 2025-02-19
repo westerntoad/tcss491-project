@@ -42,6 +42,9 @@ class SceneManager {
         this.dialogIndex = 0;
         this.dialog = new Dialog(this.game, this, this.dialogArr[this.dialogIndex].content, 
             this.dialogArr[this.dialogIndex].speaking);
+        if(this.dialogArr[this.dialogIndex].asset){
+            this.showManga(this.game, this.dialogArr[this.dialogIndex].asset);
+        }
         this.game.addEntity(this.dialog);
         this.map.player.disableMovement = true;
         this.dialogIndex++;
@@ -51,6 +54,14 @@ class SceneManager {
         this.dialog.removeFromWorld = true;
         this.dialog = undefined;
         this.map.player.disableMovement = false;
+    }
+    showManga() {
+        this.manga = new Manga(this, this.dialogArr[this.dialogIndex].asset);
+        this.game.addEntity(this.manga);
+    }
+    hideManga(){
+        this.manga.removeFromWorld = true;
+        this.manga = null;
     }
 
     update() {
@@ -62,8 +73,12 @@ class SceneManager {
                     this.dialog = new Dialog(this.game, this, this.dialogArr[this.dialogIndex].content, 
                         this.dialogArr[this.dialogIndex].speaking);
                     this.game.addEntity(this.dialog);
+                    this.manga?.load(this.dialogArr[this.dialogIndex]?.asset);
                     this.dialogIndex++;
                 } else {
+
+                    this.map.story.next();
+                    if(this.manga) this.hideManga();
                     this.hideDialog();
                 }
                 this.game.pressed['z'] = false;
@@ -79,6 +94,7 @@ class SceneManager {
             }
         }
     }
+    
 
     draw(ctx) { /* ~ unused ~ */ }
 
@@ -127,5 +143,34 @@ class SceneManager {
         this.game.entities = this.savedState;
         this.map = this.savedMap;
         console.log("Restored Overworld");
+    }
+}
+class Manga {
+    constructor(scene, asset){
+        Object.assign(this, {scene, asset});
+        this.asset = ASSET_MANAGER.getAsset(this.asset);
+        this.padding = 20;
+        this.z = 9;
+        // stash previous assets in a set
+        this.set = new Set();
+        this.scale = this.asset.width /this.asset.height;
+        // just determine size of asset here.
+        this.height = this.scene.dialog?.boxY - this.padding;
+        this.width = this.height * this.scale;
+        this.x = this.scene.game.width / 2 - this.width / 2;
+    }
+    draw (ctx) {
+        // scale enough to fill height.
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, this.scene.game.width, this.scene.game.height);
+        ctx.drawImage(this.asset, 0, 0, this.asset.width, this.asset.height,
+            this.x, this.padding, this.width, this.height
+        );
+        ctx.restore();
+    }
+    update() {}
+    load(asset){
+        this.asset = ASSET_MANAGER.getAsset(asset);
     }
 }

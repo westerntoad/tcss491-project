@@ -3,7 +3,7 @@
     {"speaking": "Mary", "content": "Oh! What a beautiful finch."},
     {"speaking": "Mary", "content": "I haven’t seen such coloring yet this year."},
     {"speaking": "Mary", "content": "Welcome to my garden, little one."},
-    {"speaking": "Mary", "content": "Stay as long as you’d like."}
+    {"speaking": "Mary", "content": "Stay as long as you’d like.", "end": true}
     ],
 
     [
@@ -39,7 +39,7 @@
     {"speaking": "Vera", "content": "Yes, I think that could be it."},
     {"speaking": "Vera", "content": "Thank you, Mary!"},
     {"speaking": "Vera", "content": "I’ll see you tomorrow."},
-    {"speaking": "Mary", "content": "See you tomorrow! Buh-bye now, dear."}
+    {"speaking": "Mary", "content": "See you tomorrow! Buh-bye now, dear.", "end": true}
     ],
 
     [{"speaking": "Mary", "content": "That’ll be Vera here to pick me up."},

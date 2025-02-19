@@ -26,7 +26,16 @@ ASSET_MANAGER.queueDownload("./maps/dev2.json");
 ASSET_MANAGER.queueDownload("./maps/house.json");
 ASSET_MANAGER.queueDownload("./maps/marysMap.json");
 ASSET_MANAGER.queueDownload("./assets/tileSheet_main.png");
-ASSET_MANAGER.queueDownload("./maps/dialogLoad.json");
+
+// Manga Panels + dialog
+ASSET_MANAGER.queueDownload("./dialog/dialogLoad.json");
+ASSET_MANAGER.queueDownload("./dialog/chapter1_1.png");
+ASSET_MANAGER.queueDownload("./dialog/chapter1_2.png");
+ASSET_MANAGER.queueDownload("./dialog/panelExample.png");
+ASSET_MANAGER.queueDownload("./dialog/panelExample2.png");
+ASSET_MANAGER.queueDownload("./dialog/quest.png");
+ASSET_MANAGER.queueDownload("./dialog/basket.png");
+
 
 // All Grandmas (32 x 32)
 ASSET_MANAGER.queueDownload("./assets/grandmas/Mary_Yott.png");
