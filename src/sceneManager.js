@@ -40,10 +40,17 @@ class SceneManager {
         this.map.player.disableMovement = false;
     }
 
-    showDialog(text) {
-        this.dialog = new Dialog(this.game, this, text);
+    showDialog(textArr) { //changed to accomodate an array of dialog.
+        this.dialogArr = textArr;
+        this.dialogIndex = 0;
+        this.dialog = new Dialog(this.game, this, this.dialogArr[this.dialogIndex].content, 
+            this.dialogArr[this.dialogIndex].speaking);
+        if(this.dialogArr[this.dialogIndex].asset){
+            this.showManga(this.game, this.dialogArr[this.dialogIndex].asset);
+        }
         this.game.addEntity(this.dialog);
         this.map.player.disableMovement = true;
+        this.dialogIndex++;
     }
 
     hideDialog() {
@@ -51,12 +58,32 @@ class SceneManager {
         this.dialog = undefined;
         this.map.player.disableMovement = false;
     }
+    showManga() {
+        this.manga = new Manga(this, this.dialogArr[this.dialogIndex].asset);
+        this.game.addEntity(this.manga);
+    }
+    hideManga(){
+        this.manga.removeFromWorld = true;
+        this.manga = null;
+    }
 
     update() {
         // if a dialog is on screen, advance the dialog.
         if (this.game.pressed['z']) {
             if (this.dialog) {
-                this.hideDialog();
+                if(this.dialogIndex < this.dialogArr.length){
+                    this.dialog.removeFromWorld = true;
+                    this.dialog = new Dialog(this.game, this, this.dialogArr[this.dialogIndex].content, 
+                        this.dialogArr[this.dialogIndex].speaking);
+                    this.game.addEntity(this.dialog);
+                    this.manga?.load(this.dialogArr[this.dialogIndex]?.asset);
+                    this.dialogIndex++;
+                } else {
+
+                    this.map.story.next();
+                    if(this.manga) this.hideManga();
+                    this.hideDialog();
+                }
                 this.game.pressed['z'] = false;
             }
         } else if (this.game.pressed['x']){
@@ -70,6 +97,7 @@ class SceneManager {
             }
         }
     }
+    
 
     draw(ctx) { /* ~ unused ~ */ }
 
@@ -121,5 +149,34 @@ class SceneManager {
         console.log("Restoring Overworld State");
         this.game.entities = this.savedState;
         this.map = this.savedMap;
+    }
+}
+class Manga {
+    constructor(scene, asset){
+        Object.assign(this, {scene, asset});
+        this.asset = ASSET_MANAGER.getAsset(this.asset);
+        this.padding = 20;
+        this.z = 9;
+        // stash previous assets in a set
+        this.set = new Set();
+        this.scale = this.asset.width /this.asset.height;
+        // just determine size of asset here.
+        this.height = this.scene.dialog?.boxY - this.padding;
+        this.width = this.height * this.scale;
+        this.x = this.scene.game.width / 2 - this.width / 2;
+    }
+    draw (ctx) {
+        // scale enough to fill height.
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, this.scene.game.width, this.scene.game.height);
+        ctx.drawImage(this.asset, 0, 0, this.asset.width, this.asset.height,
+            this.x, this.padding, this.width, this.height
+        );
+        ctx.restore();
+    }
+    update() {}
+    load(asset){
+        this.asset = ASSET_MANAGER.getAsset(asset);
     }
 }

@@ -8,8 +8,10 @@ class Map {
         this.player = new Player(game, scene, this, 0, 0);
         this.player.dir = 2; // set player facing south
         this.game.addEntity(this.player);
-        
+        this.story = new Story(this);
         this.changeMap(MAPS.marysRoom(this), 3, 2);
+        this.globalDialogIndex = 0;
+
     }
 
     hide() {
@@ -100,7 +102,7 @@ class Map {
                 const facedTile = this.player.facingTile();
                 const presentTiles = this.getTile(facedTile.x, facedTile.y);
                 for (let i = 0; i < presentTiles.length; i++) {
-                    presentTiles[i].interact?.();
+                    if(!presentTiles[i].removeFromWorld) presentTiles[i].interact?.();
                 }
             }
         }
@@ -133,21 +135,14 @@ const MAPS = {}
 MAPS.marysRoom = (map) => {
     // initialize map from JSON asset
     const json = ASSET_MANAGER.getAsset("./maps/house.json");
-    json.specialTiles = [];
+    json.specialTiles = []; // receive a array of special tiles.
+    const string = "marysRoom";
+    json.specialTiles.push(...map.story.load(string));
 
-    // TODO parse dialogue from JSON
-
-    // SPECIAL TILES
-    // Vera Mulberry
-    const interactable = new Tile(map, false, 8, 3, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
-    interactable.interact = () => map.scene.showDialog("y'like my cats?");
-    json.specialTiles.push(interactable);
-
-    // Exit
     const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        map.changeMap(MAPS.marysMap(map), 6, 6);
+        map.changeMap(MAPS.marysMap(map), 6, 7);
         map.player.dir = 2;
     };
     json.specialTiles.push(portalPoint);
@@ -159,13 +154,16 @@ MAPS.marysMap = (map) => {
     const json = ASSET_MANAGER.getAsset("./maps/marysMap.json");
 
     json.specialTiles = [];
+    json.specialTiles.push(...map.story.load("marysMap"));
 
-    // temporary special tile to start auto battler
-    const autobattlerTest = new Tile(map, true, 8, 8, 0, './assets/portalPoint.png');
-    autobattlerTest.stepOn = () => {
-        map.scene.battleScene(false);
+    
+    const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
+    marysRoom.stepOn = () => {
+        map.changeMap(MAPS.marysRoom(map), 8, 1);
+        map.player.dir = 2;
     };
-    json.specialTiles.push(autobattlerTest);
+    json.specialTiles.push(marysRoom);
 
     return json;
 }
+
