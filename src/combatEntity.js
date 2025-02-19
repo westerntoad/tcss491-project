@@ -2,6 +2,7 @@ class CombatEntity {
     //constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
     //block.unit = new CombatEntity(this.enemies[i], this, block);
     constructor(raw, battle, block) {
+        this.battle = battle;
         this.block = block;
         this.granny = raw.granny;
         this.raw = raw;
@@ -81,6 +82,8 @@ class CombatEntity {
         if(!this.ready) return;
         if(this.raw.hp <= 0) {
             PLAY.death();
+            // TODO: make a better exp thingy -> L.C.
+            this.battle.sceneManager.party.exp += this.raw.exp ? this.raw.exp :0;
             this.block.unit = null;
             this.removeFromWorld = true;
         }

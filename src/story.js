@@ -96,7 +96,7 @@ class Story {
                         this.openPortals.forEach(portals => {
                             portals.currMap = "marysMap";
                             portals.stepOn = () => {
-                                this.map.scene.battleScene(false);
+                                this.map.scene.battleScene([["L0neb0ne"]]);
                             };
                         });
                     };

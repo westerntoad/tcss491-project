@@ -7,7 +7,7 @@ class Party {
         Object.assign(this, {game});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
-        this.exp = 1000; // keep track of total exp in the pot.
+        this.exp = 0; // keep track of total exp in the pot.
     }
     showParty(){
         // kick off the gui for the party.
@@ -61,13 +61,30 @@ class PartyGUI {
             if(mouseX > x + segmentX / 10 && mouseX < x + segmentX / 10 + segmentX/8 &&
                 mouseY > y + segmentY * (3/4) && mouseY < y + segmentY * (3/4) + segmentY/8){
                 if(this.game.click){
-                    this.party.exp -= this.members[i].levelUp(this.party.exp);
+                    const used = this.members[i].levelUp(this.party.exp);
+                    used === 0 ? PLAY.invalid() : PLAY.select();
+                    if(used === 0) {
+                        PLAY.invalid();
+                        this.game.addEntity({
+                            expire: 15,
+                            draw: (ctx) => {
+                                const expire = this.expire;
+                                this.expire--;
+                                console.log("alive");
+                                if(expire <= 0) this.removeFromWorld = true;
+                            },
+                            update: () => {}
+                        });
+                    }
+                    this.party.exp -= used;
                 }
             }
             else if(mouseX > x + segmentX * (3/10) && mouseX < x + segmentX * (3/10) + segmentX/8 &&
                 mouseY > y + segmentY * (3/4) && mouseY < y + segmentY * (3/4) + segmentY/8){
                 if(this.game.click){
-                    this.party.exp += this.members[i].levelDown();
+                    const gain = this.members[i].levelDown();
+                    gain === 0 ? PLAY.invalid() : PLAY.select();
+                    this.party.exp += gain;
                 }
             }
         }

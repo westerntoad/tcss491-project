@@ -109,12 +109,10 @@ const DUNGEON_ENCOUNTERS = {
         { name: "L0neb0ne",
             attackRange: 1,
             granny: false,
-            maxHp: 50,
-            hp: 50,
-            attack: 10,
-            defense: 5,
-            speed: 1,
-            exp: 3,
+            hp: 5,
+            attack: 2,
+            defense: 0,
+            exp: 1,
             attackSpeed: 1,
             moveSpeed: 1,
             asset: "./assets/enemies/L0neb0ne.png"
@@ -122,7 +120,6 @@ const DUNGEON_ENCOUNTERS = {
         { name: "D3pr3ss0",
             attackRange: 1,
             granny: false,
-            maxHp: 25,
             hp: 25,
             attack: 25,
             defense: 10,
@@ -135,7 +132,6 @@ const DUNGEON_ENCOUNTERS = {
         { name: "Mad@Chu",
             attackRange: 1,
             granny: false,
-            maxHp: 30,
             hp: 30,
             attack: 15,
             defense: 2,
@@ -240,9 +236,9 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
 
     gameEngine.init(ctx);
 
-    gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
+    //gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
 
     gameEngine.start();
 
-    //const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
+    const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
 });

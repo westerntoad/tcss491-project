@@ -10,7 +10,7 @@ class AutoBattler {
         this.z = -5; // draw this first.
 
         this.currRound = 1;
-        this.totalRounds = 2;
+        this.totalRounds = this.enemies.length;
 
         this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
         PARAMS.spaceWidth = this.isoBlock.width; // TODO replace with hard value
@@ -72,9 +72,11 @@ class AutoBattler {
             this.game.addEntity(block.unit);
         }
         // initialize all enemy units and place onto battlefield
-        for (let i = 0; i < 3; i++) {
-            const block = this.allBlocks[6][i];
-            block.unit = new CombatEntity(this.enemies[i], this, block);
+        for (let i = 0; i < this.enemies[this.currRound - 1].length; i++) {
+            const curr = this.enemies[this.currRound - 1][i];
+            const block = (curr.x || curr.x === 0) ? // 0 is falsey.
+                this.allBlocks[(curr.x)][curr.y] : this.allBlocks[6][i];
+            block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
             this.game.addEntity(block.unit);
         }
 
@@ -158,10 +160,15 @@ class AutoBattler {
                 this.disableControl = false;
 
                 // TODO pass multiple round enemies from constructor
-                // DEBUG
-                const enemy = new CombatEntity(this.sceneManager.getRandomEncounter("Grass"), this, this.allBlocks[0][0]);
-                this.allBlocks[0][0].unit = enemy;
-                this.game.addEntity(enemy);
+                // DEBUG // similar to init for enemy placement.
+                // initialize all enemy units and place onto battlefield
+                for (let i = 0; i < this.enemies[this.currRound - 1].length; i++) {
+                    const curr = this.enemies[this.currRound - 1][i];
+                    const block = (curr.x || curr.x === 0) ? // 0 is falsey.
+                        this.allBlocks[(curr.x)][curr.y] : this.allBlocks[6][i];
+                    block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
+                    this.game.addEntity(block.unit);
+                }
             }
 
             let buttonLabel = ``;

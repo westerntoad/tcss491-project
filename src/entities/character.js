@@ -38,11 +38,11 @@ class Character {
             // Warrior (melee, balanced stats)
             case "Mary Yott":
                 this.granny = true;
-                this.hp = 10; // can just create maxHp when passing off to autoBattler
+                this.hp = 3; // can just create maxHp when passing off to autoBattler
                 this.attack = 1;
                 this.attackRange = 1; // default val for melees
                 this.defense = 0;
-                this.attackSpeed = 0.2; // atk & moveSpd currently is x * 1000 ms.
+                this.attackSpeed = 0.95; // atk & moveSpd currently is x * 1000 ms.
                 this.moveSpeed = 1; // so this is 1000ms.
                 this.hpGrowth = 0.5; // specify the distribution rate
                 this.attackGrowth = 0.5;

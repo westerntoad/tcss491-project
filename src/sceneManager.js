@@ -18,17 +18,16 @@ class SceneManager {
         this.party.addMember(new Character("Mary Yott"));// initial party. 
 
         // debug
-        this.addToParty();
+        // this.addToParty();
+        this.party.addMember(new Character("Vera Mulberry"));
         //this.map.hide();
         //this.battleScene(false);
         
     }
-    addToParty(){
+    addToParty(name){
         const names = ["Bernice Campbell", "Pearl Martinez",
             "Vera Mulberry", "Ye-soon Kim"];
-        names.forEach((name) =>{
-            this.party.addMember(new Character(name));
-        });
+        this.party.addMember(new Character(name));
     }
 
     showParty(){
@@ -116,20 +115,33 @@ class SceneManager {
         const randomIndex = Math.floor(Math.random() * enemies.length); // Roll for a random enemy
         return enemies[randomIndex]; // Return the selected enemy
     }
-    battleScene(isBoss) {
+    battleScene(enemyArr, type) {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
-        
+        enemyArr = CHAPTER1_ROUNDS;
         const enemies = [];
         const random = Math.floor(Math.random() * 2);
-        let i = 2;
-        while(i >= 0) {
-            enemies.push(
-                Object.assign({}, this.getRandomEncounter("Grass"))
-            );
-            i--;
+        for(let i = 0; i < enemyArr.length; i++){
+            const d1 = [];
+            for(let j = 0; j < enemyArr[i].length; j++){
+                for(const enemy of DUNGEON_ENCOUNTERS[type]) {
+                    if(enemy.name === enemyArr[i][j].name) {
+                        const toPush = Object.assign({}, enemy);
+                        toPush.x = enemyArr[i][j].x;
+                        toPush.y = enemyArr[i][j].y;
+                        toPush.maxHp = toPush.hp;
+                        d1.push(toPush);
+                        console.log("pushed -> " + toPush.name + " " +
+                            toPush.x + " " + toPush.y
+                        );
+                        break;
+                    }
+                }
+            }
+            enemies.push(d1);
         }
+        console.log(enemies);
 
         const players = [];
         for(let i = 0; i < this.party.members.length; i++){
@@ -180,3 +192,10 @@ class Manga {
         this.asset = ASSET_MANAGER.getAsset(asset);
     }
 }
+CHAPTER1_ROUNDS = [
+    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}],
+    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 2, y: 4}],
+    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}],
+    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}],
+    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}]
+]

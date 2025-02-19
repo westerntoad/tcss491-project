@@ -57,6 +57,7 @@ class TitleScreen {
                 mouseX <= button.x + this.buttonWidth &&
                 mouseY >= button.y && 
                 mouseY <= button.y + this.buttonHeight) {
+                    console.log(button.text + " pressed");
                 button.action();
             }
         });
