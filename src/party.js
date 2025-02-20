@@ -66,14 +66,22 @@ class PartyGUI {
                     if(used === 0) {
                         PLAY.invalid();
                         this.game.addEntity({
-                            expire: 15,
-                            draw: (ctx) => {
-                                const expire = this.expire;
+                            z: this.z + 1,
+                            expire: 30,
+                            exp: this.members[i].expReq[this.members[i].level - 1],
+                            draw: function(ctx) {
+                                ctx.save();
                                 this.expire--;
-                                console.log("alive");
-                                if(expire <= 0) this.removeFromWorld = true;
+                                ctx.font = `bold 12px runescape`;
+                                ctx.fillStyle = 'black';
+                                console.log(this.exp);
+                                ctx.fillText(`Need ${this.exp} Adoration`,
+                                    mouseX + 10, mouseY - 10
+                                )
+                                ctx.restore();
+                                if(this.expire <= 0) this.removeFromWorld = true;
                             },
-                            update: () => {}
+                            update: function() {}
                         });
                     }
                     this.party.exp -= used;
