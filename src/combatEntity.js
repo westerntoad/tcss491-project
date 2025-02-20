@@ -49,6 +49,10 @@ class CombatEntity {
             const currBlock = this.allBlocks[current.y][current.x];
 
             if(currBlock.unit){
+                if (currBlock.unit.raw.hp <= 0) {
+                    // Skip this block if the unit is dead.
+                    continue;
+                }
                 if(currBlock.unit.raw.granny !== this.raw.granny) {
                     return current;
                 }
@@ -101,7 +105,7 @@ class CombatEntity {
                 // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
                 this.attackElapsed += this.game.clockTick;
                 if(this.attackElapsed >= this.raw.attackSpeed) {
-                    if(this.target?.unit) {
+                    if(this.target?.unit && this.target.unit.raw.hp > 0) {
                         const damage = Math.round((this.target.unit.raw.defense ? 
                                 1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
                                  : 1) * this.raw.attack);

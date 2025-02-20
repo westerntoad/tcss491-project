@@ -149,6 +149,17 @@ const DUNGEON_ENCOUNTERS = {
             attackSpeed: 1,
             moveSpeed: 0,
             asset: "./assets/enemies/Jerry_Mulberry.png"
+         },
+         { name: "testL0neb0ne",
+            attackRange: 1,
+            granny: false,
+            hp: 50,
+            attack: 0,
+            defense: 0,
+            exp: 1,
+            attackSpeed: 0.2,
+            moveSpeed: 0.4,
+            asset: "./assets/enemies/L0neb0ne.png"
          }
     ],
     "Ruins": [

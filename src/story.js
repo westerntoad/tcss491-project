@@ -107,7 +107,33 @@ class Story {
                     this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true);
                     this.currMap = "autoBattler";
                     this.awaitBattle = true;
-                    this.openPortals.push(new Tile(this.map, true, 24, 9, 0, this.questIcon));
+                };
+                this.specialTiles.push(quest);
+                this.specialTiles.push(bone);
+                break;
+            case 6: // beat jerry in the forest, at round 5.
+                if(this.currMap == "autoBattler") {
+
+                }
+                break;
+            case 7: // after beating jerry, jump right into this case.
+            default:
+                break;
+        }
+        this.openPortals.forEach(portals => {
+            if(portals.currMap === this.currMap) {
+                console.log("portal pushed");
+                this.specialTiles.push(portals);
+            }
+        });
+        return this.specialTiles;
+    }
+    outOfBattle() {
+        this.dialogIndex--;
+        this.awaitBattle = false;
+        this.currMap = "marysMap"
+        this.globalProg++;
+        this.openPortals.push(new Tile(this.map, true, 24, 9, 0, this.questIcon));
                     this.openPortals.push(new Tile(this.map, true, 24, 10, 0, this.questIcon));
                     this.openPortals.push(new Tile(this.map, true, 24, 11, 0, this.questIcon));
                     this.openPortals.push(new Tile(this.map, true, 24, 12, 0, this.questIcon));
@@ -128,32 +154,6 @@ class Story {
                             ], "Grass", true);
                         };
                     });
-                };
-                this.specialTiles.push(quest);
-                this.specialTiles.push(bone);
-                break;
-            case 6: // beat jerry in the forest, at round 5.
-                if(this.currMap == "autoBattler") {
-
-                }
-                break;
-            case 7: // after beating jerry, jump right into this case.
-            default:
-                break;
-        }
-        this.openPortals.forEach(portals => {
-            if(portals.currMap === this.currMap) {
-                console.log("portal pushed");
-                this.specialTiles.push(Object.assign({}, portals));
-            }
-        });
-        return this.specialTiles;
-    }
-    outOfBattle() {
-        this.dialogIndex--;
-        this.awaitBattle = false;
-        this.currMap = "marysMap"
-        this.globalProg++;
         this.next();
     }
     next() {

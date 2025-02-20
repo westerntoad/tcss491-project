@@ -15,8 +15,7 @@ class SceneManager {
 
 
         this.party = new Party(this.game);
-        this.party.addMember(new Character("Mary Yott"));// initial party. 
-        this.party.addMember(new Character("Bernice Campbell"));
+        this.party.addMember(new Character("Mary Yott"));// initial party.
         
     }
     addToParty(name){
@@ -114,7 +113,7 @@ class SceneManager {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
-        enemyArr = CHAPTER1_ROUNDS;
+        // enemyArr = CHAPTER1_ROUNDS;
         const enemies = [];
         const random = Math.floor(Math.random() * 2);
         for(let i = 0; i < enemyArr.length; i++){

@@ -147,13 +147,21 @@ MAPS.marysRoom = (map) => {
     };
     json.specialTiles.push(portalPoint);
 
-    const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
-    portals.stepOn = () => {
-        map.scene.battleScene(
-            [[{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}]], 
-            "Grass");
-    };
-    json.specialTiles.push(portals);
+    //testing combat in marysRoom
+    // const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
+    // portals.stepOn = () => {
+    //     map.scene.battleScene(
+    //         [[{name: "L0neb0ne"},
+    //             {name: "L0neb0ne"},
+    //             {name: "L0neb0ne"},
+    //             {name: "L0neb0ne"},
+    //             {name: "L0neb0ne"},
+    //             {name: "L0neb0ne"},
+    //             {name: "L0neb0ne"}
+    //         ]], 
+    //         "Grass");
+    // };
+    // json.specialTiles.push(portals);
     return json;
 };
 

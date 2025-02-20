@@ -181,6 +181,8 @@ class AutoBattler {
                 buttonLabel = `Next Round`;
             } else if (this.currRound == this.totalRounds) {
                 buttonLabel = `Start Boss`;
+                // when we get to this round, we want to check if we have story checked,
+                // and play the dialogue.
             } else {
                 buttonLabel = `Return to Home`;
             }
