@@ -16,12 +16,7 @@ class SceneManager {
 
         this.party = new Party(this.game);
         this.party.addMember(new Character("Mary Yott"));// initial party. 
-
-        // debug
-        // this.addToParty();
-        this.party.addMember(new Character("Vera Mulberry"));
-        //this.map.hide();
-        //this.battleScene(false);
+        this.party.addMember(new Character("Bernice Campbell"));
         
     }
     addToParty(name){
@@ -115,7 +110,7 @@ class SceneManager {
         const randomIndex = Math.floor(Math.random() * enemies.length); // Roll for a random enemy
         return enemies[randomIndex]; // Return the selected enemy
     }
-    battleScene(enemyArr, type) {
+    battleScene(enemyArr, type, story = false) {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
@@ -132,16 +127,13 @@ class SceneManager {
                         toPush.y = enemyArr[i][j].y;
                         toPush.maxHp = toPush.hp;
                         d1.push(toPush);
-                        console.log("pushed -> " + toPush.name + " " +
-                            toPush.x + " " + toPush.y
-                        );
                         break;
                     }
                 }
             }
             enemies.push(d1);
         }
-        console.log(enemies);
+        if(story) enemies.story = true;
 
         const players = [];
         for(let i = 0; i < this.party.members.length; i++){
@@ -193,9 +185,14 @@ class Manga {
     }
 }
 CHAPTER1_ROUNDS = [
-    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}],
-    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 2, y: 4}],
-    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}],
-    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}],
-    [{name: "L0neb0ne", x: 0, y: 1}, {name:"L0neb0ne", x: 0, y: 2}]
+    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+        {name: "Mad@Chu", x: 3, y: 3}
+    ],
+    [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+        {name: "D3pr3ss0", x: 3, y: 0}
+    ],
+    [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+        {name: "D3pr3ss0", x: 0, y: 0}],
+    [{name: "Jerry Mulberry", x: 3, y: 0}]
 ]

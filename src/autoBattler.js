@@ -74,7 +74,7 @@ class AutoBattler {
         // initialize all enemy units and place onto battlefield
         for (let i = 0; i < this.enemies[this.currRound - 1].length; i++) {
             const curr = this.enemies[this.currRound - 1][i];
-            const block = (curr.x || curr.x === 0) ? // 0 is falsey.
+            const block = ((curr.x || curr.x === 0) && (curr.y || curr.y === 0)) ? // 0 is falsey.
                 this.allBlocks[(curr.x)][curr.y] : this.allBlocks[6][i];
             block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
             this.game.addEntity(block.unit);
@@ -138,6 +138,10 @@ class AutoBattler {
 
         // player wins
         if (numAliveEnemies == 0 && !this.showingDialog) {
+            let adoration = 0; // adding adoration display on 'Round Complete' screen
+            this.enemies[this.currRound - 1].forEach((enemy) => {
+                adoration += enemy.exp;
+            });
             this.currRound++;
 
             const finalRound = this.currRound > this.totalRounds;
@@ -146,6 +150,7 @@ class AutoBattler {
                 `Round ${this.currRound - 1} complete`; // otherwise, current round complete
             
             const callback = finalRound ? () => {
+                if(this.enemies.story) {console.log("story, here"); this.sceneManager.map.story.outOfBattle();}
                 this.cleanup();
                 this.sceneManager.restoreScene();
             } : () => {
@@ -182,7 +187,7 @@ class AutoBattler {
 
             this.showingDialog = true;
             this.disableControl = true;
-            this.game.addEntity(new RoundComplete(this.game, title, 500, buttonLabel, callback));
+            this.game.addEntity(new RoundComplete(this.game, title, adoration, buttonLabel, callback));
         }
 
         // enemy wins

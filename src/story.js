@@ -11,6 +11,8 @@ class Story {
         this.dialogIndex = 0;
         this.getPortal = null; // use to get portal.
         this.openPortals = [];
+        this.awaitBattle = false;
+        this.queue = [];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
         // mangaPanel on this same class, pulled from "asset":, in dialogLoad.
@@ -70,7 +72,10 @@ class Story {
                     const quest = new Tile(this.map, true, 4, 8, 5, this.questIcon);
                     const vera =  new Tile(this.map, false, 4, 9, 5, 
                         './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
-                    vera.interact = () => this.progress();
+                    vera.interact = () => {
+                        this.progress();
+                        this.map.scene.addToParty("Vera Mulberry");
+                    };
                     this.specialTiles.push(quest);
                     this.specialTiles.push(vera);
                 }
@@ -88,25 +93,49 @@ class Story {
                         './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
                     bone.interact = () => {
                         this.progress();
-                        const open1 = new Tile(this.map, true, 24, 9, 5, this.questIcon);
-                        this.openPortals.push(new Tile(this.map, true, 24, 9, 0, this.questIcon));
-                        this.openPortals.push(new Tile(this.map, true, 24, 10, 0, this.questIcon));
-                        this.openPortals.push(new Tile(this.map, true, 24, 11, 0, this.questIcon));
-                        this.openPortals.push(new Tile(this.map, true, 24, 12, 0, this.questIcon));
-                        this.openPortals.forEach(portals => {
-                            portals.currMap = "marysMap";
-                            portals.stepOn = () => {
-                                this.map.scene.battleScene([["L0neb0ne"]]);
-                            };
-                        });
                     };
                     this.specialTiles.push(quest);
                     this.specialTiles.push(bone);
                 }
                 break;
             case 5: // meet jerry in the forest, at round 5.
+                const quest = new Tile(this.map, true, 23, 8, 5, this.questIcon);
+                const bone = new Tile(this.map, false, 23, 9, 5,
+                    './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
+                bone.interact = () => {
+                    // pass in story progress in here
+                    this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true);
+                    this.currMap = "autoBattler";
+                    this.awaitBattle = true;
+                    this.openPortals.push(new Tile(this.map, true, 24, 9, 0, this.questIcon));
+                    this.openPortals.push(new Tile(this.map, true, 24, 10, 0, this.questIcon));
+                    this.openPortals.push(new Tile(this.map, true, 24, 11, 0, this.questIcon));
+                    this.openPortals.push(new Tile(this.map, true, 24, 12, 0, this.questIcon));
+                    this.openPortals.forEach(portals => {
+                        portals.currMap = "marysMap";
+                        portals.stepOn = () => {
+                            this.map.scene.battleScene([
+                                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+                                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                                    {name: "Mad@Chu", x: 3, y: 3}
+                                ],
+                                [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+                                    {name: "D3pr3ss0", x: 3, y: 0}
+                                ],
+                                [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                                    {name: "D3pr3ss0", x: 0, y: 0}],
+                                [{name: "Jerry Mulberry", x: 3, y: 0}]
+                            ], "Grass", true);
+                        };
+                    });
+                };
+                this.specialTiles.push(quest);
+                this.specialTiles.push(bone);
                 break;
             case 6: // beat jerry in the forest, at round 5.
+                if(this.currMap == "autoBattler") {
+
+                }
                 break;
             case 7: // after beating jerry, jump right into this case.
             default:
@@ -115,19 +144,29 @@ class Story {
         this.openPortals.forEach(portals => {
             if(portals.currMap === this.currMap) {
                 console.log("portal pushed");
-                this.specialTiles.push(portals);
+                this.specialTiles.push(Object.assign({}, portals));
             }
         });
         return this.specialTiles;
+    }
+    outOfBattle() {
+        this.dialogIndex--;
+        this.awaitBattle = false;
+        this.currMap = "marysMap"
+        this.globalProg++;
+        this.next();
     }
     next() {
         // kill current specialTiles.
         while(this.specialTiles.length > 0) {
             for(let i = 0; i < this.map.tiles.length; i++){
                 // remove from map.tiles.
-                if(this.map.tiles[i] === this.specialTiles[0]) this.map.tiles.splice(i, 1);
+                if(this.map.tiles[i] === this.specialTiles[0]) {
+                    this.map.tiles.splice(i, 1);
+                    this.specialTiles.shift().removeFromWorld = true;
+                    break;
+                }
             }
-            this.specialTiles.shift().removeFromWorld = true;
         }
         const currArr = this.dialog.chapter1[this.dialogIndex];
         console.log(currArr);

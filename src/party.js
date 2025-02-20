@@ -74,8 +74,9 @@ class PartyGUI {
                                 this.expire--;
                                 ctx.font = `bold 12px runescape`;
                                 ctx.fillStyle = 'black';
-                                console.log(this.exp);
-                                ctx.fillText(`Need ${this.exp} Adoration`,
+                                ctx.fillText(
+                                    (this.exp !== undefined ? `Need ${this.exp} Adoration` :
+                                        'Reached Max Level!'),
                                     mouseX + 10, mouseY - 10
                                 )
                                 ctx.restore();
