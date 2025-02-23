@@ -71,8 +71,6 @@ class CombatEntity {
         // find enemy, check if spot is available, find closest spot.
         const queue = [];
         const visited = new Set();
-        let closest = null; // Store the closest reachable tile
-        let closestDist = Infinity;
         queue.push ({x: this.block.mapX, y: this.block.mapY, dist: 0}) // just find the nearest enemy, then move using the initial direction.
         while(queue.length) { //this'll stop, and when it does, we just return null;
             const current = queue.shift();
@@ -82,9 +80,6 @@ class CombatEntity {
                 currBlock.unit?.raw.hp > 0) {
                 return current;
             }
-            
-            
-
             for (const d of directions) {
                 const nx = current.x + d.dx;
                 const ny = current.y + d.dy;
@@ -106,7 +101,7 @@ class CombatEntity {
                 });
             }
         }
-        return closest;
+        return null;
     }
     attack() {
         this.attackElapsed += this.game.clockTick;
