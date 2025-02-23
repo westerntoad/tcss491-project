@@ -16,7 +16,7 @@ class SceneManager {
 
         this.party = new Party(this.game);
         this.party.addMember(new Character("Mary Yott"));// initial party.
-        
+        //this.party.addMember(new Character("Vera Mulberry"));
     }
     addToParty(name){
         const names = ["Bernice Campbell", "Pearl Martinez",

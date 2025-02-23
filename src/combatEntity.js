@@ -1,3 +1,9 @@
+const directions = [
+    { dx: 0, dy: -1 },
+    { dx: 0, dy: 1 },
+    { dx: -1, dy: 0 },
+    { dx: 1, dy: 0 }
+];
 class CombatEntity {
     //constructor(entity, block, spaceHeightAdjusted, size, blockX, blockY, allBlocks, frameRate, game) {
     //block.unit = new CombatEntity(this.enemies[i], this, block);
@@ -32,37 +38,19 @@ class CombatEntity {
       //atk speed for frequency of attack rate
       //move speed for frequency of moving
     }
-
-    bfs() { // return the dx, dy to move. also return the x and y of closest enemy.
-        const directions = [
-            { dx: 0, dy: -1 },
-            { dx: 0, dy: 1 },
-            { dx: -1, dy: 0 },
-            { dx: 1, dy: 0 }
-        ];
-
+    bfsAttack(){
         const queue = [];
         const visited = new Set();
-        queue.push ({x: this.block.mapX, y: this.block.mapY, dist: 0}) // just find the nearest enemy, then move using the initial direction.
-        while(queue.length) { //this'll stop, and when it does, we just return null;
+        queue.push({x: this.block.mapX, y: this.block.mapY, dist: 0});
+        let target = null;
+        while(queue.length) {
             const current = queue.shift();
             const currBlock = this.allBlocks[current.y][current.x];
-
-            if(currBlock.unit){
-                if (currBlock.unit.raw.hp <= 0) {
-                    // Skip this block if the unit is dead.
-                    continue;
-                }
-                if(currBlock.unit.raw.granny !== this.raw.granny) {
-                    return current;
-                }
-                // console.log("unit: "+ this.entity.name + " | found: " + currBlock.occupied.entity.name
-                //     + " @ [x: " + current.x + " | y:  " + current.y + " ]"
-                // );
-                // console.log(current);
-                else if(currBlock.unit.raw !== this.raw) continue;
-            }
-
+            if(current.dist > this.raw.attackRange) continue;
+            if(currBlock.unit?.raw.hp > 0 &&
+                currBlock.unit.granny != this.granny) { // not start case.
+                target = currBlock.unit; break;
+            } 
             for (const d of directions) {
                 const nx = current.x + d.dx;
                 const ny = current.y + d.dy;
@@ -73,12 +61,84 @@ class CombatEntity {
                 queue.push({
                     x: nx,
                     y: ny,
+                    dist: current.dist + 1 // check if current.initial exists.
+                });
+            }
+        }
+        return target;
+    }
+    bfsMove() { // return the dx, dy to move. also return the x and y of closest enemy.
+        // find enemy, check if spot is available, find closest spot.
+        const queue = [];
+        const visited = new Set();
+        let closest = null; // Store the closest reachable tile
+        let closestDist = Infinity;
+        queue.push ({x: this.block.mapX, y: this.block.mapY, dist: 0}) // just find the nearest enemy, then move using the initial direction.
+        while(queue.length) { //this'll stop, and when it does, we just return null;
+            const current = queue.shift();
+            const currBlock = this.allBlocks[current.y][current.x];
+
+            if(currBlock.unit?.granny !== this.raw.granny &&
+                currBlock.unit?.raw.hp > 0) {
+                return current;
+            }
+            
+            
+
+            for (const d of directions) {
+                const nx = current.x + d.dx;
+                const ny = current.y + d.dy;
+                if (nx < 0 || nx >= 7 || ny < 0 || ny >= 7) continue;
+                const key = `${nx},${ny}`;
+                if(visited.has(key)) continue;
+                visited.add(key);
+                const nextBlock = this.allBlocks[ny][nx];
+                if (nextBlock.unit && nextBlock.unit.raw.granny === this.raw.granny) {
+                    continue;
+                }
+
+
+                queue.push({
+                    x: nx,
+                    y: ny,
                     dist: current.dist + 1,
                     initial: (current.initial ? current.initial : {x: d.dx, y: d.dy}) // check if current.initial exists.
                 });
             }
         }
-        return null;
+        return closest;
+    }
+    attack() {
+        this.attackElapsed += this.game.clockTick;
+        if(this.attackElapsed >= this.raw.attackSpeed) {
+            const damage = Math.round((this.target.raw.defense ? 
+                1 - (this.target.raw.defense / (this.target.raw.defense + 50))
+                : 1) * this.raw.attack);
+            this.target.raw.hp -= damage;
+
+            // determining damageNum and beam placement.
+            const origX  = this.block.isoX + this.block.width * 0.5;
+            const origY  = this.block.isoY - this.block.height * 0.2;
+            const destX  = this.target.block.isoX + this.target.block.width * 0.5;
+            const destY  = this.target.block.isoY + this.target.block.height * 0.2;
+            // damage number gen
+            this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
+
+            // if ranged, shoot beam
+            if (this.raw.attackRange > 1) {
+                this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+            }
+
+            // temporary code - will replace with sounds unique to each combat entity
+            // DEBUG
+            if (Math.random() < 0.5) {
+                PLAY.hit1();
+            } else {
+                PLAY.hit2();
+            }
+            this.attackElapsed = 0;
+            this.attacking = true;
+        }
     }
     update() {
         this.dx = 0;
@@ -91,66 +151,63 @@ class CombatEntity {
             this.block.unit = null;
             this.removeFromWorld = true;
         }
+        if (this.prevBlock || !this.attacking) this.moveElapsed += this.game.clockTick;
 
-
-        // 2 modes of operation, moving or attacking.
-        // First, look for closest enemy location
-        const found = this.bfs(); // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
-        if (found) { // there are enemies on map
-            if (this.prevBlock || !this.attacking) {
-                this.moveElapsed += this.game.clockTick;
-            }
-            if (found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
-                // check the atkSpeed
-                // granny attack speed is frequency in seconds. so 0.2 is 0.2 seconds per attack.
-                this.attackElapsed += this.game.clockTick;
-                if(this.attackElapsed >= this.raw.attackSpeed) {
-                    if(this.target?.unit && this.target.unit.raw.hp > 0) {
-                        const damage = Math.round((this.target.unit.raw.defense ? 
-                                1 - (this.target.unit.raw.defense / (this.target.unit.raw.defense + 50))
-                                 : 1) * this.raw.attack);
-                        this.target.unit.raw.hp -= damage;
-
-                        const origX  = this.block.isoX + this.block.width * 0.5;
-                        const origY  = this.block.isoY - this.block.height * 0.2;
-                        const destX  = this.target.isoX + this.target.width * 0.5;
-                        const destY  = this.target.isoY + this.target.height * 0.2;
-                        // damage number gen
-                        this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
-
-                        // if ranged, shoot beam
-                        if (this.raw.attackRange > 1) {
-                            this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
-                        }
-
-                        // temporary code - will replace with sounds unique to each combat entity
-                        // DEBUG
-                        if (Math.random() < 0.5) {
-                            PLAY.hit1();
-                        } else {
-                            PLAY.hit2();
-                        }
-                    } else {
-                        this.target = this.allBlocks[found.y][found.x];
-                    }
-
-                    this.attackElapsed = 0;
-                    this.attacking = true;
-                }
-            } else {
-                const block = this.allBlocks[this.block.mapY + found.initial.y]
-                    [this.block.mapX + found.initial.x];
-                if(this.moveElapsed >= this.raw.moveSpeed){
-                    // check the moveSpeed
-                    this.prevBlock = this.block;
-                    this.blockMove(block);
-                    this.moveElapsed -= this.raw.moveSpeed;// how timer is used
-                    this.attacking = false;
-                } 
-            }
-        } else {
+        // first, check if target is alive and their
+        // target should be the unit on the block.
+        if(this.target && this.target.raw.hp > 0 && 
+            (Math.abs(this.blockX - this.target.blockX) + 
+            Math.abs(this.blockY - this.target.blockY) <= this.raw.attackRange)) {
+                this.attack();
+        } else { // attempt to find another enemy in vacinity
+            // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
             this.attacking = false;
+            const foundAttack = this.bfsAttack(); // enemies close enough for attack
+            if(foundAttack) {
+                this.target = foundAttack;
+                this.attack();
+            } else { // foundAttack should return the enemy we can hit.
+                const foundMove = this.bfsMove();
+                if(foundMove){
+                    if(this.moveElapsed >= this.raw.moveSpeed){
+                        const block = this.allBlocks[this.block.mapY + foundMove.initial.y]
+                        [this.block.mapX + foundMove.initial.x];
+
+                        this.prevBlock = this.block;
+                        this.blockMove(block);
+                        this.moveElapsed = 0;// how timer is used
+                    }
+                    this.attacking = false;
+                }
+            }
+
         }
+        // if (found) { // there are enemies on map
+        //     if (this.prevBlock || !this.attacking) {
+        //         this.moveElapsed += this.game.clockTick;
+        //     }
+        //     if (found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
+        //         this.attackElapsed += this.game.clockTick;
+        //         if(this.attackElapsed >= this.raw.attackSpeed) {
+        //             this.attack();
+        //             this.attackElapsed = 0;
+        //             this.attacking = true;
+        //         }
+        //         else this.target = this.allBlocks[found.y][found.x].unit;
+        //     } else {
+        //         const block = this.allBlocks[this.block.mapY + found.initial.y]
+        //             [this.block.mapX + found.initial.x];
+        //         if(this.moveElapsed >= this.raw.moveSpeed){
+        //             // check the moveSpeed
+        //             this.prevBlock = this.block;
+        //             this.blockMove(block);
+        //             this.moveElapsed = 0;// how timer is used
+        //             this.attacking = false;
+        //         } 
+        //     }
+        // } else {
+        //     this.attacking = false;
+        // }
 
         if (this.prevBlock) {
             // calculate movement interpolation
@@ -171,7 +228,6 @@ class CombatEntity {
                 this.dx = 0;
                 this.dy = 0;
             }
-            
         }
     }
   

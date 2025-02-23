@@ -210,8 +210,12 @@ class AutoBattler {
         this.removeFromWorld = true;
     }
 
-    draw(ctx) {
-        ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
+    draw(ctx) { // ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.save();
+        ctx.fillStyle = "grey";
+        ctx.fillRect(0, 0, this.game.width, this.game.height);
+        //ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.restore();
         
     }
     isPointInTriangle(px, py, ax, ay, bx, by, cx, cy) {

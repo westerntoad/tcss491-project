@@ -129,7 +129,7 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/Mad@Chu.png"
          },
         { name: "D3pr3ss0",
-            attackRange: 2,
+            attackRange: 3,
             granny: false,
             hp: 10,
             attack: 5,
@@ -147,7 +147,7 @@ const DUNGEON_ENCOUNTERS = {
             defense: 20,
             exp: 25,
             attackSpeed: 1,
-            moveSpeed: 0,
+            moveSpeed: Infinity,
             asset: "./assets/enemies/Jerry_Mulberry.png"
          },
          { name: "testL0neb0ne",
@@ -256,9 +256,8 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
 
     gameEngine.init(ctx);
 
-    gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
+    const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
+    //gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
 
     gameEngine.start();
-
-    //const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
 });

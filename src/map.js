@@ -151,7 +151,10 @@ MAPS.marysRoom = (map) => {
     const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
     portals.stepOn = () => {
         map.scene.battleScene([
-            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                {name: "L0neb0ne"}, {name:"L0neb0ne"},
+                {name: "L0neb0ne"}, {name:"L0neb0ne"}
+            ],
                 [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
                     {name: "Mad@Chu", x: 3, y: 3}
                 ],
