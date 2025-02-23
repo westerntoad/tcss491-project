@@ -91,8 +91,6 @@ class CombatEntity {
                 if (nextBlock.unit && nextBlock.unit.raw.granny === this.raw.granny) {
                     continue;
                 }
-
-
                 queue.push({
                     x: nx,
                     y: ny,
@@ -177,33 +175,6 @@ class CombatEntity {
             }
 
         }
-        // if (found) { // there are enemies on map
-        //     if (this.prevBlock || !this.attacking) {
-        //         this.moveElapsed += this.game.clockTick;
-        //     }
-        //     if (found.dist <= this.raw.attackRange) { // switch to attack if enemy is close
-        //         this.attackElapsed += this.game.clockTick;
-        //         if(this.attackElapsed >= this.raw.attackSpeed) {
-        //             this.attack();
-        //             this.attackElapsed = 0;
-        //             this.attacking = true;
-        //         }
-        //         else this.target = this.allBlocks[found.y][found.x].unit;
-        //     } else {
-        //         const block = this.allBlocks[this.block.mapY + found.initial.y]
-        //             [this.block.mapX + found.initial.x];
-        //         if(this.moveElapsed >= this.raw.moveSpeed){
-        //             // check the moveSpeed
-        //             this.prevBlock = this.block;
-        //             this.blockMove(block);
-        //             this.moveElapsed = 0;// how timer is used
-        //             this.attacking = false;
-        //         } 
-        //     }
-        // } else {
-        //     this.attacking = false;
-        // }
-
         if (this.prevBlock) {
             // calculate movement interpolation
             //const prog = Math.sqrt(this.elapsedTime) / Math.sqrt(this.raw.moveSpeed);
