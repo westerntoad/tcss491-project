@@ -41,9 +41,12 @@ class TitleScreen {
                 action: () => this.exitGame()
             }
         ];
+
+        //Storing click handler as a class property so it can be removed later
+        this.boundClickHandler = (e) => this.handleClick(e);
         
         // Add click event listener
-        this.game.ctx.canvas.addEventListener("click", (e) => this.handleClick(e));
+        this.game.ctx.canvas.addEventListener("click", this.boundClickHandler);
     }
     
     handleClick(event) {
@@ -62,27 +65,34 @@ class TitleScreen {
             }
         });
     }
+
+    // Removes listener after the title screen is no longer needed.
+    removeEventListener() {
+        this.game.ctx.canvas.removeEventListener("click", this.boundClickHandler);
+    }
     
     startNewGame() {
+        // Cleans up event listener before removing the title screen.
+        this.removeEventListener();
         // Remove title screen and start new game
         this.game.entities = this.game.entities.filter(entity => entity !== this);
         const scene = new SceneManager(this.game, this.width, this.height);
     }
     
     loadGame() {
-        // Implement load game functionality
+        // Implement load game functionality?
         console.log("Load game clicked");
     }
     
     openSettings() {
-        // Implement settings menu
+        // Implement settings menu?
         console.log("Settings clicked");
     }
     
     exitGame() {
         // Implement exit functionality
         console.log("Exit clicked");
-        // You might want to show a confirmation dialog here
+        // Might want to show a confirmation dialog here?
         window.close();
     }
     
@@ -104,7 +114,7 @@ class TitleScreen {
         ctx.fillStyle = "white";
         ctx.font = "48px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Grandmas vs. Unhappiness", this.width / 2, this.height / 3);
+        ctx.fillText("Grandmas Versus Unhappiness", this.width / 2, this.height / 3);
         
         // Draw buttons
         this.buttons.forEach(button => {
