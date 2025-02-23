@@ -159,7 +159,19 @@ class Animate {
     static easeOutQuad(t) {
         return 1 - (1 - t) * (1 - t);
     }
-    static hit() {
+    static moveExp(startX, startY, endX, endY, frames) {
+        const positions = [];
+        for (let i = 0; i <= frames; i++) {
+          const t = i / frames;
 
+          const eased = Animate.easeOutExpo(t);
+          const x = startX + (endX - startX) * eased;
+          const y = startY + (endY - startY) * eased;
+          positions.push({ x, y });
+        }
+        return positions;
+    }
+    static easeOutExpo(t) {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
     }
 }
