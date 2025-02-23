@@ -46,11 +46,11 @@ class AutoBattler {
         return arr;
     }
     
-    init() {
+    init() { // moveExp(startX, startY, endX, endY, frames)
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
             const block = new Block(i % 7, Math.floor(i / 7));
-            block.animate(Animate.bounceSpace(-block.isoY, 0, 60), i);
+            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 35), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
@@ -59,7 +59,7 @@ class AutoBattler {
         // initialize all blocks on bench
         for(let i = 0; i < 7; i++) {
             const block = new Block(8, i);
-            block.animate(Animate.bounceSpace(1050 - block.isoY, 0, 60), i + 64);
+            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
