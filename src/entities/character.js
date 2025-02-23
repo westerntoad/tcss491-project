@@ -73,13 +73,13 @@ class Character {
                 this.attackRange = 1;
                 this.defense = 0;
                 this.attackSpeed = 1;
-                this.moveSpeed = 0.95; // 950ms
+                this.moveSpeed = 0.7; // 950ms
                 this.hpGrowth = 0.25;
                 this.attackGrowth = 0.5;
-                this.attackSpeedGrowth = 0.25;
+                this.attackSpeedGrowth = 0.5;
                 this.hpCap = 60;
-                this.attackCap = 50;
-                this.attackSpeedCap = 0.5;
+                this.attackCap = 60;
+                this.attackSpeedCap = 0.4;
                 break; // 25% hp, 50% atk, 25% atkSpeed
             // Ranged (paper thin Hp, high attack)
             case "Ye-soon Kim":

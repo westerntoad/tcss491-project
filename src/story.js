@@ -13,6 +13,7 @@ class Story {
         this.openPortals = [];
         this.awaitBattle = false;
         this.queue = [];
+        this.globalExp = [3, 0, 0, 6, 0, 3, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
         // mangaPanel on this same class, pulled from "asset":, in dialogLoad.
@@ -112,18 +113,16 @@ class Story {
                 this.specialTiles.push(bone);
                 break;
             case 6: // beat jerry in the forest, at round 5.
-                if(this.currMap == "autoBattler") {
-
-                }
+                
                 break;
             case 7: // after beating jerry, jump right into this case.
             default:
                 break;
         }
         this.openPortals.forEach(portals => {
-            if(portals.currMap === this.currMap) {
+            if(portals.currMap == this.currMap) {
                 console.log("portal pushed");
-                this.specialTiles.push(portals);
+                this.specialTiles.push(Object.assign({}, portals));
             }
         });
         return this.specialTiles;
@@ -133,27 +132,7 @@ class Story {
         this.awaitBattle = false;
         this.currMap = "marysMap"
         this.globalProg++;
-        this.openPortals.push(new Tile(this.map, true, 24, 9, 2, this.questIcon));
-        this.openPortals.push(new Tile(this.map, true, 24, 10, 2, this.questIcon));
-        this.openPortals.push(new Tile(this.map, true, 24, 11, 2, this.questIcon));
-        this.openPortals.push(new Tile(this.map, true, 24, 12, 2, this.questIcon));
-        this.openPortals.forEach(portals => {
-            portals.currMap = "marysMap";
-            portals.stepOn = () => {
-                this.map.scene.battleScene([
-                    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
-                    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-                        {name: "Mad@Chu", x: 3, y: 3}
-                    ],
-                    [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-                        {name: "D3pr3ss0", x: 3, y: 0}
-                    ],
-                    [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                        {name: "D3pr3ss0", x: 0, y: 0}],
-                    [{name: "Jerry Mulberry", x: 3, y: 0}]
-                    ], "Grass", true);
-                };
-        });
+        console.log(this.globalProg);
         this.next();
     }
     next() {
@@ -171,6 +150,7 @@ class Story {
         const currArr = this.dialog.chapter1[this.dialogIndex];
         console.log(currArr);
         if(currArr[currArr.length - 1].end) {
+            this.map.scene.party.exp += this.globalExp[this.globalProg];
             this.globalProg++;
         }
         this.dialogIndex++;
@@ -179,7 +159,7 @@ class Story {
         loaded.forEach(tile => {
             this.map.tiles.push(tile);
             this.map.game.addEntity(tile);
-        })
+        });
     }
     progress(){
         this.map.scene.showDialog(this.dialog.chapter1[this.dialogIndex]);

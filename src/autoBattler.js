@@ -38,7 +38,7 @@ class AutoBattler {
     units() {
         let arr = [];
         this.allBlocks.forEach(column => column.forEach(block => {
-            if (block?.unit) {
+            if (block?.unit && block.unit.raw.hp > 0) {
                 arr.push(block.unit);
             }
         }));
@@ -100,6 +100,15 @@ class AutoBattler {
     }
 
     update() {
+        // force game over
+        if(this.game.pressed['Escape']){
+            this.exit = (this.exit ? this.exit + 1 : 1);
+            console.log(this.exit);
+            if(this.exit >= 5) {
+                this.cleanup();
+                this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
+            }
+        }
         // handle mouse input
         let mouseX = this.game.mouse?.x;
         let mouseY = this.game.mouse?.y;
@@ -108,6 +117,7 @@ class AutoBattler {
                 let block = this.allBlocks[i][j];
                 if (!block) continue;
                 if (this.isMouseOverTile(mouseX, mouseY, block) && !this.disableControl) {
+                    console.log(`x: ${i} | y : ${j}`);
                     block.hovered = true;
                     if (this.game.click) {
                         if (!this.selectedBlock && block.unit && block.unit.granny) {
@@ -191,7 +201,6 @@ class AutoBattler {
             this.disableControl = true;
             this.game.addEntity(new RoundComplete(this.game, title, adoration, buttonLabel, callback));
         }
-
         // enemy wins
         if (numAlivePlayers == 0) {
             // game over
@@ -307,9 +316,9 @@ class RoundComplete {
         Object.assign(this, { game, title, adoration, buttonLabel, callback });
         this.z = 100_000;
         this.elapsed = 0;
-        this.titleDelay = 1;
-        this.adorationDelay = 2;
-        this.buttonDelay = 3;
+        this.titleDelay = 0.75;
+        this.adorationDelay = 1;
+        this.buttonDelay = 1.5;
     }
 
     update() {

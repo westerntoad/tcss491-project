@@ -11,7 +11,7 @@ class Map {
         this.story = new Story(this);
         this.changeMap(MAPS.marysRoom(this), 3, 2);
         this.globalDialogIndex = 0;
-
+        this.secret = [false];
     }
 
     hide() {
@@ -148,10 +148,11 @@ MAPS.marysRoom = (map) => {
     json.specialTiles.push(portalPoint);
 
     //testing combat in marysRoom
-    const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
-    portals.stepOn = () => {
+    //Chapter 1
+    const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
+    portals.interact = () => {
         map.scene.battleScene([
-            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+            [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
 
                 [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
                     {name: "Mad@Chu", x: 3, y: 3}],
@@ -161,10 +162,35 @@ MAPS.marysRoom = (map) => {
 
                 [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
                     {name: "D3pr3ss0", x: 0, y: 0}],
-                    
-                [{name: "Jerry Mulberry", x: 3, y: 0}]], "Grass", true);
+
+                [{name: "Jerry Mulberry", x: 3, y: 0}]], "Grass", false);
     };
     json.specialTiles.push(portals);
+    //Chapter 2
+    const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
+    portals1.interact = () => {
+        map.scene.battleScene([
+        // "1ntern" "0verworked" "J4nitor" "Derek King"
+            [{name: "1ntern", x: 0, y: 1}, {name:"1ntern", x: 1, y: 0},
+                {name: "1ntern", x: 1, y: 1}
+                ],
+
+                [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
+                    {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
+                    {name: "0verworked", x: 2, y: 0}],
+
+                [{name: "0verworked", x: 1, y: 0}, {name: "0verworked", x: 5, y: 0},
+                    {name: "J4nitor", x: 3, y: 1},
+                    {name: "1ntern", x: 2, y: 0}, {name: "1ntern", x: 4, y: 0}],
+
+                [{name: "J4nitor", x: 2, y: 1}, {name: "J4nitor", x: 5, y: 4}, 
+                    {name: "J4nitor", x: 4, y: 2},
+                    {name: "0verworked", x: 6, y: 4},
+                    {name: "0verworked", x: 2, y: 0}],
+
+                [{name: "Derek King", x: 3, y: 0}]], "Office", false);
+    };
+    json.specialTiles.push(portals1);
     return json;
 };
 
@@ -182,6 +208,38 @@ MAPS.marysMap = (map) => {
     };
     json.specialTiles.push(marysRoom);
 
+    if(!map.secret[0]){
+        const secret = new Tile(map, true, 6, 3, 0, './assets/portalPoint.png', 16, 16, 16, 16);
+        secret.interact = () => {
+            map.scene.party.exp += 15;
+            secret.removeFromWorld = true;
+            map.secret[0] = true;
+        };
+        json.specialTiles.push(secret);
+    }
+    //ASSET_MANAGER.queueDownload("./assets/maps/areaOpen.png");
+    const forest = [];
+    forest.push(new Tile(map, true, 24, 9, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, true, 24, 10, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, true, 24, 11, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, true, 24, 12, -1, "./maps/areaOpen.png"));
+    forest.forEach(portals => {
+        portals.stepOn = () => {
+            map.scene.battleScene([
+                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                {name: "Mad@Chu", x: 3, y: 3}
+                ],
+                [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+                    {name: "D3pr3ss0", x: 3, y: 0}
+                ],
+                [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                    {name: "D3pr3ss0", x: 0, y: 0}],
+                [{name: "Jerry Mulberry", x: 3, y: 0}]
+            ], "Grass", true);
+        };
+    });
+    json.specialTiles.push(...forest);
     return json;
 }
 

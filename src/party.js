@@ -72,7 +72,7 @@ class PartyGUI {
                             draw: function(ctx) {
                                 ctx.save();
                                 this.expire--;
-                                ctx.font = `bold 12px runescape`;
+                                ctx.font = `bold 16px runescape`;
                                 ctx.fillStyle = 'black';
                                 ctx.fillText(
                                     (this.exp !== undefined ? `Need ${this.exp} Adoration` :

@@ -73,6 +73,8 @@
     {"speaking": "Vera", "content": "I’ll see you tomorrow.",
         "asset": "./dialog/panelExample.png"},
     {"speaking": "Mary", "content": "See you tomorrow! Buh-bye now, dear.",
+        "asset": "./dialog/panelExample.png"},
+    {"speaking": "", "content": "*Mary gained 3 Adoration!*",
         "asset": "./dialog/panelExample.png", "end": true}
     ],
 
@@ -166,8 +168,9 @@
     {"speaking": "Mary", "content": "*Chuckles* No need to be so *sappy* now.",
         "asset": "./dialog/panelExample2.png"},
     {"speaking": "Mary", "content": "Anyways, we'll be back later. Buh bye, now!",
-        "asset": "./dialog/panelExample2.png",
-        "end": true}
+        "asset": "./dialog/panelExample2.png"},
+        {"speaking": "", "content": "*Mary gained 6 Adoration!*",
+        "asset": "./dialog/panelExample2.png", "end": true}
     ],
 
     [
