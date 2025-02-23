@@ -148,20 +148,21 @@ MAPS.marysRoom = (map) => {
     json.specialTiles.push(portalPoint);
 
     //testing combat in marysRoom
-    // const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
-    // portals.stepOn = () => {
-    //     map.scene.battleScene(
-    //         [[{name: "L0neb0ne"},
-    //             {name: "L0neb0ne"},
-    //             {name: "L0neb0ne"},
-    //             {name: "L0neb0ne"},
-    //             {name: "L0neb0ne"},
-    //             {name: "L0neb0ne"},
-    //             {name: "L0neb0ne"}
-    //         ]], 
-    //         "Grass");
-    // };
-    // json.specialTiles.push(portals);
+    const portals = new Tile(map, true, 1, 1, 0, './assets/portalPoint.png');
+    portals.stepOn = () => {
+        map.scene.battleScene([
+            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                    {name: "Mad@Chu", x: 3, y: 3}
+                ],
+                [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+                    {name: "D3pr3ss0", x: 3, y: 0}
+                ],
+                [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                    {name: "D3pr3ss0", x: 0, y: 0}],
+                [{name: "Jerry Mulberry", x: 3, y: 0}]], "Grass", true);
+    };
+    json.specialTiles.push(portals);
     return json;
 };
 

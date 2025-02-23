@@ -138,22 +138,22 @@ class Story {
         this.openPortals.push(new Tile(this.map, true, 24, 11, 2, this.questIcon));
         this.openPortals.push(new Tile(this.map, true, 24, 12, 2, this.questIcon));
         this.openPortals.forEach(portals => {
-        portals.currMap = "marysMap";
-        portals.stepOn = () => {
-            this.map.scene.battleScene([
-                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
-                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-                    {name: "Mad@Chu", x: 3, y: 3}
-                ],
-                [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-                    {name: "D3pr3ss0", x: 3, y: 0}
-                ],
-                [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                    {name: "D3pr3ss0", x: 0, y: 0}],
-                [{name: "Jerry Mulberry", x: 3, y: 0}]
-                ], "Grass", true);
+            portals.currMap = "marysMap";
+            portals.stepOn = () => {
+                this.map.scene.battleScene([
+                    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+                    [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                        {name: "Mad@Chu", x: 3, y: 3}
+                    ],
+                    [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+                        {name: "D3pr3ss0", x: 3, y: 0}
+                    ],
+                    [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                        {name: "D3pr3ss0", x: 0, y: 0}],
+                    [{name: "Jerry Mulberry", x: 3, y: 0}]
+                    ], "Grass", true);
                 };
-                });
+        });
         this.next();
     }
     next() {

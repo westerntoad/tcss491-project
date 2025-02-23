@@ -59,7 +59,7 @@ class AutoBattler {
         // initialize all blocks on bench
         for(let i = 0; i < 7; i++) {
             const block = new Block(8, i);
-            block.animate(Animate.bounceSpace(1050 - block.isoY, 0, 90), i + 64);
+            block.animate(Animate.bounceSpace(1050 - block.isoY, 0, 60), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
