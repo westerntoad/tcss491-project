@@ -28,8 +28,8 @@ class AutoBattler {
 
     showText(text) {
         const textWidth = this.game.ctx.measureText(this.text).width;
-        const frames = 120; // modifiable
-        const textStartFrames = Animate.easeInOut(-textWidth, this.game.height/2, this.game.width - textWidth, 
+        const frames = 90; // modifiable
+        const textStartFrames = Animate.moveExp(-textWidth, this.game.height/2, this.game.width / 2 - textWidth / 2, 
             this.game.height/2, frames);
         this.game.addEntity(new Text(text, textStartFrames, frames));
     }
@@ -477,7 +477,7 @@ class Text {
         ctx.textBaseline = "alphabetic";
         const textSize = 50; // modifiable
         ctx.font = "" + textSize + "px serif";
-        ctx.fillStyle = '#cccccc'
+        ctx.fillStyle = 'black'
         ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
         this.expire--;
