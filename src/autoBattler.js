@@ -23,7 +23,8 @@ class AutoBattler {
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text)
-
+        this.prep = true;
+        this.drawTrans = null;
         if(text == "Endless") {
             this.initEndless();
             this.endless = true;
@@ -144,13 +145,14 @@ class AutoBattler {
             this.units().forEach(unit => {
                 unit.ready = true;
             });
-
+            this.prep = false;
+            this.drawTrans = null;
         });
         this.game.addEntity(this.startButton);
         PLAY.battle1();
     }
-
     update() {
+        if(this.drawTrans) this.drawTrans.expire = 1;
         // force game over
         if(this.game.pressed['Escape']){
             this.exit = (this.exit ? this.exit + 1 : 1);
@@ -160,33 +162,51 @@ class AutoBattler {
                 this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
             }
         }
-        // handle mouse input
-        let mouseX = this.game.mouse?.x;
-        let mouseY = this.game.mouse?.y;
-        for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < 9; j++) {
-                let block = this.allBlocks[i][j];
-                if (!block) continue;
-                if (this.isMouseOverTile(mouseX, mouseY, block) && !this.disableControl) {
-                    console.log(`x: ${i} | y : ${j}`);
-                    block.hovered = true;
-                    if (this.game.click) {
-                        if (!this.selectedBlock && block.unit && block.unit.granny) {
-                            block.selected = true;
-                            this.selectedBlock = block;
-                        } else if (this.selectedBlock && !block.unit) {
-                            const entity = this.selectedBlock.unit;
-                            entity.blockMove(block);
-                            this.selectedBlock = null;
-                            PLAY.hit1();
+        if(this.prep){ // uh oh, this is gross (but functional).
+            // handle mouse input
+            let mouseX = this.game.mouse?.x;
+            let mouseY = this.game.mouse?.y;
+            let flag = false;
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 9; j++) {
+                    let block = this.allBlocks[i][j];
+                    if (!block) continue;
+                    if (this.isMouseOverTile(mouseX, mouseY, block) && !this.disableControl) {
+                        //console.log(`x: ${i} | y : ${j}`);
+                        block.hovered = true;
+                        flag = (block.unit ? false : true);
+                        if(this.selectedBlock && !block.unit) {
+                            if(this.drawTrans) {
+                                this.drawTrans.block = block;
+                                this.drawTrans.z = block.z + 1;
+                            }
                         }
+                        if (this.game.click) {
+                            if (!this.selectedBlock && block.unit && block.unit.granny) {
+                                block.selected = true;
+                                this.selectedBlock = block;
+
+                                if(this.drawTrans) this.drawTrans.removeFromWorld = true;
+                                this.drawTrans = new Transparent(block, this);
+                                this.game.addEntity(this.drawTrans);
+                            } else if (this.selectedBlock && !block.unit) {
+                                const entity = this.selectedBlock.unit;
+                                entity.blockMove(block);
+                                this.selectedBlock = null;
+                                this.drawTrans.removeFromWorld = true;
+                                this.drawTrans = null;
+                                PLAY.hit1();
+                            }
+                        }
+                    } else {
+                        block.hovered = false;
                     }
-                } else {
-                    block.hovered = false;
                 }
             }
+            if(!flag && this.selectedBlock) {
+                if(this.drawTrans) this.drawTrans.block = null;
+            } 
         }
-
         // count the total number of players.
         let numAlivePlayers = 0;
         this.units().forEach(unit => {
@@ -226,6 +246,7 @@ class AutoBattler {
                         unit.ready = false;
                         i++;
                     });
+                    this.prep = true;
                     this.showingDialog = false;
                     this.disableControl = false;
 
@@ -254,6 +275,7 @@ class AutoBattler {
 
                 this.showingDialog = true;
                 this.disableControl = true;
+                this.selectedBlock = null;
                 this.game.addEntity(new RoundComplete(this.game, title, adoration, buttonLabel, callback));
             }
         }

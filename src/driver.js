@@ -89,6 +89,7 @@ ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 
 // For Auto Battler
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
 
 // Sound effects
 ASSET_MANAGER.queueDownload("./assets/select.wav");
