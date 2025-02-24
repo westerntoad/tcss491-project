@@ -13,7 +13,6 @@ class CombatEntity {
         this.granny = raw.granny;
         this.raw = raw;
         this.entity = raw;
-        this.block = block;
         this.spaceHeightAdjusted = PARAMS.spaceHeightAdjusted; 
         this.size = ENTITY_SIZE;
         this.blockX = block.mapX; 

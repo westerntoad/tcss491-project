@@ -50,6 +50,7 @@ ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Ye-soon_Kim.png");
 
 // Enemies
+ASSET_MANAGER.queueDownload("./assets/enemies/endlessPortal.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Mad@Chu.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/D3pr3ss0.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/L0neb0ne.png");

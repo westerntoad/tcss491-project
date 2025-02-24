@@ -163,8 +163,22 @@ MAPS.marysRoom = (map) => {
                 [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
                     {name: "D3pr3ss0", x: 0, y: 0}],
 
-                [{name: "Jerry Mulberry", x: 3, y: 0}]], "Grass", false);
+                [{name: "L0neb0ne", x: 1, y: 1}, {name:"L0neb0ne", x: 2, y: 1},
+                    {name: "L0neb0ne", x: 3, y: 1}, {name:"L0neb0ne", x: 4, y: 1},
+                    {name: "L0neb0ne", x: 5, y: 1},
+                    {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
+                    {name: "D3pr3ss0", x: 4, y: 0},
+                    {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
+                    ], 
+                    "Grass", false);
     };
+    const jerry = new Tile(map, false, 4, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
+    jerry.interact = () => {
+        map.scene.battleScene([
+            [{name: "Jerry Mulberry", x: 3, y: 0}]], 
+                    "Grass", false);
+    }
+    json.specialTiles.push(jerry);
     json.specialTiles.push(portals);
     //Chapter 2
     const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
@@ -234,8 +248,14 @@ MAPS.marysMap = (map) => {
                     {name: "D3pr3ss0", x: 3, y: 0}
                 ],
                 [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                    {name: "D3pr3ss0", x: 0, y: 0}],
-                [{name: "Jerry Mulberry", x: 3, y: 0}]
+                    {name: "D3pr3ss0", x: 0, y: 0}
+                ],
+                [{name: "L0neb0ne", x: 1, y: 1}, {name:"L0neb0ne", x: 2, y: 1},
+                    {name: "L0neb0ne", x: 3, y: 1}, {name:"L0neb0ne", x: 4, y: 1},
+                    {name: "L0neb0ne", x: 5, y: 1},
+                    {name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                    {name: "D3pr3ss0", x: 0, y: 0}
+                ]
             ], "Grass", true);
         };
     });

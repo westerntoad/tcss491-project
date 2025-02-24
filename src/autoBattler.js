@@ -23,7 +23,13 @@ class AutoBattler {
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text)
-        this.init();
+
+        if(text == "Endless") {
+            this.initEndless();
+            this.endless = true;
+        } else {
+            this.initStory();
+        }
     }
 
     showText(text) {
@@ -38,15 +44,59 @@ class AutoBattler {
     units() {
         let arr = [];
         this.allBlocks.forEach(column => column.forEach(block => {
-            if (block?.unit && block.unit.raw.hp > 0) {
+            if (block?.unit && block.unit.raw?.hp > 0) {
                 arr.push(block.unit);
             }
         }));
 
         return arr;
     }
+
+    spawn(){
+        // get spawnCost of enemies from input to autoBattler?
+        // send in one of each enemy for the designated Chapter
+        // Can we determine their cost via how much exp they give?
+
+        //get spawnValue, determine which enemies to put out.
+        //  Taking big reference from Risk of Rain spawning mechanic
+        //increment spawnValue with spawnRate.
+    }
+    spawnRate(){
+        //return spawnRate for the this.game.tick*
+    }
+
+    initEndless() {
+        // initialize all blocks in battlefield
+        for (let i = 0; i < 7*7; i++) {
+            const block = new Block(i % 7, Math.floor(i / 7));
+            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 35), i);
+            this.allBlocks[block.mapY][block.mapX] = block;
+
+            this.game.addEntity(block);
+        }
+        // initialize all blocks on bench
+        for(let i = 0; i < 7; i++) {
+            const block = new Block(8, i);
+            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
+            this.allBlocks[block.mapY][block.mapX] = block;
+        
+            this.game.addEntity(block);
+        }
+        // initialize all friendly units and place on bench
+        for(let i = 0; i < this.players.length && i < 7; i++) {
+            const block = this.allBlocks[i][8];
+            block.unit = new CombatEntity(this.players[i], this, block);
+            this.game.addEntity(block.unit);
+        }
+        const block = this.allBlocks[3][0];
+        block.unit = new EndlessPortal(block, this.game); // create the portal
+        this.game.addEntity(block.unit);
+        this.spawnValue = 0;
+        this.spawnRate = // important for increasing the rate of spawn
+        this.init();
+    }
     
-    init() { // moveExp(startX, startY, endX, endY, frames)
+    initStory() { // moveExp(startX, startY, endX, endY, frames)
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
             const block = new Block(i % 7, Math.floor(i / 7));
@@ -79,8 +129,9 @@ class AutoBattler {
             block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
             this.game.addEntity(block.unit);
         }
-
-
+        this.init();
+    }
+    init() {
         this.startButton = new StartButton(this.game, () => {
             let canStart = true;
             this.units().forEach(unit => {
@@ -136,70 +187,75 @@ class AutoBattler {
             }
         }
 
-
-        // count the total number of enemies & players.
+        // count the total number of players.
         let numAlivePlayers = 0;
         this.units().forEach(unit => {
             if (unit.granny) {
                 numAlivePlayers++;
             }
         });
-        const numAliveEnemies = this.units().length - numAlivePlayers;
 
-        // player wins
-        if (numAliveEnemies == 0 && !this.showingDialog) {
-            let adoration = 0; // adding adoration display on 'Round Complete' screen
-            this.enemies[this.currRound - 1].forEach((enemy) => {
-                adoration += enemy.exp;
-            });
-            this.currRound++;
+        if(this.endless){// endless case
+            this.spawn();
+        } else {
 
-            const finalRound = this.currRound > this.totalRounds;
-            const title = finalRound ?                  // if final round
-                `Boss complete` :                       // boss complete
-                `Round ${this.currRound - 1} complete`; // otherwise, current round complete
-            
-            const callback = finalRound ? () => {
-                if(this.enemies.story) {console.log("story, here"); this.sceneManager.map.story.outOfBattle();}
-                this.cleanup();
-                this.sceneManager.restoreScene();
-            } : () => {
-                let i = 0;
-                this.units().forEach(unit => {
-                    console.log(unit);
-                    unit.blockMove(this.allBlocks[i][8]);
-                    unit.ready = false;
-                    i++;
+            // count the total number of players.
+            const numAliveEnemies = this.units().length - numAlivePlayers;
+
+            // player wins
+            if (numAliveEnemies == 0 && !this.showingDialog) {
+                let adoration = 0; // adding adoration display on 'Round Complete' screen
+                this.enemies[this.currRound - 1].forEach((enemy) => {
+                    adoration += enemy.exp;
                 });
-                this.showingDialog = false;
-                this.disableControl = false;
+                this.currRound++;
 
-                // TODO pass multiple round enemies from constructor
-                // DEBUG // similar to init for enemy placement.
-                // initialize all enemy units and place onto battlefield
-                for (let i = 0; i < this.enemies[this.currRound - 1].length; i++) {
-                    const curr = this.enemies[this.currRound - 1][i];
-                    const block = (curr.x || curr.x === 0) ? // 0 is falsey.
-                        this.allBlocks[(curr.x)][curr.y] : this.allBlocks[6][i];
-                    block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
-                    this.game.addEntity(block.unit);
+                const finalRound = this.currRound > this.totalRounds;
+                const title = `Round ${this.currRound - 1} complete`; // if final round
+                                         // boss complete  // otherwise, current round complete
+                if(this.story) title = 'Boss complete';
+                const callback = finalRound ? () => {
+                    if(this.enemies.story) {console.log("story, here"); this.sceneManager.map.story.outOfBattle();}
+                    this.cleanup();
+                    this.sceneManager.restoreScene();
+                } : () => {
+                    let i = 0;
+                    this.units().forEach(unit => {
+                        console.log(unit);
+                        unit.blockMove(this.allBlocks[i][8]);
+                        unit.ready = false;
+                        i++;
+                    });
+                    this.showingDialog = false;
+                    this.disableControl = false;
+
+                    // TODO pass multiple round enemies from constructor
+                    // DEBUG // similar to init for enemy placement.
+                    // initialize all enemy units and place onto battlefield
+                    for (let i = 0; i < this.enemies[this.currRound - 1].length; i++) {
+                        const curr = this.enemies[this.currRound - 1][i];
+                        const block = (curr.x || curr.x === 0) ? // 0 is falsey.
+                            this.allBlocks[(curr.x)][curr.y] : this.allBlocks[6][i];
+                        block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
+                        this.game.addEntity(block.unit);
+                    }
                 }
-            }
 
-            let buttonLabel = ``;
-            if (this.currRound < this.totalRounds) {
-                buttonLabel = `Next Round`;
-            } else if (this.currRound == this.totalRounds) {
-                buttonLabel = `Start Boss`;
-                // when we get to this round, we want to check if we have story checked,
-                // and play the dialogue.
-            } else {
-                buttonLabel = `Return to Home`;
-            }
+                let buttonLabel = ``;
+                if (this.currRound < this.totalRounds) {
+                    buttonLabel = `Next Round`;
+                } else if (this.currRound == this.totalRounds) {
+                    buttonLabel = `Start Boss`;
+                    // when we get to this round, we want to check if we have story checked,
+                    // and play the dialogue.
+                } else {
+                    buttonLabel = `Return to Home`;
+                }
 
-            this.showingDialog = true;
-            this.disableControl = true;
-            this.game.addEntity(new RoundComplete(this.game, title, adoration, buttonLabel, callback));
+                this.showingDialog = true;
+                this.disableControl = true;
+                this.game.addEntity(new RoundComplete(this.game, title, adoration, buttonLabel, callback));
+            }
         }
         // enemy wins
         if (numAlivePlayers == 0) {
@@ -494,5 +550,42 @@ class Text {
         ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
         this.expire--;
+    }
+}
+class EndlessPortal {
+    constructor(block, game) {
+        this.game = game;
+        this.block = block;
+        this.size = ENTITY_SIZE;
+        this.blockX = block.mapX; 
+        this.blockY = block.mapY;
+        this.z = this.block.z + 1;
+        this.img = ASSET_MANAGER.getAsset("./assets/enemies/endlessPortal.png");
+
+        this.currentFrame = 0;
+        this.frames = this.img.width / 32;
+        this.assetSize = this.frames - 1;
+        this.drawTime = 0;
+        this.refreshRate = 200; // every 0.2 secs
+        this.spaceHeightAdjusted = PARAMS.spaceHeightAdjusted;
+    }
+    update(){}
+    draw(ctx){
+        this.drawTime += this.game.clockTick;
+        if(this.drawTime >= this.refreshRate) {
+            this.currentFrame = this.currentFrame >= this.frames - 1 ? 0 :
+                this.currentFrame + 1;
+            this.drawTime = 0;
+        }
+        ctx.drawImage(this.img, 
+            this.currentFrame * this.assetSize,
+            0, 32, 32,
+            this.block.isoX + this.block.width / 2
+                - this.size * this.block.scale / 2,
+            (this.block.isoY + this.spaceHeightAdjusted * this.block.scale / 2
+                - this.size * this.block.scale),
+            this.size * this.block.scale,
+            this.size * this.block.scale
+        );
     }
 }

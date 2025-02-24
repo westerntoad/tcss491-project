@@ -16,6 +16,10 @@ class SceneManager {
 
         this.party = new Party(this.game);
         this.party.addMember(new Character("Mary Yott"));// initial party.
+        this.party.addMember(new Character("Vera Mulberry"));// initial party.
+        this.party.addMember(new Character("Bernice Campbell"));
+        this.party.addMember(new Character("Pearl Martinez"));
+        this.party.addMember(new Character("Ye-soon Kim"));
     }
     addToParty(name){
         const names = ["Bernice Campbell", "Pearl Martinez",
@@ -108,7 +112,7 @@ class SceneManager {
         const randomIndex = Math.floor(Math.random() * enemies.length); // Roll for a random enemy
         return enemies[randomIndex]; // Return the selected enemy
     }
-    battleScene(enemyArr, type, story = false) {
+    battleScene(enemyArr, type, story = false, endless = false, chapter = 1) {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
@@ -133,6 +137,7 @@ class SceneManager {
         }
         if(story) enemies.story = true;
 
+        // Endless, story, boss rush*
         const players = [];
         for(let i = 0; i < this.party.members.length; i++){
             const player = this.party.members[i];
@@ -144,7 +149,10 @@ class SceneManager {
         console.log('Players:', players);
 
         this.game.entities = []; // Clear current entities
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Round 1"));
+
+        endless ?
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Endless")) : 
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `Chapter ${chapter}`));
         // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
@@ -192,5 +200,6 @@ CHAPTER1_ROUNDS = [
     ],
     [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
         {name: "D3pr3ss0", x: 0, y: 0}],
+        
     [{name: "Jerry Mulberry", x: 3, y: 0}]
 ]
