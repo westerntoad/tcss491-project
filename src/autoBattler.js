@@ -35,8 +35,8 @@ class AutoBattler {
 
     showText(text) {
         const textWidth = this.game.ctx.measureText(this.text).width;
-        const frames = 90; // modifiable
-        const textStartFrames = Animate.moveExp(-textWidth, this.game.height/2, this.game.width / 2 - textWidth / 2, 
+        const frames = 120; // modifiable
+        const textStartFrames = Animate.moveExp(-textWidth, this.game.height/2, this.game.width / 2, 
             this.game.height/2, frames);
         this.game.addEntity(new Text(text, textStartFrames, frames));
     }
@@ -70,7 +70,7 @@ class AutoBattler {
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
             const block = new Block(i % 7, Math.floor(i / 7));
-            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 35), i);
+            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 45), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
@@ -78,7 +78,7 @@ class AutoBattler {
         // initialize all blocks on bench
         for(let i = 0; i < 7; i++) {
             const block = new Block(8, i);
-            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
+            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 45), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
         
             this.game.addEntity(block);
@@ -101,7 +101,7 @@ class AutoBattler {
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
             const block = new Block(i % 7, Math.floor(i / 7));
-            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 25), i);
+            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
@@ -110,7 +110,7 @@ class AutoBattler {
         // initialize all blocks on bench
         for(let i = 0; i < 7; i++) {
             const block = new Block(8, i);
-            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 35), i + 64);
+            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
@@ -204,7 +204,7 @@ class AutoBattler {
                                     }
                                     this.selectedBlock.selected = false;
                                     this.selectedBlock = null;
-                                }else {
+                                }else if(block.unit.granny){
                                     this.selectedBlock.selected = false;
                                     this.selectedBlock = block;
                                     block.selected = true;
@@ -249,9 +249,9 @@ class AutoBattler {
                 const finalRound = this.currRound > this.totalRounds;
                 const title = `Round ${this.currRound - 1} complete`; // if final round
                                          // boss complete  // otherwise, current round complete
-                if(this.story) title = 'Boss complete';
+                if(this.story) title = 'Story complete';
                 const callback = finalRound ? () => {
-                    if(this.enemies.story) {console.log("story, here"); this.sceneManager.map.story.outOfBattle();}
+                    if(this.enemies.story) {console.log("story, here"); this.sceneManager.story = true;}
                     this.cleanup();
                     this.sceneManager.restoreScene();
                 } : () => {
@@ -580,7 +580,7 @@ class Text {
             this.vanishCounter --;
         }
         const width = ctx.measureText(this.text).width;
-        ctx.textAlign = "start";
+        ctx.textAlign = 'center';
         ctx.textBaseline = "alphabetic";
         const textSize = 50; // modifiable
         ctx.font = "" + textSize + "px serif";

@@ -138,7 +138,7 @@ const DUNGEON_ENCOUNTERS = {
             exp: 2,
             attackSpeed: 0.95,
             moveSpeed: 0.4,
-            asset: "./assets/enemies/Mad@Chu.png"
+            asset: "./assets/enemies/dearless.png"
          },
         { name: "D3pr3ss0",
             attackRange: 3,
@@ -149,7 +149,7 @@ const DUNGEON_ENCOUNTERS = {
             exp: 4,
             attackSpeed: 0.75,
             moveSpeed: 0.5,
-            asset: "./assets/enemies/D3pr3ss0.png"
+            asset: "./assets/enemies/0bL1V15k.png"
          },
          { name: "Jerry Mulberry",
             attackRange: 5,

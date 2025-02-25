@@ -11,8 +11,8 @@ class Story {
         this.dialogIndex = 0;
         this.getPortal = null; // use to get portal.
         this.openPortals = [];
-        this.awaitBattle = false;
         this.queue = [];
+        this.storyCheck = [false, false, false, false, false];
         //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
@@ -43,36 +43,27 @@ class Story {
         this.currMap = string;
         switch(this.globalProg) {
             case 0:
-                if(this.currMap === "marysRoom"){
-                const quest = new Tile(this.map, false, 2, 0, 5, this.questIcon);
-                quest.interact = () => this.progress();
-                this.specialTiles.push(quest);
+                if(this.currMap === "marysRoom") {
+                    const quest = new Tile(this.map, false, 2, 0, 5, this.questIcon);
+                    quest.interact = () => this.progress();
+                    this.specialTiles.push(quest);
                 }
                 break;
-            // case 1:
-            //     const portalPoint = new Tile(this.map, true, 8, 0, 0, './assets/portalPoint.png');
-            //     portalPoint.stepOn = () => {
-            //         // change to next map
-            //         this.map.changeMap(MAPS.marysMap(this.map), 6, 7);
-            //         this.map.player.dir = 2;
-            //     };
-            //     this.specialTiles.push(portalPoint);
-            //     break;
+        
             case 1:
-                if(this.currMap == "marysRoom"){
+                if(this.currMap == "marysRoom") {
                     const quest = new Tile(this.map, true, 6, 0, 5, this.questIcon);
-                    const basket = new Tile(this.map, false, 6, 1, 5, 
-                        './dialog/basket.png', 0, 0, 32, 32
-                    );
+                    const basket = new Tile(this.map, false, 6, 1, 5, './dialog/basket.png', 0, 0, 32, 32);
                     basket.interact = () => this.progress();
-                this.specialTiles.push(basket);
-                this.specialTiles.push(quest);
+                    this.specialTiles.push(basket);
+                    this.specialTiles.push(quest);
                 }
+                break;
+        
             case 2:
-                if(this.currMap == "marysMap"){
+                if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 4, 8, 5, this.questIcon);
-                    const vera =  new Tile(this.map, false, 4, 9, 5, 
-                        './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
+                    const vera = new Tile(this.map, false, 4, 9, 5, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
                     vera.interact = () => {
                         this.progress();
                         this.map.scene.addToParty("Vera Mulberry");
@@ -80,60 +71,95 @@ class Story {
                     this.specialTiles.push(quest);
                     this.specialTiles.push(vera);
                 }
+                break;
+        
             case 3:
-                if(this.currMap == "marysMap"){
+                if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 14, 11, 5, this.questIcon);
                     quest.interact = () => this.progress();
                     this.specialTiles.push(quest);
                 }
                 break;
+        
             case 4:
-                if(this.currMap == "marysMap"){
-                    const quest = new Tile(this.map, true, 23, 8, 5, this.questIcon);
-                    const bone = new Tile(this.map, false, 23, 9, 5,
-                        './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
-                    bone.interact = () => {
-                        this.progress();
-                    };
-                    this.specialTiles.push(quest);
-                    this.specialTiles.push(bone);
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 23, 10, 5, this.questIcon);
+                    const bone = new Tile(this.map, false, 23, 11, 1, './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
+                    bone.interact = () => this.progress();
+                    const quest1 = new Tile(this.map, true, 23, 11, 5, this.questIcon);
+                    const bone1 = new Tile(this.map, false, 23, 12, 1, './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
+                    bone1.interact = () => this.progress();
+                    this.specialTiles.push(quest1, bone1, quest, bone);
                 }
                 break;
+        
             case 5: // meet jerry in the forest, at round 5.
-                const quest = new Tile(this.map, true, 23, 8, 5, this.questIcon);
-                const bone = new Tile(this.map, false, 23, 9, 5,
-                    './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
-                bone.interact = () => {
-                    // pass in story progress in here
-                    this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true);
-                    this.currMap = "autoBattler";
-                    this.awaitBattle = true;
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 23, 10, 5, this.questIcon);
+                    const bone = new Tile(this.map, false, 23, 11, 1, './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
+                    bone.interact = () => {
+                        this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true, "Tutorial");
+                    };
+                    const quest1 = new Tile(this.map, true, 23, 11, 5, this.questIcon);
+                    const bone1 = new Tile(this.map, false, 23, 12, 1, './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
+                    bone1.interact = () => {
+                        this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true, "Tutorial");
+                    };
+                    this.specialTiles.push(bone1, quest1, quest, bone);
+                }
+                break;
+        
+            case 6: // beat forest
+                console.log("case 6 reached");
+                for(let i = 0; i < 4; i++){
+                    const quest = new Tile(this.map, true, 24, 9 + i, 2, this.questIcon);
+                    this.specialTiles.push(quest);
+                }
+                break;
+            case 7: // talk to jerry
+
+                console.log("case 7 reached"); // This should now appear
+                const quest = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                const jerry = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                jerry.interact = () => {
+                    this.progress();
                 };
-                this.specialTiles.push(quest);
-                this.specialTiles.push(bone);
+                this.specialTiles.push(quest, jerry);
                 break;
-            case 6: // beat jerry in the forest, at round 5.
-                
+            case 8: // beat jerry
+                console.log("case 8 reached"); // This should now appear
+                const quest1 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                const jerry1 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                jerry1.interact = () => {
+                    this.map.scene.battleScene([[{name: "Jerry Mulberry", x: 3, y: 3}]], "Grass", true, "Jerry Mulberry")
+                };
+                this.specialTiles.push(quest1, jerry1);
                 break;
-            case 7: // after beating jerry, jump right into this case.
+
+            case 9:
+                // add pearl here.
+                console.log("case 9 reached");
+                const quest2 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                const jerry2 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                jerry2.interact = () => {
+                    this.progress();
+                }
+                this.specialTiles.push(quest2, jerry2);
+                break;
+            
+            case 10:
+                console.log("case 10 reached");
+                const quest3 = new Tile(this.map, true, 23, 10, 5, this.questIcon);
+                const pearl = new Tile(this.map, false, 23, 11, 5, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
+                pearl.interact = () => {
+                    this.progress();
+                }
+                this.specialTiles.push(quest3, pearl);
+                break;
             default:
                 break;
         }
-        this.openPortals.forEach(portals => {
-            if(portals.currMap == this.currMap) {
-                console.log("portal pushed");
-                this.specialTiles.push(Object.assign({}, portals));
-            }
-        });
         return this.specialTiles;
-    }
-    outOfBattle() {
-        this.dialogIndex--;
-        this.awaitBattle = false;
-        this.currMap = "marysMap"
-        this.globalProg++;
-        console.log(this.globalProg);
-        this.next();
     }
     next() {
         // kill current specialTiles.
@@ -163,5 +189,26 @@ class Story {
     }
     progress(){
         this.map.scene.showDialog(this.dialog.chapter1[this.dialogIndex]);
+    }
+    fromBattle(){
+        console.log(`GlobalIndex: ` + this.globalProg);
+        switch (this.globalProg) {
+            case 5:
+                this.dialogIndex--;
+                this.next();
+                break;
+            case 6:
+                if(!this.storyCheck[0]) {
+                    this.storyCheck[0] = true;
+                    this.dialogIndex--;
+                    this.next();
+                }
+                break;
+            case 8:
+                this.dialogIndex--;
+                this.next();
+                break;
+            default: break;
+        }
     }
 }

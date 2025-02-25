@@ -73,8 +73,6 @@
     {"speaking": "Vera", "content": "I’ll see you tomorrow.",
         "asset": "./dialog/panelExample.png"},
     {"speaking": "Mary", "content": "See you tomorrow! Buh-bye now, dear.",
-        "asset": "./dialog/panelExample.png"},
-    {"speaking": "", "content": "*Mary gained 3 Adoration!*",
         "asset": "./dialog/panelExample.png", "end": true}
     ],
 
@@ -168,8 +166,6 @@
     {"speaking": "Mary", "content": "*Chuckles* No need to be so *sappy* now.",
         "asset": "./dialog/panelExample2.png"},
     {"speaking": "Mary", "content": "Anyways, we'll be back later. Buh bye, now!",
-        "asset": "./dialog/panelExample2.png"},
-        {"speaking": "", "content": "*Mary gained 6 Adoration!*",
         "asset": "./dialog/panelExample2.png", "end": true}
     ],
 
@@ -189,7 +185,8 @@
     {"speaking": "Jerry", "content": "No… but what does it even matter?"},
     {"speaking": "Vera", "content": "Jerry, it matters a lot to me."},
     {"speaking": "Vera", "content": "YOU matter so much to me."},
-    {"speaking": "Vera", "content": "Let me show you just how much, please."}
+    {"speaking": "Vera", "content": "Let me show you just how much, please.",
+        "end": true}
     ],
 
     [
@@ -205,7 +202,7 @@
     {"speaking": "Jerry", "content": "I’d like that."},
     {"speaking": "Jerry", "content": "I can show you a project I’ve been working on at school, then, too!"},
     {"speaking": "Jerry", "content": "I’d better go get it ready."},
-    {"speaking": "Jerry", "content": "Smell ya later!"}
+    {"speaking": "Jerry", "content": "Smell ya later!", "end": true}
     ],
 
     [
@@ -222,7 +219,8 @@
     {"speaking": "Mary", "content": "Would you like to join us on the way out of the forest, Pearl?"},
     {"speaking": "Mary", "content": "I’d love a chance to get to know you more, and we could always use another companion along the way."},
     {"speaking": "Pearl", "content": "Yes, I would love that."},
-    {"speaking": "Pearl", "content": "I usually walk through here alone on my hikes, the companionship will be most welcome."}
+    {"speaking": "Pearl", "content": "I usually walk through here alone on my hikes, the companionship will be most welcome.",
+        "end": true}
     ]
 ],
 "chapter2": [

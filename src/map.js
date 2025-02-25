@@ -170,7 +170,7 @@ MAPS.marysRoom = (map) => {
                     {name: "D3pr3ss0", x: 4, y: 0},
                     {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
                     ], 
-                    "Grass", false);
+                    "Grass", true);
     };
     const jerry = new Tile(map, false, 4, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
     jerry.interact = () => {
@@ -258,7 +258,7 @@ MAPS.marysMap = (map) => {
                     {name: "D3pr3ss0", x: 4, y: 0},
                     {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
                     ], 
-                    "Grass", false);
+                    "Grass", true, "Lonely Forest");
         };
     });
     json.specialTiles.push(...forest);

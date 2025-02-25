@@ -12,6 +12,7 @@ class SceneManager {
         this.game.addEntity(this.map);
 
         this.game.addEntity(this);
+        this.story = false;
 
 
         this.party = new Party(this.game);
@@ -97,22 +98,7 @@ class SceneManager {
 
     draw(ctx) { /* ~ unused ~ */ }
 
-    startCombat() {
-        
-    }
-
-    getRandomEncounter(dungeonType) {
-        const enemies = DUNGEON_ENCOUNTERS[dungeonType]; // Get the array of enemies
-    
-        if (!enemies) {
-            console.error("Invalid dungeon type!");
-            return null;
-        }
-    
-        const randomIndex = Math.floor(Math.random() * enemies.length); // Roll for a random enemy
-        return enemies[randomIndex]; // Return the selected enemy
-    }
-    battleScene(enemyArr, type, story = false, endless = false, chapter = 1) {
+    battleScene(enemyArr, type, story = false, title = "", endless = false) {
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
@@ -152,14 +138,17 @@ class SceneManager {
 
         endless ?
         this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Endless")) : 
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `Chapter ${chapter}`));
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `${title}`));
         // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
         console.log("Restoring Overworld State");
         this.game.entities = this.savedState;
         this.map = this.savedMap;
+        if(this.story) this.map.story.fromBattle();
+        this.story = false; 
     }
+
 }
 class Manga {
     constructor(scene, asset){

@@ -20,12 +20,6 @@ class Transparent {
             this.redSpots.push(spot);
             this.game.addEntity(spot);
         }
-
-        // Directions (not used in this dumb method)
-        this.directions = [
-            { dx: 1, dy: 0 }, { dx: -1, dy: 0 },  // Left, Right
-            { dx: 0, dy: 1 }, { dx: 0, dy: -1 }   // Up, Down
-        ];
     }
 
     draw(ctx) {
@@ -74,16 +68,14 @@ class Transparent {
     }
 
     simpleAttackRange(x, y) {
-        // Simple brute-force approach to find all tiles within the attack range
         for (let dx = -this.range; dx <= this.range; dx++) {
             for (let dy = -this.range; dy <= this.range; dy++) {
                 const newX = x + dx;
                 const newY = y + dy;
 
-                // Check if the tile is within range and bounds of the grid
                 if (Math.abs(dx) + Math.abs(dy) <= this.range && newX >= 0 && newX < 7 && newY >= 0 && newY < 7) {
                     const key = `${newX},${newY}`;
-                    this.attackTiles.add(key); // Add tile to attack range set
+                    this.attackTiles.add(key);
                 }
             }
         }
