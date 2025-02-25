@@ -13,7 +13,7 @@ class Story {
         this.openPortals = [];
         this.awaitBattle = false;
         this.queue = [];
-        this.globalExp = [3, 0, 0, 6, 0, 3, 0, 0];
+        //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
         // mangaPanel on this same class, pulled from "asset":, in dialogLoad.
@@ -150,7 +150,7 @@ class Story {
         const currArr = this.dialog.chapter1[this.dialogIndex];
         console.log(currArr);
         if(currArr[currArr.length - 1].end) {
-            this.map.scene.party.exp += this.globalExp[this.globalProg];
+            // this.map.scene.party.exp += this.globalExp[this.globalProg];
             this.globalProg++;
         }
         this.dialogIndex++;

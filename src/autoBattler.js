@@ -197,7 +197,14 @@ class AutoBattler {
                                     this.drawTrans.removeFromWorld = true;
                                     this.drawTrans = null;
                                     PLAY.hit1();
-                                } else {
+                                } else if(block.unit == this.selectedBlock.unit){
+                                    if(this.drawTrans) {
+                                        this.drawTrans.removeFromWorld = true;
+                                        this.drawTrans = null;
+                                    }
+                                    this.selectedBlock.selected = false;
+                                    this.selectedBlock = null;
+                                }else {
                                     this.selectedBlock.selected = false;
                                     this.selectedBlock = block;
                                     block.selected = true;

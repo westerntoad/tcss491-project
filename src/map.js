@@ -233,12 +233,12 @@ MAPS.marysMap = (map) => {
     }
     //ASSET_MANAGER.queueDownload("./assets/maps/areaOpen.png");
     const forest = [];
-    forest.push(new Tile(map, true, 24, 9, -1, "./maps/areaOpen.png"));
-    forest.push(new Tile(map, true, 24, 10, -1, "./maps/areaOpen.png"));
-    forest.push(new Tile(map, true, 24, 11, -1, "./maps/areaOpen.png"));
-    forest.push(new Tile(map, true, 24, 12, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, false, 24, 9, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, false, 24, 10, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, false, 24, 11, -1, "./maps/areaOpen.png"));
+    forest.push(new Tile(map, false, 24, 12, -1, "./maps/areaOpen.png"));
     forest.forEach(portals => {
-        portals.stepOn = () => {
+        portals.interact = () => {
             map.scene.battleScene([
                 [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
 

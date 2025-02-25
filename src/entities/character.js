@@ -10,7 +10,7 @@ class Character {
         //, hp, attack, defense, attackSpeed, moveSpeed, level, exp
         this.level = 1;
         this.exp = 0;
-        this.maxLevel = 7;
+        this.maxLevel = 8;
         /**
          * defense damage reduction forumule: "defense / defense + 50"
          * // -Luke, this is a ripped-off and oversimplified version from "The First Descendent"
