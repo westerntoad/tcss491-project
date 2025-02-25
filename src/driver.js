@@ -101,6 +101,7 @@ ASSET_MANAGER.queueDownload("./assets/hit2.wav");
 // Fonts
 // NOTE: fonts must not start with './'
 ASSET_MANAGER.queueDownload("assets/runescape.ttf");
+ASSET_MANAGER.queueDownload("assets/m6x11.ttf");
 
 const DUNGEON_ENCOUNTERS = {
     "Grass": [

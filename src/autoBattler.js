@@ -101,7 +101,7 @@ class AutoBattler {
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
             const block = new Block(i % 7, Math.floor(i / 7));
-            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 35), i);
+            block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 25), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
@@ -110,7 +110,7 @@ class AutoBattler {
         // initialize all blocks on bench
         for(let i = 0; i < 7; i++) {
             const block = new Block(8, i);
-            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
+            block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 35), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
 
             this.game.addEntity(block);
@@ -189,13 +189,22 @@ class AutoBattler {
                                 if(this.drawTrans) this.drawTrans.removeFromWorld = true;
                                 this.drawTrans = new Transparent(block, this);
                                 this.game.addEntity(this.drawTrans);
-                            } else if (this.selectedBlock && !block.unit) {
-                                const entity = this.selectedBlock.unit;
-                                entity.blockMove(block);
-                                this.selectedBlock = null;
-                                this.drawTrans.removeFromWorld = true;
-                                this.drawTrans = null;
-                                PLAY.hit1();
+                            } else if (this.selectedBlock) {
+                                if(!block.unit) {
+                                    const entity = this.selectedBlock.unit;
+                                    entity.blockMove(block);
+                                    this.selectedBlock = null;
+                                    this.drawTrans.removeFromWorld = true;
+                                    this.drawTrans = null;
+                                    PLAY.hit1();
+                                } else {
+                                    this.selectedBlock.selected = false;
+                                    this.selectedBlock = block;
+                                    block.selected = true;
+                                    if(this.drawTrans) this.drawTrans.removeFromWorld = true;
+                                    this.drawTrans = new Transparent(block, this);
+                                    this.game.addEntity(this.drawTrans);
+                                }
                             }
                         }
                     } else {

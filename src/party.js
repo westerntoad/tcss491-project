@@ -7,7 +7,7 @@ class Party {
         Object.assign(this, {game});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
-        this.exp = 150; // keep track of total exp in the pot.
+        this.exp = 0; // keep track of total exp in the pot.
     }
     showParty(){
         // kick off the gui for the party.
@@ -45,7 +45,7 @@ class PartyGUI {
         let mouseX = this.game.mouse?.x;
         let mouseY = this.game.mouse?.y;
 
-        const startX = this.game.width / 8;
+        const startX = this.game.width * (2/ 8);
         const endX = this.game.width * (7/8);
         const startY = this.game.height / 8;
         const endY = this.game.height * (7/8);
@@ -75,8 +75,7 @@ class PartyGUI {
                                 ctx.font = `bold 16px runescape`;
                                 ctx.fillStyle = 'black';
                                 ctx.fillText(
-                                    (this.exp !== undefined ? `Need ${this.exp} Adoration` :
-                                        'Reached Max Level!'),
+                                    `can't :(`,
                                     mouseX + 10, mouseY - 10
                                 )
                                 ctx.restore();
@@ -103,41 +102,50 @@ class PartyGUI {
         ctx.save();
         ctx.fillStyle = "#7DB2EB";
         ctx.globalAlpha = 0.5;
-        const startX = this.game.width / 8;
+        const startX = this.game.width * (2/ 8);
         const endX = this.game.width * (7/8);
         const startY = this.game.height / 8;
         const endY = this.game.height * (7/8);
-        ctx.fillRect(startX, startY,
-            this.game.width * (3/4), this.game.height * (3/4)
-        )
-        // lets draw the adorations hehe
-        ctx.fillRect(startX + this.game.width * (2/7), 
-            startY - this.game.height / 16,
-            this.game.width * (3/16), this.game.height * (1/16)
-        )
         ctx.restore();
+
         ctx.save();
+        ctx.globalAlpha = 0.35;
+        ctx.fillStyle = '#9cd5ff';
+        ctx.fillRect(startX, startY, (endX - startX), (endY - startY));
+        ctx.restore(); 
+
+        ctx.save();
+        const aHeight = this.game.height * (1/16);
+        const aWidth = this.game.width * (3/16);
+        const aX = (startX + endX) / 2 - aWidth /2 ;
+        const aY = startY - this.game.height / 16;
+
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.font = `bold 22px m6x11`;
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = "black";
+        ctx.textAlign = "start";
+        ctx.fillStyle = "#b347cc";
+        
         ctx.drawImage(this.baseBorders, 0, 0, 
             this.baseBordersSize,
             this.baseBordersSize, 
-            startX + this.game.width * (2/7), 
-            startY - this.game.height / 16,
+            aX, 
+            aY,
             this.game.width * (3/16), 
             this.game.height * (1/16)
         );
-        this.game.ctx.font = "17px serif";
-        ctx.fillText(`Adoration: ${this.party.exp}`,
-            startX + this.game.width * (2/7) + this.game.width / 32,
-            startY - this.game.height / 32
-        )
+        ctx.strokeText('Adoration', aX + aWidth / 8, aY + aHeight / 4);
+        ctx.fillText('Adoration', aX + aWidth / 8, aY + aHeight / 4);
+        this.getDefaultEndStyle(ctx);
+        ctx.fillText(`${this.party.exp}`, aX + aWidth * (7/8), aY + aHeight / 4);
         ctx.restore();
-        // (img, startX/Y of img, w/h of img, canvas-coord, resize);
-        // ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
-        //ctx.drawImage(this.plus, );
+
         ctx.save();
         ctx.textAlign = "start";
         ctx.textBaseline = "alphabetic";
-        this.game.ctx.font = "17px serif";
+        ctx.font = "16px m6x11";
 
         const numRows = 3;
         const segmentX = (endX - startX) / 2;
@@ -153,19 +161,22 @@ class PartyGUI {
                 x, y,
                 segmentX, segmentY
             );
-            // define x and y, filler.
+            // draw Name
             const nameLength = ctx.measureText(this.members[i].name).width;
             ctx.fillText(`${this.members[i].name}`, 
-                x + segmentX * (5/ 20) - nameLength/2,
+                x + segmentX * (6.5/ 20) - nameLength/2,
                 y + segmentY * (3/20)
             )
-            /**
-             * this.plus = ASSET_MANAGER.getAsset("./assets/plus.png");
-             * this.minus = ASSET_MANAGER.getAsset("./assets/minus.png");
-             * his.baseBorders = ASSET_MANAGER.getAsset("./assets/baseBorders.png"); 
-             * */
-            // lets add padding.
-            //draw pluses and minuses.
+
+            //draw Plus and Minus
+            ctx.save();
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = '#6a7ddb';
+            ctx.fillRect(x + segmentX / 10, y + segmentY * (3/4),
+            (x + segmentX * (3/10))-(x + segmentX / 10) + segmentX /8, segmentY / 8);
+            // TODO: for ITEMS ** >>
+            ctx.fillRect(x + segmentX / 10, y + segmentY * (9/16), 25, 25);
+            ctx.restore();
             ctx.drawImage(this.plus, 0, 0, // plus
                 this.plusSize, this.plusSize,
                 x + segmentX / 10,
@@ -177,44 +188,118 @@ class PartyGUI {
                 x + segmentX * (3/10),
                 y + segmentY * (3/4),
                 segmentX / 8, segmentY / 8
-            ); // attach listeners on these bad boys.
+            );
+
+            // draw Character
             const img = ASSET_MANAGER.getAsset(this.members[i].asset);
-            const imgSize = 32; // draw character imgs
+            const imgSize = 32;
             ctx.drawImage(img, 0,
                 0, imgSize, imgSize,
-                x + segmentX * (2/ 10) - segmentX /16,
+                x + segmentX * (2.65/ 10) - segmentX /16,
                 y + segmentY * (1/5),
                 segmentX / 4, segmentX / 4
             );
 
+            // detail borders
             ctx.drawImage(this.baseBorders, 0, 0, 
                 this.baseBordersSize,
                 this.baseBordersSize, 
                 x + segmentX / 2, y + segmentY / 16,
-                segmentX *(7/16), segmentY * (7/8)
+                segmentX * (7/16), segmentY * (7/8)
             );
             ctx.save();
-            this.game.ctx.font = "17px serif";
+            // ***** Did not use icons, text is more cohesive.
+            // level, hp, attack, attackSpeed (players will see atkrange inBattle)
+            // Only bernice has def (shield icon)
+            const fontSize = 21; // can Change.
+            const fontPadding = 1;
+            this.game.ctx.font = `${fontSize}px m6x11`;
             const fields = [
                 "level", "hp", "attack", "attackSpeed",
                 "defense", "attackRange"
             ];
-            ctx.textAlign = "left";
+            ctx.textAlign = "start";
             ctx.textBaseline = "top";
-            for(let j = 0; j < fields.length; j++){
-                ctx.fillText(`${fields[j]}: ${this.members[i][fields[j]]}`,
-                    x + segmentX / 2 + segmentX /16,
-                    y + segmentY *(3/ 16) + j * (20)
-                );
+            ctx.fillStyle = "#ebbf4d";
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "black"; // keep this strokeStyle
+
+            // **************** Details **************
+            const detailWidth = segmentX * (7/16);
+            const detailPad = segmentX / 16;
+            const detailX = x + segmentX / 2;
+            const detailY = y + segmentY * (5 / 32);
+
+            // Lvl
+            ctx.strokeText(`Lvl`, detailX + detailPad, detailY);
+            ctx.fillText(`Lvl`, detailX + detailPad, detailY);
+            
+            this.getDefaultEndStyle(ctx);
+            //ctx.strokeText(this.members[i].level, detailX + detailWidth / 2, detailY);
+            ctx.fillText(this.members[i].level, detailX + detailWidth - detailPad, detailY);
+
+            // HP
+            ctx.textAlign = "start";
+            ctx.fillStyle = "#bd4444";
+            ctx.strokeText('Hp', detailX + detailPad, detailY + (fontSize + fontPadding));
+            ctx.fillText('Hp', detailX + detailPad, detailY + (fontSize + fontPadding));
+            this.getDefaultEndStyle(ctx);
+            ctx.fillText(this.members[i].hp, detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding));
+
+            // ATK
+            ctx.textAlign = "start";
+            ctx.fillStyle = "#a7e276";
+            ctx.strokeText('Atk', detailX + detailPad, detailY + (fontSize + fontPadding) * 2);
+            ctx.fillText('Atk', detailX + detailPad, detailY + (fontSize + fontPadding) * 2);
+            this.getDefaultEndStyle(ctx);
+            ctx.fillText(this.members[i].attack, detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding) * 2);
+            
+            // DPS
+            ctx.textAlign = "start";
+            ctx.fillStyle = "#60a762";
+            ctx.strokeText('Dps', detailX + detailPad, detailY + (fontSize + fontPadding) * 3);
+            ctx.fillText('Dps', detailX + detailPad, detailY + (fontSize + fontPadding) * 3);
+            this.getDefaultEndStyle(ctx);
+            ctx.fillText(Math.round(100 * (this.members[i].attack / this.members[i].attackSpeed)) / 100,
+                 detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding) * 3);
+
+            if(this.members[i].name == "Bernice Campbell") { // show defense.
+                // DEF
+
+                ctx.textAlign = "start";
+                ctx.fillStyle = '#804f2b';
+                ctx.strokeText('Def', detailX + detailPad, detailY + (fontSize + fontPadding) * 4);
+                ctx.fillText('Def', detailX + detailPad, detailY + (fontSize + fontPadding) * 4);
+                this.getDefaultEndStyle(ctx);
+                ctx.fillText(Math.round((this.members[i].defense) * 100 / (this.members[i].defense + 50)) /100, 
+                    detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding) * 4);
+            }
+            if(this.members[i].name) {
+                // Exp
+                ctx.textAlign = "start";
+                ctx.fillStyle = "#cbdbfc";
+                ctx.strokeText('Exp', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
+                ctx.fillText('Exp', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
+                this.getDefaultEndStyle(ctx);
+                ctx.fillText(this.members[i].getNextExp(), detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
             }
             ctx.restore();
-            // level, hp, attack, attackSpeed, defense, attackRange
+            // *****
         }
         ctx.restore();
     }
-    // handle click the same as autoBattler refactored by Abe
+    getDefaultMidStyle(ctx) {
+        ctx.textAlign = "center";
+        ctx.fillStyle = 'black';
+
+    }
+    getDefaultEndStyle(ctx, positive = true) {
+        ctx.textAlign = 'end';
+        ctx.fillStyle = 'black';
+        //ctx.fillStyle = positive ? 'green' : 'red';
+    }
 }
-class TextCreator{
+class TextCreator{ // abe will never find me :o
     constructor(){
         error("You can't construct this bro");
     }

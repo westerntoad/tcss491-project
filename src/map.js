@@ -240,23 +240,25 @@ MAPS.marysMap = (map) => {
     forest.forEach(portals => {
         portals.stepOn = () => {
             map.scene.battleScene([
-                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3}],
+                [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
+
                 [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-                {name: "Mad@Chu", x: 3, y: 3}
-                ],
+                    {name: "Mad@Chu", x: 3, y: 3}],
+
                 [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-                    {name: "D3pr3ss0", x: 3, y: 0}
-                ],
+                    {name: "D3pr3ss0", x: 3, y: 0}],
+
                 [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                    {name: "D3pr3ss0", x: 0, y: 0}
-                ],
+                    {name: "D3pr3ss0", x: 0, y: 0}],
+
                 [{name: "L0neb0ne", x: 1, y: 1}, {name:"L0neb0ne", x: 2, y: 1},
                     {name: "L0neb0ne", x: 3, y: 1}, {name:"L0neb0ne", x: 4, y: 1},
                     {name: "L0neb0ne", x: 5, y: 1},
-                    {name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                    {name: "D3pr3ss0", x: 0, y: 0}
-                ]
-            ], "Grass", true);
+                    {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
+                    {name: "D3pr3ss0", x: 4, y: 0},
+                    {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
+                    ], 
+                    "Grass", false);
         };
     });
     json.specialTiles.push(...forest);

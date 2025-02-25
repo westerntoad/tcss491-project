@@ -10,6 +10,7 @@ class Character {
         //, hp, attack, defense, attackSpeed, moveSpeed, level, exp
         this.level = 1;
         this.exp = 0;
+        this.maxLevel = 7;
         /**
          * defense damage reduction forumule: "defense / defense + 50"
          * // -Luke, this is a ripped-off and oversimplified version from "The First Descendent"
@@ -18,7 +19,7 @@ class Character {
         this.defend = () =>{
             return (this.defense / this.defense + 50);
         }
-        this.expReq = [2, 3, 4, 5, 7, 10, 13, 18, 25]; // using the expRequirement.
+        this.expReq = [2, 3, 4, 5, 7, 10, 13, 18, 25, 100, 300, 500, 2000]; // using the expRequirement.
         /** Everytime we level up, we push to the levelStack.
          *  If we want to remove levels, we pop from the levelStack and look at
          *      the amount to decrement for each stat improved.
@@ -43,11 +44,11 @@ class Character {
                 this.attackRange = 1; // default val for melees
                 this.defense = 0;
                 this.attackSpeed = 0.95; // atk & moveSpd currently is x * 1000 ms.
-                this.moveSpeed = 1; // so this is 1000ms.
+                this.moveSpeed = 0.75; // so this is 1000ms.
                 this.hpGrowth = 0.5; // specify the distribution rate
                 this.attackGrowth = 0.5;
                 this.hpCap = 50;
-                this.attackCap = 25;
+                this.attackCap = 50;
                 break; // 50% hp, 50% atk
             // Ranged (paper thin Hp, high attackSpeed)
             case "Vera Mulberry":
@@ -57,13 +58,13 @@ class Character {
                 this.attackRange = 3;
                 this.defense = 0;
                 this.attackSpeed = 0.75;
-                this.moveSpeed = 1.25; // 1250ms
+                this.moveSpeed = 0.85; // 1250ms
                 this.hpGrowth = 0.25;
                 this.attackGrowth = 0.25;
                 this.attackSpeedGrowth = 0.5;
                 this.hpCap = 25;
-                this.attackCap = 50;
-                this.attackSpeedCap = 0.25;
+                this.attackCap = 65;
+                this.attackSpeedCap = 0.4;
                 break; // 25% hp, 50% atkSpeed, 25% atk 
             // Warrior (melee, high attack)
             case "Pearl Martinez":
@@ -73,7 +74,7 @@ class Character {
                 this.attackRange = 1;
                 this.defense = 0;
                 this.attackSpeed = 1;
-                this.moveSpeed = 0.7; // 950ms
+                this.moveSpeed = 0.3; // 950ms
                 this.hpGrowth = 0.25;
                 this.attackGrowth = 0.5;
                 this.attackSpeedGrowth = 0.5;
@@ -89,7 +90,7 @@ class Character {
                 this.attackRange = 3;
                 this.defense = 0;
                 this.attackSpeed = 1.5;
-                this.moveSpeed = 1.25;
+                this.moveSpeed = 0.85;
                 this.hpGrowth = 0.25;
                 this.attackGrowth = 0.50;
                 this.attackSpeedGrowth = 0.25;
@@ -104,22 +105,18 @@ class Character {
                 this.attack = 1;
                 this.attackRange = 1;
                 this.defense = 5;
-                this.attackSpeed = 1.5;
-                this.moveSpeed = 1.5;
+                this.attackSpeed = 2;
+                this.moveSpeed = 1.25;
                 this.hpGrowth = 0.5;
                 this.defenseGrowth = 0.5;
+                this.attackGrowth = 0.25;
+                this.attackCap = 50;
                 this.hpCap = 100;
                 this.defenseCap = 100;
                 break;// 50% hp, 50% def
             default:
                 break;
         }
-
-        const expArray = [];
-        for(let i = 1; i < 10; i++) { // can change to allow for levels over 10
-            expArray.push(Math.round(this.expRequired(i)));
-        }
-        this.expReq = expArray;
         // figure out the levelStack logic here
         const base = {
             hpBase: this.hp,
@@ -145,7 +142,7 @@ class Character {
         return base + (cap - base) * ((level - 1) / intervals) * normalizedGrowth;
     }
     levelUp(exp){// GO GO GO GO
-        if(this.level > 9 || exp < this.expReq[this.level - 1]) return 0; // can't, hehe
+        if(this.level >= this.maxLevel || exp < this.expReq[this.level - 1]) return 0; // can't, hehe
         const usedExp = this.expReq[this.level - 1];
         const currGrowth = {};
         if (this.hpGrowth) {
@@ -191,7 +188,11 @@ class Character {
         this.level--;
         return this.expReq[this.level - 1]; // should return the exp.
     }
+    getNextExp() { // return the amount of exp for next lvl;
+        const get = this.expReq[this.level - 1];
 
+        return get ? (this.level == this.maxLevel ? `Max Lvl` : get) : `Max Lvl`;
+    }
     takeDamage(amount) {
         this.hp -= Math.max(0, amount - this.defense); // Reduce damage by defense
         console.log(`${this.name} takes ${amount} damage. HP: ${this.hp}`);
