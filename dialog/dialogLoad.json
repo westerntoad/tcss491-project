@@ -166,7 +166,8 @@
     {"speaking": "Mary", "content": "*Chuckles* No need to be so *sappy* now.",
         "asset": "./dialog/panelExample2.png"},
     {"speaking": "Mary", "content": "Anyways, we'll be back later. Buh bye, now!",
-        "asset": "./dialog/panelExample2.png", "end": true}
+        "asset": "./dialog/panelExample2.png",
+        "end": true}
     ],
 
     [
@@ -202,7 +203,8 @@
     {"speaking": "Jerry", "content": "I’d like that."},
     {"speaking": "Jerry", "content": "I can show you a project I’ve been working on at school, then, too!"},
     {"speaking": "Jerry", "content": "I’d better go get it ready."},
-    {"speaking": "Jerry", "content": "Smell ya later!", "end": true}
+    {"speaking": "Jerry", "content": "Smell ya later!",
+        "end": true}
     ],
 
     [
@@ -222,6 +224,7 @@
     {"speaking": "Pearl", "content": "I usually walk through here alone on my hikes, the companionship will be most welcome.",
         "end": true}
     ],
+
     [
     {"speaking": "Mary", "content": "Oh, let me introduce our friend."},
     {"speaking": "Mary", "content": "This is Pearl Martinez."},
@@ -336,5 +339,99 @@
     {"speaking": "Derek King", "content": "If you wouldn’t mind, Miss Cambell, I’d love to bring these cookies out to share with my team."},
     {"speaking": "Bernice", "content": "Oh please, I made plenty to go around!",
         "end": true}
+    ],
+
+    [
+    {"speaking": "Pearl", "content": "Now that we’ve had a chance to work together, I’ve been meaning to ask a favor."},
+    {"speaking": "Pearl", "content": "Mi hija, my daughter…"},
+    {"speaking": "Pearl", "content": "She’s been fighting against Seth Roth and his campaign to clear the Lonely Forest to make room for big corporations for the last year or so."},
+    {"speaking": "Bernice", "content": "Why, that seems like such a noble pursuit."},
+    {"speaking": "Bernice", "content": "What seems to be the trouble, cher?"},
+    {"speaking": "Pearl", "content": "You see, I know the cause means a great deal to Melanie but lately it seems like she may be losing Hope."},
+    {"speaking": "Ye-soon", "content": "Mm I understand."},
+    {"speaking": "Ye-soon", "content": "I’ve been hearing through the grapevine that Mr. Roth’s campaign has been seeing larger funding, and with it gaining some traction."},
+    {"speaking": "Ye-soon", "content": "I myself have no wish to see my peaceful hiking trails disappear to such a fate."},
+    {"speaking": "Pearl", "content": "Precisamente."},
+    {"speaking": "Pearl", "content": "I know it’s a lot to ask, especially after what we’ve all done recently, but…might I trouble you all to join me at her next rally?"},
+    {"speaking": "Pearl", "content": "It’s scheduled for this Saturday in the Woebegone Park."},
+    {"speaking": "Mary", "content": "I know I speak for us all when I say we would be most delighted, dear Pearl. We can go together."},
+    {"speaking": "Pearl", "content": "Gracias, Mary. I knew I could count on all of you."},
+    {"speaking": "Pearl", "content": "I knew I could count on all of you.",
+        "end": true}
+    ],
+
+    [
+    {"speaking": "Melanie", "content": "Ma? What are you doing here?"},
+    {"speaking": "Pearl", "content": "We came to join your rally."},
+    {"speaking": "Melanie", "content": " Ma…I don’t know if it’s worth it to keep fighting."},
+    {"speaking": "Melanie", "content": "It all just feels so hopeless.",
+        "end": true}
+    ],
+
+    [
+    {"speaking": "Melanie", "content": "Oh, ma. You’re right."},
+    {"speaking": "Melanie", "content": "It may feel like an uphill battle, but it’s worth it."},
+    {"speaking": "Melanie", "content": "Who will fight for the Lonely Forest if not us?"},
+    {"speaking": "Pearl", "content": "Si, Melanie."},
+    {"speaking": "Pearl", "content": "You continue to be such an inspiration."},
+    {"speaking": "Pearl", "content": "I’m so proud of you."},
+    {"speaking": "Melanie", "content": "Gracias, ma. Gracias to all of you."},
+    {"speaking": "Melanie", "content": "I’m feeling much more prepared for the rally."},
+    {"speaking": "Melanie", "content": "I know exactly what I’m going to say now."},
+    {"speaking": "Pearl", "content": "We will support you always."},
+    {"speaking": "Pearl", "content": "If you’d like, we can meet you back at my friend Mary’s house afterwards."},
+    {"speaking": "Pearl", "content": "I’ll write down the address."},
+    {"speaking": "Pearl", "content": "Now, go get ‘em, dear!",
+        "end": true}
+    ],
+
+    [
+        {"speaking": "Mary", "content": "Melanie, how lovely to see you! Would you like to join me and your mother for some tea?"},
+        {"speaking": "Melanie", "content": "That sounds delicious, gracias. Hola, Ma!"},
+        {"speaking": "Vera", "content": "Hola, Melanie. Is all well?"},
+        {"speaking": "Melanie", "content": "Actually, I’d been meaning to ask if you’d like to join me for the town hall meeting coming up. It’s…going to be a big one, to say the least. Seth Roth is going to be presenting the case in hopes of confirming the deforestation of the Lonely Forest."},
+        {"speaking": "Vera", "content": "Yes, I’d better be there for it. When is it? I’ll pencil it into my calendar."},
+        {"speaking": "Melanie", "content": " It’s this Friday, and starts right at 10am at city hall. I’ll be there, as will anyone else I can rally up to support opposing the deforestation plan. The more we can get, the better."},
+        {"speaking": "Mary", "content": "I’ll call up the others, too, dear. You can count on us."},
+        {"speaking": "Melanie", "content": "I knew I could. Gracias, Mary. Gracias, Ma. I’d better go make some calls myself. I’ll see you there!"}
+    ],
+
+    [
+        {"speaking": "Seth", "content": "…and that’s why we’d like to begin the deforestation of Lonely Forest. This town hall is adjourned, and will reconvene for final discussions in one week."},
+        {"speaking": "Melanie", "content": "Oh, this is not good. We have so much support here, but the mayor seems blind to our opposition. There’s too much Greed involved."},
+        {"speaking": "Ye-soon", "content": "Mm, yes. I can see it as well. Melanie, why don’t you let us try to talk to him?"},
+        {"speaking": "Bernice", "content": "That’s brilliant, Ye-soon. No one can turn away a group of us innocent old ladies. He’ll have to at least hear us out."},
+        {"speaking": "Melanie", "content": "Si! If anything is going to get through to him, it’s all of you."},
+        {"speaking": "Mary", "content": "Si! If anything is going to get through to him, it’s all of you."}
+    ],
+
+    [
+        {"speaking": "Seth", "content": "Yes, welcome in. How can I help you all today?"},
+        {"speaking": "Mary", "content": "Mr. Mayor, we’re here to discuss your deforestation plans. We’d like to make sure you’ve truly considered the consequences."},
+        {"speaking": "Seth", "content": "Ah, I see. Unfortunately, the city could really use the money being offered by the corporations. And anyways, having stores move so near would be a huge convenience for all of our residents. There’s simply no losing."},
+        {"speaking": "Mary", "content": "But there is loss involved. The money gained will only be temporary, but the Forest will be lost forever."},
+        {"speaking": "Seth", "content": "I’m sorry, ladies. My hands are tied on this one."},
+        {"speaking": "Mary", "content": "With respect, Mr. Mayor, let us show you that that is not true."}
+    ],
+
+    [
+        {"speaking": "Seth", "content": "…Yes. Yes, I see. You’re right. I’ve been looking at the short term, blinded by the benefits. I wasn’t hearing what the opposition was saying. But all of you… You’ve made it so clear. What was your daughter’s name again, ma'am?"},
+        {"speaking": "Pearl", "content": "Her name is Melanie. Melanie Martinez."},
+        {"speaking": "Seth", "content": "Melanie. Yes, that rings a bell. Can I ask you to have Melanie meet with me? I’d really like to discuss this with her further."},
+        {"speaking": "Pearl", "content": "Mr. Mayor, we’d be delighted."}
+    ],
+    
+    [
+        {"speaking": "Melanie", "content": "…and after we finished the discussions, Mr. Roth asked me to join his team as his advisor!"},
+        {"speaking": "Seth", "content": "And, to my surprise after everything I’ve put her through, she’s agreed. We plan to address the deforestation again at the next town hall. This time, we will announce that it is officially cancelled, and that we have declined the funding from the corporations."},
+        {"speaking": "Pearl", "content": "Oh, mi hija! I’m so proud of you."},
+        {"speaking": "Ye-soon", "content": "Mm yes, what fantastic news."},
+        {"speaking": "Melanie", "content": "This couldn’t have happened without all of your help. I’m so grateful to you all."},
+        {"speaking": "Seth", "content": "As am I!"},
+        {"speaking": "Jerry", "content": "Me too! I love you grandma. You and your friends have brought such love to our town."},
+        {"speaking": "Vera", "content": "I love you too, Jerry."},
+        {"speaking": "Mary", "content": "We’ve made such a team. Although if you don’t mind, my knees have been aching today. Perhaps if we spend the next week a little less active? I’d be happy to gather for tea!"},
+        {"speaking": "Bernice", "content": "I do declare, we have certainly all earned a bit of respite. Yes, a gentle week will do us old ladies well."},
+        {"speaking": "Mary", "content": "It will indeed, my friends. So it will!"}
     ]
 ]}

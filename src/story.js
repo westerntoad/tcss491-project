@@ -10,9 +10,10 @@ class Story {
         this.specialTiles = [];
         this.dialogIndex = 0;
         this.getPortal = null; // use to get portal.
-        this.openPortals = [];
+        this.npc = [];
         this.queue = [];
         this.storyCheck = [false, false, false, false, false];
+        this.questBattle = null;
         //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
@@ -110,44 +111,48 @@ class Story {
                 break;
         
             case 6: // beat forest
-                console.log("case 6 reached");
-                for(let i = 0; i < 4; i++){
-                    const quest = new Tile(this.map, true, 24, 9 + i, 2, this.questIcon);
-                    this.specialTiles.push(quest);
+                if(this.currMap == "marysMap") {
+                    console.log("case 6 reached");
+                    for(let i = 0; i < 4; i++){
+                        const quest = new Tile(this.map, true, 24, 9 + i, 2, this.questIcon);
+                        this.specialTiles.push(quest);
+                    }
                 }
                 break;
             case 7: // talk to jerry
-
-                console.log("case 7 reached"); // This should now appear
-                const quest = new Tile(this.map, true, 21, 10, 5, this.questIcon);
-                const jerry = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
-                jerry.interact = () => {
-                    this.progress();
-                };
-                this.specialTiles.push(quest, jerry);
+                if(this.currMap == "marysMap") {
+                    console.log("case 7 reached"); // This should now appear
+                    const quest = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                    const jerry = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                    jerry.interact = () => {
+                        this.progress();
+                    };
+                    this.specialTiles.push(quest, jerry);
+                }
                 break;
             case 8: // beat jerry
-                console.log("case 8 reached"); // This should now appear
-                const quest1 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
-                const jerry1 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
-                jerry1.interact = () => {
-                    this.map.scene.battleScene([[{name: "Jerry Mulberry", x: 3, y: 3}]], "Grass", true, "Jerry Mulberry")
-                };
-                this.specialTiles.push(quest1, jerry1);
+                if(this.currMap == "marysMap") {
+                    console.log("case 8 reached"); // This should now appear
+                    const quest1 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                    const jerry1 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                    jerry1.interact = () => {
+                        this.map.scene.battleScene([[{name: "Jerry Mulberry", x: 3, y: 3}]], "Grass", true, "Jerry Mulberry")
+                    };
+                    this.specialTiles.push(quest1, jerry1);
+                }
                 break;
 
-            case 9:
-                // add pearl here.
-                console.log("case 9 reached");
-                const quest2 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
-                const jerry2 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
-                jerry2.interact = () => {
-                    this.progress();
+            case 9: // talk to jerry
+                if(this.currMap == "marysMap") {
+                    console.log("case 9 reached");
+                    const quest2 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                    const jerry2 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                    jerry2.interact = () => this.progress();
+                    this.specialTiles.push(quest2, jerry2);
                 }
-                this.specialTiles.push(quest2, jerry2);
                 break;
             
-            case 10:
+            case 10: // add pearl here
                 console.log("case 10 reached");
                 const quest3 = new Tile(this.map, true, 23, 10, 5, this.questIcon);
                 const pearl = new Tile(this.map, false, 23, 11, 5, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
@@ -157,7 +162,24 @@ class Story {
                 }
                 this.specialTiles.push(quest3, pearl);
                 break;
+            case 11: // go to jerry's house
+                console.log("case 11 reached");
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 14, 11, 5, this.questIcon);
+                    quest.interact = () => this.progress();
+                    this.specialTiles.push(quest);
+                }
+                break;
+            case 12: // talk to jerry
+                if(this.currMap == "marysMap") {
+                    const quest2 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
+                    const jerry2 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                    jerry2.interact = () => this.progress();
+                    this.specialTiles.push(quest2, jerry2);
+                }
+                break;
             default:
+                this.specialTiles.push(quest4);
                 break;
         }
         return this.specialTiles;

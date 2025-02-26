@@ -161,6 +161,10 @@ class AutoBattler {
                 this.cleanup();
                 this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
             }
+        } else if(this.game.pressed['y']) {
+            this.sceneManager.story = true;
+                    this.cleanup();
+                    this.sceneManager.restoreScene();
         }
         if(this.prep){ // uh oh, this is gross (but functional).
             // handle mouse input
