@@ -152,7 +152,6 @@ class AutoBattler {
         PLAY.battle1();
     }
     update() {
-        if(this.drawTrans) this.drawTrans.expire = 1;
         // force game over
         if(this.game.pressed['Escape']){
             this.exit = (this.exit ? this.exit + 1 : 1);
@@ -161,11 +160,12 @@ class AutoBattler {
                 this.cleanup();
                 this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
             }
-        } else if(this.game.pressed['a']) {
-            this.sceneManager.story = true;
-                    this.cleanup();
-                    this.sceneManager.restoreScene();
-        }
+        } 
+        // else if(this.game.pressed['']) {
+        //     this.sceneManager.story = true;
+        //             this.cleanup();
+        //             this.sceneManager.restoreScene();
+        // }
         if(this.prep){ // uh oh, this is gross (but functional).
             // handle mouse input
             let mouseX = this.game.mouse?.x;
