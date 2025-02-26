@@ -161,7 +161,7 @@ class AutoBattler {
                 this.cleanup();
                 this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
             }
-        } else if(this.game.pressed['y']) {
+        } else if(this.game.pressed['a']) {
             this.sceneManager.story = true;
                     this.cleanup();
                     this.sceneManager.restoreScene();

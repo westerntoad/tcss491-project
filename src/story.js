@@ -10,7 +10,7 @@ class Story {
         this.specialTiles = [];
         this.dialogIndex = 0;
         this.getPortal = null; // use to get portal.
-        this.npc = [];
+        this.npc = [false, false, false];
         this.queue = [];
         this.storyCheck = [false, false, false, false, false];
         this.questBattle = null;
@@ -94,17 +94,19 @@ class Story {
                 }
                 break;
         
-            case 5: // meet jerry in the forest, at round 5.
+            case 5: // tutorial
                 if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 23, 10, 5, this.questIcon);
                     const bone = new Tile(this.map, false, 23, 11, 1, './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
                     bone.interact = () => {
                         this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true, "Tutorial");
+                        this.questBattle = this.globalProg;
                     };
                     const quest1 = new Tile(this.map, true, 23, 11, 5, this.questIcon);
                     const bone1 = new Tile(this.map, false, 23, 12, 1, './assets/enemies/L0neb0ne.png', 0, 0, 32, 32);
                     bone1.interact = () => {
                         this.map.scene.battleScene([[{name: "L0neb0ne", x: 3, y: 3}]], "Grass", true, "Tutorial");
+                        this.questBattle = this.globalProg;
                     };
                     this.specialTiles.push(bone1, quest1, quest, bone);
                 }
@@ -136,7 +138,8 @@ class Story {
                     const quest1 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
                     const jerry1 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
                     jerry1.interact = () => {
-                        this.map.scene.battleScene([[{name: "Jerry Mulberry", x: 3, y: 3}]], "Grass", true, "Jerry Mulberry")
+                        this.map.scene.battleScene([[{name: "Jerry Mulberry", x: 3, y: 3}]], "Grass", true, "Jerry Mulberry");
+                        this.questBattle = this.globalProg;
                     };
                     this.specialTiles.push(quest1, jerry1);
                 }
@@ -152,15 +155,17 @@ class Story {
                 }
                 break;
             
-            case 10: // add pearl here
-                console.log("case 10 reached");
-                const quest3 = new Tile(this.map, true, 23, 10, 5, this.questIcon);
-                const pearl = new Tile(this.map, false, 23, 11, 5, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
-                pearl.interact = () => {
-                    this.progress();
-                    this.map.scene.addToParty("Pearl Martinez");
+            case 10: // add pearl here // Chapter 1 Over
+                if(this.currMap == "marysMap") {
+                    console.log("case 10 reached");
+                    const quest3 = new Tile(this.map, true, 23, 10, 5, this.questIcon);
+                    const pearl = new Tile(this.map, false, 23, 11, 5, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
+                    pearl.interact = () => {
+                        this.progress();
+                        this.map.scene.addToParty("Pearl Martinez");
+                    }
+                    this.specialTiles.push(quest3, pearl);
                 }
-                this.specialTiles.push(quest3, pearl);
                 break;
             case 11: // go to jerry's house
                 console.log("case 11 reached");
@@ -172,17 +177,88 @@ class Story {
                 break;
             case 12: // talk to jerry
                 if(this.currMap == "marysMap") {
-                    const quest2 = new Tile(this.map, true, 21, 10, 5, this.questIcon);
-                    const jerry2 = new Tile(this.map, false, 21, 11, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                    const quest2 = new Tile(this.map, true, 11, 18, 5, this.questIcon);
+                    const jerry2 = new Tile(this.map, false, 11, 19, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
                     jerry2.interact = () => this.progress();
                     this.specialTiles.push(quest2, jerry2);
                 }
                 break;
+            case 13: // talk to Ye-soon
+                if(this.currMap == "marysMap") {
+                    this.npc[0] = true; // jerry's shop is open
+
+                    const quest = new Tile(this.map, true, 10, 22, 5, this.questIcon);
+                    const yesoon = new Tile(this.map, false, 10, 23, 5, './assets/grandmas/Ye-soon_Kim.png', 0, 0, 32, 32)
+                    yesoon.interact = () => {
+                        this.progress();
+                        this.map.scene.addToParty("Ye-soon Kim");
+                    };
+                    this.specialTiles.push(yesoon, quest);
+                }
+                break;
+            case 14: // Office map is the quest
+                if(this.currMap == "marysMap") {
+                    for(let i = 0; i < 3; i++){
+                        const quest = new Tile(this.map, true, 10+i, 30, 5, this.questIcon);
+                        this.specialTiles.push(quest);
+                    }
+                }
+                break;
+            case 15: // recruit bernice
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 10, 25, 5, this.questIcon);
+                    const bernice = new Tile(this.map, false, 10, 26, 5, './assets/grandmas/Bernice_Campbell.png', 0, 0, 32, 32)
+                    bernice.interact = () => {
+                        this.progress();
+                        this.map.scene.addToParty("Bernice Campbell");
+                    };
+                    this.specialTiles.push(bernice, quest);
+                }
+                break;
+            case 16: // talk to Derek King
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 12, 27, 5, this.questIcon);
+                    const derek = new Tile(this.map, false, 12, 28, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32)
+                    derek.interact = () => {
+                        this.progress();
+                    };
+                    this.specialTiles.push(derek, quest);
+                }
+                break;
+            case 17: // fight Derek King
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 12, 27, 5, this.questIcon);
+                    const derek = new Tile(this.map, false, 12, 28, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32)
+                    derek.interact = () => {
+                        this.map.scene.battleScene([[{name: "Derek King", x: 3, y: 3}]], "Office", true, "Derek King");
+                        this.questBattle = this.globalProg;
+                    };
+                    this.specialTiles.push(derek, quest);
+                }
+                break;
+            case 18: // talk to Derek King // Chapter 2 Over
+                if(this.currMap == "marysMap") {
+                    const quest = new Tile(this.map, true, 12, 27, 5, this.questIcon);
+                    const derek = new Tile(this.map, false, 12, 28, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32)
+                    derek.interact = () => {
+                        this.progress();
+                    };
+                    this.specialTiles.push(derek, quest);
+                }
             default:
-                this.specialTiles.push(quest4);
                 break;
         }
+        this.openNpc();
         return this.specialTiles;
+    }
+    openNpc(){
+        if(this.currMap == "marysMap") {
+            if(this.npc[0]) {
+                const jerry = new Tile(this.map, false, 11, 19, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+                jerry.interact = () => {};// this.map.scene.openShop();
+                this.specialTiles.push(jerry);
+            }
+        }
     }
     next() {
         // kill current specialTiles.
@@ -215,23 +291,9 @@ class Story {
     }
     fromBattle(){
         console.log(`GlobalIndex: ` + this.globalProg);
-        switch (this.globalProg) {
-            case 5:
-                this.dialogIndex--;
-                this.next();
-                break;
-            case 6:
-                if(!this.storyCheck[0]) {
-                    this.storyCheck[0] = true;
-                    this.dialogIndex--;
-                    this.next();
-                }
-                break;
-            case 8:
-                this.dialogIndex--;
-                this.next();
-                break;
-            default: break;
+        if(this.questBattle && this.questBattle === this.globalProg) {
+            this.dialogIndex--;
+            this.next();
         }
     }
 }

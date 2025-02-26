@@ -142,7 +142,7 @@ MAPS.marysRoom = (map) => {
     const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
     portalPoint.stepOn = () => {
         // change to next map
-        map.changeMap(MAPS.marysMap(map), 6, 7);
+        map.changeMap(MAPS.marysMap(map), 5, 7);
         map.player.dir = 2;
     };
     json.specialTiles.push(portalPoint);
@@ -259,9 +259,34 @@ MAPS.marysMap = (map) => {
                     {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
                     ], 
                     "Grass", true, "Lonely Forest");
+            map.story.questBattle = 6;
         };
     });
     json.specialTiles.push(...forest);
+    for(let i = 0; i < 3; i++) {
+        const zone = new Tile(map, false, 10 + i, 30, -1, "./maps/areaOpen.png", 16, 0, 16, 16);
+        zone.interact = () => {
+            map.scene.battleScene([
+            // "1ntern" "0verworked" "J4nitor" "Derek King"
+                [{name: "1ntern", x: 0, y: 1}, {name:"1ntern", x: 1, y: 0},
+                    {name: "1ntern", x: 1, y: 1}],
+
+                [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
+                    {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
+                    {name: "0verworked", x: 2, y: 0}],
+
+                [{name: "0verworked", x: 1, y: 0}, {name: "0verworked", x: 5, y: 0},
+                    {name: "J4nitor", x: 3, y: 1},
+                    {name: "1ntern", x: 2, y: 0}, {name: "1ntern", x: 4, y: 0}],
+
+                [{name: "J4nitor", x: 2, y: 1}, {name: "J4nitor", x: 5, y: 4}, 
+                    {name: "J4nitor", x: 4, y: 2},
+                    {name: "0verworked", x: 6, y: 4},
+                    {name: "0verworked", x: 2, y: 0}]], "Office", true, "Office");
+                map.story.questBattle = 14;
+        }
+        json.specialTiles.push(zone);
+    }
     return json;
 }
 
