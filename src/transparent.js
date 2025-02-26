@@ -44,7 +44,7 @@ class Transparent {
     }
 
     update() {
-        if (this.block) {
+        if (this.block && this.block.mapX < 7) {
             this.visited = new Set();
             this.attackTiles = new Set();
             this.simpleAttackRange(this.block.mapX, this.block.mapY);

@@ -153,6 +153,7 @@ class Story {
                 const pearl = new Tile(this.map, false, 23, 11, 5, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
                 pearl.interact = () => {
                     this.progress();
+                    this.map.scene.addToParty("Pearl Martinez");
                 }
                 this.specialTiles.push(quest3, pearl);
                 break;

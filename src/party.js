@@ -7,7 +7,7 @@ class Party {
         Object.assign(this, {game});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
-        this.exp = 1000; // keep track of total exp in the pot.
+        this.exp = 0; // keep track of total exp in the pot.
     }
     showParty(){
         // kick off the gui for the party.
@@ -278,8 +278,8 @@ class PartyGUI {
                 // Exp
                 ctx.textAlign = "start";
                 ctx.fillStyle = "#cbdbfc";
-                ctx.strokeText('Exp', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
-                ctx.fillText('Exp', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
+                ctx.strokeText('ExpReq', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
+                ctx.fillText('ExpReq', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
                 this.getDefaultEndStyle(ctx);
                 ctx.fillText(this.members[i].getNextExp(), detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
             }

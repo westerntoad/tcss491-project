@@ -221,9 +221,7 @@
     {"speaking": "Pearl", "content": "Yes, I would love that."},
     {"speaking": "Pearl", "content": "I usually walk through here alone on my hikes, the companionship will be most welcome.",
         "end": true}
-    ]
-],
-"chapter2": [
+    ],
     [
     {"speaking": "Mary", "content": "Oh, let me introduce our friend."},
     {"speaking": "Mary", "content": "This is Pearl Martinez."},
@@ -267,7 +265,8 @@
     {"speaking": "Jerry", "content": "*groaning*"},
     {"speaking": "Mary", "content": "*chuckles*"},
     {"speaking": "Pearl", "content": "*laughing* Ah, I liked that one. *Shear* joy. Imagine."},
-    {"speaking": "Pearl", "content": "Anyways, have a lovely night! This scarf won’t knit itself!"}
+    {"speaking": "Pearl", "content": "Anyways, have a lovely night! This scarf won’t knit itself!",
+        "end": true}
     ],
 
     [
@@ -275,7 +274,8 @@
     {"speaking": "Jerry", "content": "Anytime you need it, just let me know and I can show you what I have in stock."},
     {"speaking": "Vera", "content": "The boy has some interesting ideas!"},
     {"speaking": "Vera", "content": "We’ll wait over here while you take a look, Mary."},
-    {"speaking": "Vera", "content": "Let us know when you’re ready to go."}
+    {"speaking": "Vera", "content": "Let us know when you’re ready to go.",
+        "end": true}
     ],
 
     [
@@ -288,7 +288,8 @@
     {"speaking": "Mary", "content": "The more the merrier, and it seems like this office could use as much merry as we could bring anyways."},
     {"speaking": "Ye-soon", "content": "Wonderful!"},
     {"speaking": "Ye-soon", "content": "We’ll certainly warm up the place."},
-    {"speaking": "Ye-soon", "content": "Let’s finish this round, then I’ll be ready to join you whenever!"}
+    {"speaking": "Ye-soon", "content": "Let’s finish this round, then I’ll be ready to join you whenever!",
+        "end": true}
     ],
 
     [
@@ -310,7 +311,8 @@
     {"speaking": "Mary", "content": "We’re here for the same reason."},
     {"speaking": "Mary", "content": "Pearl here’s finished a scarf, and Vera is bringing a kitten calendar even."},
     {"speaking": "Mary", "content": "Why don’t we all go in together?"},
-    {"speaking": "Mary", "content": "Certainly, this Mr. King can’t turn away all of us."}
+    {"speaking": "Mary", "content": "Certainly, this Mr. King can’t turn away all of us.",
+        "end": true}
     ],
 
     [
@@ -321,7 +323,8 @@
     {"speaking": "Mary", "content": "We’ve brought some things that we hope will cheer you up."},
     {"speaking": "Derek King", "content": "How dare my workers talk about me behind my back!"},
     {"speaking": "Derek King", "content": "It’ll be Saturday work for the next month!"},
-    {"speaking": "Mary", "content": "Please, Mr. King, just hear us out…"}
+    {"speaking": "Mary", "content": "Please, Mr. King, just hear us out…",
+        "end": true}
     ],
 
     [
@@ -331,6 +334,7 @@
     {"speaking": "Derek King", "content": "I’ve been miserable to them, haven’t I?"},
     {"speaking": "Derek King", "content": "Thank you, ladies. This is…so kind of you."},
     {"speaking": "Derek King", "content": "If you wouldn’t mind, Miss Cambell, I’d love to bring these cookies out to share with my team."},
-    {"speaking": "Bernice", "content": "Oh please, I made plenty to go around!"}
+    {"speaking": "Bernice", "content": "Oh please, I made plenty to go around!",
+        "end": true}
     ]
 ]}
