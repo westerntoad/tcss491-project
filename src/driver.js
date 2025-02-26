@@ -30,6 +30,8 @@ ASSET_MANAGER.queueDownload("./maps/dev2.json");
 ASSET_MANAGER.queueDownload("./maps/house.json");
 ASSET_MANAGER.queueDownload("./maps/marysMap.json");
 ASSET_MANAGER.queueDownload("./assets/tileSheet_main.png");
+ASSET_MANAGER.queueDownload("./maps/areaOpen.png");
+
 
 // Manga Panels + dialog
 ASSET_MANAGER.queueDownload("./dialog/dialogLoad.json");
@@ -49,10 +51,21 @@ ASSET_MANAGER.queueDownload("./assets/grandmas/Vera_Mulberry.png");
 ASSET_MANAGER.queueDownload("./assets/grandmas/Ye-soon_Kim.png");
 
 // Enemies
+ASSET_MANAGER.queueDownload("./assets/enemies/endlessPortal.png");
+
 ASSET_MANAGER.queueDownload("./assets/enemies/Mad@Chu.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/D3pr3ss0.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/L0neb0ne.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/0bL1V15k.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/dearless.png");
+
+ASSET_MANAGER.queueDownload("./assets/enemies/1ntern.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/0verworked.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/J4nitor.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/Derek_King.png");
+
+
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
@@ -79,6 +92,8 @@ ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 
 // For Auto Battler
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
+
 
 // Sound effects
 ASSET_MANAGER.queueDownload("./assets/select.wav");
@@ -90,6 +105,7 @@ ASSET_MANAGER.queueDownload("./assets/hit2.wav");
 // Fonts
 // NOTE: fonts must not start with './'
 ASSET_MANAGER.queueDownload("assets/runescape.ttf");
+ASSET_MANAGER.queueDownload("assets/m6x11.ttf");
 
 const DUNGEON_ENCOUNTERS = {
     "Grass": [
@@ -162,11 +178,52 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/L0neb0ne.png"
          }
     ],
-    "Ruins": [
-        { name: "Skeleton", hp: 60, attack: 12 },
-        { name: "Ghost", hp: 40, attack: 8 },
-        { name: "Zombie", hp: 70, attack: 15 }
-    ],
+    "Office": [
+        { name: "1ntern",
+            attackRange: 3,
+            granny: false,
+            hp: 25,
+            attack: 5,
+            defense: 0,
+            exp: 6,
+            attackSpeed: 0.5,
+            moveSpeed: 0.4,
+            asset: "./assets/enemies/1ntern.png"
+         },
+         { name: "0verworked",
+            attackRange: 1,
+            granny: false,
+            hp: 100,
+            attack: 8,
+            defense: 20,
+            exp: 8,
+            attackSpeed: 0.75,
+            moveSpeed: 0.75,
+            asset: "./assets/enemies/0verworked.png"
+         },
+         { name: "J4nitor",
+            attackRange: 1,
+            granny: false,
+            hp: 250,
+            attack: 25,
+            defense: 30,
+            exp: 15,
+            attackSpeed: 1.5,
+            moveSpeed: 1,
+            asset: "./assets/enemies/J4nitor.png"
+         },
+         { name: "Derek King",
+            attackRange: 5,
+            granny: false,
+            hp: 1000,
+            attack: 30,
+            defense: 50,
+            exp: 75,
+            attackSpeed: 1.5,
+            moveSpeed: Infinity,
+            asset: "./assets/enemies/Derek_King.png"
+         }
+        ],
     "Volcano": [
         { name: "Fire Sprite", hp: 35, attack: 7 },
         { name: "Lava Slime", hp: 45, attack: 10 },
