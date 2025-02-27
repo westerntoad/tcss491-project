@@ -10,7 +10,7 @@ class Character {
         //, hp, attack, defense, attackSpeed, moveSpeed, level, exp
         this.level = 1;
         this.exp = 0;
-        this.maxLevel = 14;
+        this.maxLevel = 20;
         /**
          * defense damage reduction forumule: "defense / defense + 50"
          * // -Luke, this is a ripped-off and oversimplified version from "The First Descendent"
@@ -19,7 +19,8 @@ class Character {
         this.defend = () =>{
             return (this.defense / this.defense + 50);
         }
-        this.expReq = [2, 3, 4, 5, 7, 10, 13, 18, 25, 100, 300, 500, 2000]; // using the expRequirement.
+        this.expReq = [2, 3, 4, 5, 7, 10, 13, 17, 21, 
+            25, 30, 40, 50, 130, 170, 220, 280, 350]; // using the expRequirement.
         /** Everytime we level up, we push to the levelStack.
          *  If we want to remove levels, we pop from the levelStack and look at
          *      the amount to decrement for each stat improved.
@@ -47,8 +48,8 @@ class Character {
                 this.moveSpeed = 0.75; // so this is 1000ms.
                 this.hpGrowth = 0.5; // specify the distribution rate
                 this.attackGrowth = 0.5;
-                this.hpCap = 50;
-                this.attackCap = 50;
+                this.hpCap = 75;
+                this.attackCap = 25;
                 break; // 50% hp, 50% atk
             // Ranged (paper thin Hp, high attackSpeed)
             case "Vera Mulberry":
@@ -63,40 +64,38 @@ class Character {
                 this.attackGrowth = 0.25;
                 this.attackSpeedGrowth = 0.5;
                 this.hpCap = 25;
-                this.attackCap = 65;
-                this.attackSpeedCap = 0.4;
+                this.attackCap = 75;
+                this.attackSpeedCap = 0.5;
                 break; // 25% hp, 50% atkSpeed, 25% atk 
             // Warrior (melee, high attack)
             case "Pearl Martinez":
                 this.granny = true;
                 this.hp = 2;
-                this.attack = 2;
+                this.attack = 4;
                 this.attackRange = 1;
                 this.defense = 0;
                 this.attackSpeed = 1;
-                this.moveSpeed = 0.3; // 950ms
+                this.moveSpeed = 0.45; // 950ms
                 this.hpGrowth = 0.25;
-                this.attackGrowth = 0.5;
-                this.attackSpeedGrowth = 0.5;
+                this.attackGrowth = 0.75;
                 this.hpCap = 60;
-                this.attackCap = 60;
-                this.attackSpeedCap = 0.4;
+                this.attackCap = 175;
                 break; // 25% hp, 50% atk, 25% atkSpeed
             // Ranged (paper thin Hp, high attack)
             case "Ye-soon Kim":
                 this.granny = true;
                 this.hp = 1;
-                this.attack = 2;
+                this.attack = 5;
                 this.attackRange = 3;
                 this.defense = 0;
-                this.attackSpeed = 1.5;
+                this.attackSpeed = 1.25;
                 this.moveSpeed = 0.85;
                 this.hpGrowth = 0.25;
-                this.attackGrowth = 0.50;
-                this.attackSpeedGrowth = 0.25;
+                this.attackGrowth = 0.5;
+                this.attackSpeedGrowth = 0.3;
                 this.hpCap = 25;
-                this.attackCap = 100;
-                this.attackSpeedCap = 0.5;
+                this.attackCap = 90;
+                this.attackSpeedCap = 0.6;
                 break; // 25% hp, 50% atk, 25% atkSpeed
             // Tank (melee, high defensive). Actually has level-scaling defense.
             case "Bernice Campbell":

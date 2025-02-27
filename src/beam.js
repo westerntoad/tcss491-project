@@ -7,7 +7,7 @@ class Beam {
         this.z = 100_000;
         this.elapsed = 0;
         this.lifetime = 0.1;
-        this.size = 2 + damage * 0.2;
+        this.size = 2 + damage * 0.1;
     }
 
     update() {

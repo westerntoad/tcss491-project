@@ -5,7 +5,7 @@ class Player {
         this.spritesheet = ASSET_MANAGER.getAsset("./assets/player.png");
         this.dir = 0; // 0 = north, 1 = east, 2 = south, 3 = west
         this.isMoving = false;
-        this.speed = 8; // grandmas are slow :(
+        this.speed = 4; // grandmas are slow :(
         this.dx = 0;
         this.dy = 0;
         this.z = 1;

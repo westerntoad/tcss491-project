@@ -18,8 +18,6 @@ class AutoBattler {
         this.spaceHeight = 24; // hard value from image 32x32
         this.spaceHeightAdjusted = 15;
         this.scale = 3;
-        this.nextX = 16; // the nextX for the next block.
-        this.nextY = 8; // the nextY for the next block
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text);
@@ -169,11 +167,11 @@ class AutoBattler {
                 this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
             }
         } 
-        else if(this.game.pressed['a']) {
-            this.sceneManager.story = true;
-                    this.cleanup();
-                    this.sceneManager.restoreScene();
-        }
+        // else if(this.game.pressed['a']) {
+        //     this.sceneManager.story = true;
+        //             this.cleanup();
+        //             this.sceneManager.restoreScene();
+        // }
         if(this.prep){ // uh oh, this is gross (but functional).
             // handle mouse input
             let mouseX = this.game.mouse?.x;

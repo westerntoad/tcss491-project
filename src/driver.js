@@ -65,7 +65,9 @@ ASSET_MANAGER.queueDownload("./assets/enemies/0verworked.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/J4nitor.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Derek_King.png");
 
-
+ASSET_MANAGER.queueDownload("./assets/enemies/droplet.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/waneChime.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/hopless.png");
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
@@ -159,11 +161,11 @@ const DUNGEON_ENCOUNTERS = {
          { name: "Jerry Mulberry",
             attackRange: 5,
             granny: false,
-            hp: 175,
-            attack: 8,
-            defense: 15,
-            exp: 5,
-            attackSpeed: 1,
+            hp: 160,
+            attack: 3,
+            defense: 20,
+            exp: 10,
+            attackSpeed: 0.35,
             moveSpeed: Infinity,
             asset: "./assets/enemies/Jerry_Mulberry.png"
          },
@@ -184,21 +186,21 @@ const DUNGEON_ENCOUNTERS = {
             attackRange: 3,
             granny: false,
             hp: 25,
-            attack: 5,
+            attack: 4,
             defense: 0,
             exp: 2,
-            attackSpeed: 0.5,
+            attackSpeed: 0.85,
             moveSpeed: 0.4,
             asset: "./assets/enemies/1ntern.png"
          },
          { name: "0verworked",
             attackRange: 1,
             granny: false,
-            hp: 100,
-            attack: 8,
+            hp: 80,
+            attack: 5,
             defense: 20,
-            exp: 2,
-            attackSpeed: 0.75,
+            exp: 3,
+            attackSpeed: 1.25,
             moveSpeed: 0.75,
             asset: "./assets/enemies/0verworked.png"
          },
@@ -206,9 +208,9 @@ const DUNGEON_ENCOUNTERS = {
             attackRange: 1,
             granny: false,
             hp: 250,
-            attack: 25,
+            attack: 12,
             defense: 30,
-            exp: 2,
+            exp: 5,
             attackSpeed: 1.5,
             moveSpeed: 1,
             asset: "./assets/enemies/J4nitor.png"
@@ -216,11 +218,11 @@ const DUNGEON_ENCOUNTERS = {
          { name: "Derek King",
             attackRange: 5,
             granny: false,
-            hp: 1000,
+            hp: 3000,
             attack: 30,
             defense: 50,
-            exp: 10,
-            attackSpeed: 1.5,
+            exp: 150,
+            attackSpeed: 1,
             moveSpeed: Infinity,
             asset: "./assets/enemies/Derek_King.png"
          }
