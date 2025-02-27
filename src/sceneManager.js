@@ -16,6 +16,10 @@ class SceneManager {
 
         this.party = new Party(this.game);
         this.party.addMember(new Character("Mary Yott"));// initial party.
+
+        this.hud = new HUD(this.game, this);
+        this.game.addEntity(this.hud);
+        this.hud.visible = true;
         
     }
     addToParty(name){
@@ -88,7 +92,24 @@ class SceneManager {
                     this.game.pressed['x'] = false;
                 }
             }
+        } else if (this.game.pressed['h']) {
+            this.hud.toggle();
+            this.game.pressed['h'] = false;
         }
+    }
+
+    // Helper methods to control the HUD
+    showHUD() {
+        this.hud.show();
+    }
+
+    hideHUD() {
+        this.hud.hide();
+    }
+
+// Method to add custom controls to the HUD if we want
+    addHUDControl(key, description) {
+        this.hud.addControl(key, description);
     }
     
 
