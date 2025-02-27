@@ -66,7 +66,7 @@ STOP.battle1 = () => {
     STOP.__stop('./assets/battle1.wav');
 }
 
-STOP.overworld() => {
+STOP.overworld = () => {
     STOP.__stop('./assets/mary-theme.wav');
 }
 

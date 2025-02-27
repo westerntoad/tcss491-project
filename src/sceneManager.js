@@ -169,6 +169,7 @@ class SceneManager {
         this.map = this.savedMap;
         if(this.story) this.map.story.fromBattle();
         this.story = false; 
+        console.log(this.game.entities);
     }
 
 }
