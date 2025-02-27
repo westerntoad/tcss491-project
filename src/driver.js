@@ -3,6 +3,8 @@ const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const PARAMS = {
     altMusic: true,
+    soundEffectsVolume: 1,
+    musicVolume: 1,
     cellSize: 75,
     spaceHeight: 24,
     spaceHeightAdjusted: 15,

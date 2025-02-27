@@ -32,30 +32,30 @@ STOP.__stop = (path) => {
 
 // SOUND EFFECTS
 PLAY.select = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/select.wav', 1)
-    : () => PLAY.__play('./assets/invalid.wav', 0); // placeholder
+    ? () => PLAY.__play('./assets/select.wav', 1  * PARAMS.soundEffectsVolume)
+    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
 PLAY.invalid = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/invalid.wav', 1)
-    : () => PLAY.__play('./assets/invalid.wav', 0); // placeholder
+    ? () => PLAY.__play('./assets/invalid.wav', 1 * PARAMS.soundEffectsVolume)
+    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
 PLAY.death = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/death.wav', 1)
-    : () => PLAY.__play('./assets/invalid.wav', 0); // placeholder
+    ? () => PLAY.__play('./assets/death.wav', 1   * PARAMS.soundEffectsVolume)
+    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
 PLAY.hit1 = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/hit1.wav', 0.75)
-    : () => PLAY.__play('./assets/invalid.wav', 0.6); // placeholder
+    ? () => PLAY.__play('./assets/hit1.wav', 0.75   * PARAMS.soundEffectsVolume)
+    : () => PLAY.__play('./assets/invalid.wav', 0.6 * PARAMS.soundEffectsVolume); // placeholder
 PLAY.hit2 = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/hit1.wav', 1)
-    : () => PLAY.__play('./assets/invalid.wav', 0); // placeholder
+    ? () => PLAY.__play('./assets/hit1.wav', 1    * PARAMS.soundEffectsVolume)
+    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
 
 // MUSIC
 PLAY.gameover = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/gameover.wav', 0.2)
-    : () => PLAY.__play('./assets/invalid.wav', 0); // placeholder
+    ? () => PLAY.__play('./assets/gameover.wav', 0.2 * PARAMS.musicVolume)
+    : () => PLAY.__play('./assets/invalid.wav', 0    * PARAMS.musicVolume); // placeholder
 
 // MUSIC ~ looped
 PLAY.battle1 = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/battle1.wav', 0.35, true)
-    : () => PLAY.__play('./assets/invalid.wav', 0); // placeholder
+    ? () => PLAY.__play('./assets/battle1.wav', 0.35 * PARAMS.musicVolume, true)
+    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.musicVolume); // placeholder
 
 STOP.battle1 = () => {
     // add other looped music here to avoid unstoppable music

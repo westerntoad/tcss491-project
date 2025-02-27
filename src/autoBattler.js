@@ -320,6 +320,7 @@ class AutoBattler {
         this.units().forEach(unit => unit.removeFromWorld = true);
         this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
+        STOP.battle1();
         this.removeFromWorld = true;
     }
 
