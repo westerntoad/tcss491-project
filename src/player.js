@@ -77,22 +77,22 @@ class Player {
             }
         } else if (!this.disableMovement) {
             // parse user input into movement
-            if (this.game.keys['ArrowRight']) {
+            if (this.game.keys['ArrowRight'] || this.game.keys['d']) {
                 if (this.map.isTraversable(this.x + 1, this.y)) {
                     this.isMoving = true;
                 }
                 this.dir = 1;
-            } else  if (this.game.keys['ArrowLeft']) {
+            } else  if (this.game.keys['ArrowLeft'] || this.game.keys['a']) {
                 if (this.map.isTraversable(this.x - 1, this.y)) {
                     this.isMoving = true;
                 }
                 this.dir = 3;
-            } else if (this.game.keys['ArrowUp']) {
+            } else if (this.game.keys['ArrowUp'] || this.game.keys['w']) {
                 if (this.map.isTraversable(this.x, this.y - 1)) {
                     this.isMoving = true;
                 }
                 this.dir = 0;
-            } else if (this.game.keys['ArrowDown']) {
+            } else if (this.game.keys['ArrowDown'] || this.game.keys['s']) {
                 if (this.map.isTraversable(this.x, this.y + 1)) {
                     this.isMoving = true;
                 }
