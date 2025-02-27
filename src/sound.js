@@ -57,7 +57,19 @@ PLAY.battle1 = PARAMS.altMusic
     ? () => PLAY.__play('./assets/battle1.wav', 0.35 * PARAMS.musicVolume, true)
     : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.musicVolume); // placeholder
 
+PLAY.overworld = PARAMS.altMusic
+    ? () => PLAY.__play('./assets/mary-theme.wav', 0.3 * PARAMS.musicVolume, true)
+    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.musicVolume); // placeholder
+
 STOP.battle1 = () => {
     // add other looped music here to avoid unstoppable music
     STOP.__stop('./assets/battle1.wav');
+}
+
+STOP.overworld() => {
+    STOP.__stop('./assets/mary-theme.wav');
+}
+
+STOP.__all = () => {
+    // todo
 }

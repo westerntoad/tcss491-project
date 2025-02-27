@@ -76,6 +76,7 @@ class TitleScreen {
         this.removeEventListener();
         // Remove title screen and start new game
         this.game.entities = this.game.entities.filter(entity => entity !== this);
+        PLAY.overworld();
         const scene = new SceneManager(this.game, this.width, this.height);
     }
     

@@ -92,6 +92,7 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 // MUSIC 
 ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
 ASSET_MANAGER.queueDownload("./assets/gameover.wav");
+ASSET_MANAGER.queueDownload("./assets/mary-theme.wav");
 ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 
 // For Auto Battler

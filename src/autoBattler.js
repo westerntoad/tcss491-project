@@ -30,6 +30,7 @@ class AutoBattler {
         } else {
             this.initStory();
         }
+        STOP.overworld();
     }
     blockImg(text) {
         console.log("Text being read: " + text);
@@ -321,6 +322,7 @@ class AutoBattler {
         this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
         STOP.battle1();
+        PLAY.overworld();
         this.removeFromWorld = true;
     }
 
