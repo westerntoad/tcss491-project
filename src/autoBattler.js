@@ -22,7 +22,8 @@ class AutoBattler {
         this.nextY = 8; // the nextY for the next block
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
-        this.showText(text)
+        this.showText(text);
+        this.blockImg(text);
         this.prep = true;
         this.drawTrans = null;
         if(text == "Endless") {
@@ -30,6 +31,13 @@ class AutoBattler {
             this.endless = true;
         } else {
             this.initStory();
+        }
+    }
+    blockImg(text) {
+        console.log("Text being read: " + text);
+        if(text === "Office" || text === "Derek King") {
+            console.log("isoBlock changed.")
+            this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
         }
     }
 
@@ -100,7 +108,7 @@ class AutoBattler {
     initStory() { // moveExp(startX, startY, endX, endY, frames)
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
-            const block = new Block(i % 7, Math.floor(i / 7));
+            const block = new Block(i % 7, Math.floor(i / 7), this.isoBlock);
             block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
@@ -109,7 +117,7 @@ class AutoBattler {
 
         // initialize all blocks on bench
         for(let i = 0; i < 7; i++) {
-            const block = new Block(8, i);
+            const block = new Block(8, i, this.isoBlock);
             block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
 
@@ -161,11 +169,11 @@ class AutoBattler {
                 this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
             }
         } 
-        // else if(this.game.pressed['']) {
-        //     this.sceneManager.story = true;
-        //             this.cleanup();
-        //             this.sceneManager.restoreScene();
-        // }
+        else if(this.game.pressed['a']) {
+            this.sceneManager.story = true;
+                    this.cleanup();
+                    this.sceneManager.restoreScene();
+        }
         if(this.prep){ // uh oh, this is gross (but functional).
             // handle mouse input
             let mouseX = this.game.mouse?.x;

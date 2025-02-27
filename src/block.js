@@ -1,5 +1,5 @@
 class Block {
-    constructor(mapX, mapY) {
+    constructor(mapX, mapY, img = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png")) {
         Object.assign(this, {mapX, mapY})
         this.scale = PARAMS.scale;
         this.width = PARAMS.spaceWidth * PARAMS.scale;
@@ -11,7 +11,7 @@ class Block {
         this.hovered = false;
         this.selected = false;
 
-        this.img = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png");
+        this.img = img;
     }
 
     animate(deltas, delay) {
