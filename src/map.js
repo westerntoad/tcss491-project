@@ -183,9 +183,8 @@ MAPS.marysRoom = (map) => {
     // //Chapter 2
     // const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
     // portals1.interact = () => {
-    //     map.scene.battleScene([
-    //     // "1ntern" "0verworked" "J4nitor" "Derek King"
-    //         [{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
+    //     map.scene.battleScene(
+    //         [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
     //         {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
     //             ],
 
@@ -193,16 +192,17 @@ MAPS.marysRoom = (map) => {
     //                 {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
     //                 {name: "0verworked", x: 2, y: 0}],
 
-    //             [{name: "0verworked", x: 1, y: 0}, {name: "0verworked", x: 5, y: 0},
-    //                 {name: "J4nitor", x: 3, y: 1},
-    //                 {name: "1ntern", x: 2, y: 0}, {name: "1ntern", x: 4, y: 0}],
+    //             [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
+    //                 {name: "J4nitor", x: 5, y: 0},
+    //                 {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
+    //                 {name: "1ntern", x: 0, y: 5}],
 
     //             [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
     //                 {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
     //                 {name: "J4nitor", x: 6, y: 6},
     //                 {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
     //                 {name: "1ntern", x: 0, y: 4}
-    //             ]], "Office", false, "Office");
+    //             ]], "Office", true, "Office");
     // };
     // json.specialTiles.push(portals1);
     return json;
@@ -258,7 +258,7 @@ MAPS.marysMap = (map) => {
                     {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
                     ], 
                     "Grass", true, "Lonely Forest");
-            map.story.questBattle = 6;
+            map.story.questBattle = 7;
         };
     });
     json.specialTiles.push(...forest);
@@ -266,9 +266,8 @@ MAPS.marysMap = (map) => {
     for(let i = 0; i < 3; i++) { // Office
         const zone = new Tile(map, false, 10 + i, 30, -1, "./maps/areaOpen.png", 16, 0, 16, 16);
         zone.interact = () => {
-            map.scene.battleScene([
-            // "1ntern" "0verworked" "J4nitor" "Derek King"
-            [{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
+            map.scene.battleScene(
+                [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
                 {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
                     ],
     
@@ -276,9 +275,10 @@ MAPS.marysMap = (map) => {
                         {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
                         {name: "0verworked", x: 2, y: 0}],
     
-                    [{name: "0verworked", x: 1, y: 0}, {name: "0verworked", x: 5, y: 0},
-                        {name: "J4nitor", x: 3, y: 1},
-                        {name: "1ntern", x: 2, y: 0}, {name: "1ntern", x: 4, y: 0}],
+                    [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
+                        {name: "J4nitor", x: 5, y: 0},
+                        {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
+                        {name: "1ntern", x: 0, y: 5}],
     
                     [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
                         {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
@@ -286,7 +286,7 @@ MAPS.marysMap = (map) => {
                         {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
                         {name: "1ntern", x: 0, y: 4}
                     ]], "Office", true, "Office");
-                map.story.questBattle = 14;
+                map.story.questBattle = 15;
         }
         json.specialTiles.push(zone);
     }

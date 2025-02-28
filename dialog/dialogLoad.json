@@ -179,6 +179,10 @@
         "end": true}
     ],
 
+    [{"speaking": "Mary", "content": "Ah, Vera! It seems we’ve gained some adoration. Surely we can use it to bolster ourselves."},
+    {"speaking": "", "content": "NOTE: Spend adoration to level up your grandmas by opening the “X” menu.",
+        "end": true}],
+        
     [
     {"speaking": "Jerry", "content": "Grandma… what are you doing here?"},
     {"speaking": "Vera", "content": "We came to see how you were doing."},
