@@ -15,7 +15,7 @@ class SceneManager {
         this.story = false;
 
 
-        this.party = new Party(this.game);
+        this.party = new Party(this.game, this);
         this.party.addMember(new Character("Mary Yott"));// initial party.
         // this.party.addMember(new Character("Vera Mulberry"));// initial party.
         // this.party.addMember(new Character("Pearl Martinez"));
@@ -59,6 +59,7 @@ class SceneManager {
         this.dialog.removeFromWorld = true;
         this.dialog = undefined;
         this.map.player.disableMovement = false;
+        this.dialogArr = null;
     }
     showManga() {
         this.manga = new Manga(this, this.dialogArr[this.dialogIndex].asset);
@@ -99,6 +100,7 @@ class SceneManager {
             }
         } else if (this.game.pressed['h']) {
             this.hud.toggle();
+            this.party.changeSize();
             this.game.pressed['h'] = false;
         }
     }

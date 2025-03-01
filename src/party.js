@@ -3,8 +3,8 @@
  * Party will also bring up a gui that will allow upgrades to grandma objects.
  */
 class Party {
-    constructor(game) {
-        Object.assign(this, {game});
+    constructor(game, scene) {
+        Object.assign(this, {game, scene});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
         this.exp = 0; // keep track of total exp in the pot.
@@ -23,6 +23,9 @@ class Party {
     addMember(grandma){
         if(this.members.length < this.maxSize) this.members.push(grandma);
     }
+    changeSize(){
+        if(this.partyGUI) this.partyGUI.changeSize();
+    }
 }
 class PartyGUI {
     constructor(members, game, party){
@@ -35,9 +38,21 @@ class PartyGUI {
         this.plusSize = this.plus.width;
         this.minusSize = this.minus.width;
         this.baseBordersSize = this.baseBorders.width;
+
+        this.changeSize();
     }
     init(){
 
+    }
+    changeSize(){
+        if(this.party.scene.hud.visible){
+            const padding = this.party.scene.hud.padding;
+            this.sX = padding;
+            this.eX = this.party.scene.hud.x - padding;
+        } else {
+            this.sX = this.game.width * (1/ 8);
+            this.eX = this.game.width * (7/8);
+        }
     }
     // lets start drawing this.
     update(){
@@ -45,8 +60,8 @@ class PartyGUI {
         let mouseX = this.game.mouse?.x;
         let mouseY = this.game.mouse?.y;
 
-        const startX = this.game.width * (2/ 8);
-        const endX = this.game.width * (7/8);
+        const startX = this.sX;
+        const endX = this.eX;
         const startY = this.game.height / 8;
         const endY = this.game.height * (7/8);
         
@@ -92,6 +107,28 @@ class PartyGUI {
                 if(this.game.click){
                     const gain = this.members[i].levelDown();
                     gain === 0 ? PLAY.invalid() : PLAY.select();
+                    if(gain === 0) {
+                        PLAY.invalid();
+                        this.game.addEntity({
+                            z: this.z + 1,
+                            expire: 30,
+                            exp: this.members[i].expReq[this.members[i].level - 1],
+                            draw: function(ctx) {
+                                ctx.save();
+                                this.expire--;
+                                ctx.font = `bold 16px runescape`;
+                                ctx.fillStyle = 'black';
+                                ctx.fillText(
+                                    `nope :o`,
+                                    mouseX + 10, mouseY - 10
+                                )
+                                ctx.restore();
+                                if(this.expire <= 0) this.removeFromWorld = true;
+                            },
+                            update: function() {}
+                        });
+                        
+                    }
                     this.party.exp += gain;
                 }
             }
@@ -102,8 +139,8 @@ class PartyGUI {
         ctx.save();
         ctx.fillStyle = "#7DB2EB";
         ctx.globalAlpha = 0.5;
-        const startX = this.game.width * (2/ 8);
-        const endX = this.game.width * (7/8);
+        const startX = this.sX;
+        const endX = this.eX;
         const startY = this.game.height / 8;
         const endY = this.game.height * (7/8);
         ctx.restore();
@@ -145,7 +182,8 @@ class PartyGUI {
         ctx.save();
         ctx.textAlign = "start";
         ctx.textBaseline = "alphabetic";
-        ctx.font = "16px m6x11";
+        ctx.font = "17px m6x11";
+        ctx.fillStyle = 'white';
 
         const numRows = 3;
         const segmentX = (endX - startX) / 2;
@@ -165,8 +203,7 @@ class PartyGUI {
             const nameLength = ctx.measureText(this.members[i].name).width;
             ctx.fillText(`${this.members[i].name}`, 
                 x + segmentX * (6.5/ 20) - nameLength/2,
-                y + segmentY * (3/20)
-            )
+                y + segmentY * (3/20));
 
             //draw Plus and Minus
             ctx.save();
@@ -277,9 +314,9 @@ class PartyGUI {
             if(this.members[i].name) {
                 // Exp
                 ctx.textAlign = "start";
-                ctx.fillStyle = "#cbdbfc";
-                ctx.strokeText('ExpReq', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
-                ctx.fillText('ExpReq', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
+                ctx.fillStyle = "#b347cc";
+                ctx.strokeText('AdorReq', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
+                ctx.fillText('AdorReq', detailX + detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
                 this.getDefaultEndStyle(ctx);
                 ctx.fillText(this.members[i].getNextExp(), detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
             }

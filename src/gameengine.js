@@ -228,7 +228,7 @@ class GameEngine {
     loop() {
         this.clockTick = this.timer.tick();
         this.entities.sort((a, b) => b.z - a.z);
-        this.ctx.canvas.addEventListener("keydown", event => this.pressed[event.key] = true);
+        // this.ctx.canvas.addEventListener("keydown", event => this.pressed[event.key] = true);
         this.update();
         this.draw();
 

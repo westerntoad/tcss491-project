@@ -167,7 +167,7 @@ const DUNGEON_ENCOUNTERS = {
             hp: 160,
             attack: 3,
             defense: 20,
-            exp: 10,
+            exp: 25,
             attackSpeed: 0.35,
             moveSpeed: Infinity,
             asset: "./assets/enemies/Jerry_Mulberry.png"
@@ -202,7 +202,7 @@ const DUNGEON_ENCOUNTERS = {
             hp: 80,
             attack: 5,
             defense: 20,
-            exp: 3,
+            exp: 4,
             attackSpeed: 1.25,
             moveSpeed: 0.75,
             asset: "./assets/enemies/0verworked.png"
@@ -213,7 +213,7 @@ const DUNGEON_ENCOUNTERS = {
             hp: 250,
             attack: 12,
             defense: 30,
-            exp: 5,
+            exp: 7,
             attackSpeed: 1.5,
             moveSpeed: 1,
             asset: "./assets/enemies/J4nitor.png"
