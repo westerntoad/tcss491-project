@@ -227,10 +227,40 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/Derek_King.png"
          }
         ],
-    "Volcano": [
-        { name: "Fire Sprite", hp: 35, attack: 7 },
-        { name: "Lava Slime", hp: 45, attack: 10 },
-        { name: "Flame Serpent", hp: 80, attack: 18 }
+    "Park": [
+        { name: "droplet",
+            attackRange: 5,
+            granny: false,
+            hp: 40,
+            attack: 8,
+            defense: 0,
+            exp: 10,
+            attackSpeed: 0.5,
+            moveSpeed: 0.4,
+            asset: "./assets/enemies/droplet.png"
+         },
+         { name: "waneChime",
+            attackRange: 1,
+            granny: false,
+            hp: 400,
+            attack: 15,
+            defense: 0,
+            exp: 20,
+            attackSpeed: 1.25,
+            moveSpeed: 0.75,
+            asset: "./assets/enemies/waneChime.png"
+         },
+         { name: "hopless",
+            attackRange: 1,
+            granny: false,
+            hp: 1000,
+            attack: 40,
+            defense: 0,
+            exp: 30,
+            attackSpeed: 2,
+            moveSpeed: 1,
+            asset: "./assets/enemies/hopless.png"
+         }
     ]
 };
 
