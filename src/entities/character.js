@@ -104,8 +104,8 @@ class Character {
                 this.attack = 1;
                 this.attackRange = 1;
                 this.defense = 5;
-                this.attackSpeed = 2;
-                this.moveSpeed = 1.25;
+                this.attackSpeed = 2.1;
+                this.moveSpeed = 1.2;
                 this.hpGrowth = 0.5;
                 this.defenseGrowth = 0.5;
                 this.attackGrowth = 0.25;
@@ -190,7 +190,7 @@ class Character {
     getNextExp() { // return the amount of exp for next lvl;
         const get = this.expReq[this.level - 1];
 
-        return get ? (this.level == this.maxLevel ? `Max Lvl` : get) : `Max Lvl`;
+        return get ? (this.level == this.maxLevel ? `Max` : get) : `Max`;
     }
     takeDamage(amount) {
         this.hp -= Math.max(0, amount - this.defense); // Reduce damage by defense

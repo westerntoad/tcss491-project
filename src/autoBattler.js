@@ -75,6 +75,7 @@ class AutoBattler {
                 });
             }
         }
+        console.log(get);
         // remember previous spots in the map, store info in sceneManager
     }
     recordSpots(round) {
@@ -205,7 +206,7 @@ class AutoBattler {
             });
 
             return canStart;
-        }, () => { // HERE
+        }, () => {
             this.recordSpots(this.currRound-1);
             this.units().forEach(unit => {
                 unit.ready = true;

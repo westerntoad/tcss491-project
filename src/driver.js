@@ -169,7 +169,7 @@ const DUNGEON_ENCOUNTERS = {
             moveSpeed: Infinity,
             asset: "./assets/enemies/Jerry_Mulberry.png"
          },
-         { name: "testL0neb0ne",
+         { name: "chu",
             attackRange: 1,
             granny: false,
             hp: 50,
@@ -179,6 +179,17 @@ const DUNGEON_ENCOUNTERS = {
             attackSpeed: 0.2,
             moveSpeed: 0.4,
             asset: "./assets/enemies/L0neb0ne.png"
+         },
+         { name: "dep",
+            attackRange: 1,
+            granny: false,
+            hp: 50,
+            attack: 0,
+            defense: 0,
+            exp: 1,
+            attackSpeed: 0.2,
+            moveSpeed: 0.4,
+            asset: "./assets/enemies/D3pr3ss0.png"
          }
     ],
     "Office": [
@@ -251,14 +262,14 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/waneChime.png"
          },
          { name: "hopless",
-            attackRange: 1,
+            attackRange: 10,
             granny: false,
-            hp: 1000,
-            attack: 40,
+            hp: 800,
+            attack: 50,
             defense: 0,
-            exp: 30,
-            attackSpeed: 2,
-            moveSpeed: 1,
+            exp: 40,
+            attackSpeed: 1.5,
+            moveSpeed: 10,
             asset: "./assets/enemies/hopless.png"
          }
     ]

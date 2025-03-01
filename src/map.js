@@ -185,10 +185,15 @@ MAPS.marysRoom = (map) => {
     portals1.interact = () => {
         map.scene.battleScene(
             [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
-                {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4}
+                {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
+                {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
+                {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
             ],
             [{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
-                {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 1, y: 4}
+                {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 4},
+                {name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4}
+            ],
+            [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
             ]
             ], "Park", true, "Woebegone Park");
     };
