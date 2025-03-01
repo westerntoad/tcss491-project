@@ -9,7 +9,7 @@ class DamageNum {
         this.z = 100_000;
         this.elapsed = 0;
         this.lifetime = 1;
-        this.size = 16 + Math.sqrt(Math.pow(num, 1.5));
+        this.size = 16 + Math.sqrt(Math.pow(num, 1.125));
     }
 
     update() {

@@ -20,7 +20,7 @@ class Character {
             return (this.defense / this.defense + 50);
         }
         this.expReq = [2, 3, 4, 5, 7, 10, 13, 17, 21, 
-            25, 30, 40, 50, 130, 170, 220, 280, 350]; // using the expRequirement.
+            25, 30, 40, 50, 60, 70, 80, 90, 110, 150]; // using the expRequirement.
         /** Everytime we level up, we push to the levelStack.
          *  If we want to remove levels, we pop from the levelStack and look at
          *      the amount to decrement for each stat improved.

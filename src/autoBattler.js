@@ -24,6 +24,9 @@ class AutoBattler {
         this.blockImg(text);
         this.prep = true;
         this.drawTrans = null;
+
+        this.text = text;
+        if(!this.sceneManager.setSpot) this.sceneManager.setSpot = [{name: text}]; // remember spots
         if(text == "Endless") {
             this.initEndless();
             this.endless = true;
@@ -37,6 +40,60 @@ class AutoBattler {
             console.log("isoBlock changed.")
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
         }
+    }
+    setSpots(round) { // also recordSpots when `start` is pressed.
+        const get  = this.sceneManager.setSpot.find(spot => spot.name === `${this.text}`);
+        if(get) {
+            console.log("we Got it");
+            if(`round${round}` in get) {
+                let i = 0;
+                const got = get[`round${round}`];
+                this.units().forEach(unit => {
+                    if(unit.raw.granny) {
+                        console.log(unit);
+                        const isRecorded = got.find(spot => spot.granny === unit.raw.name);
+                        if(isRecorded) {
+                            unit.blockMove(this.allBlocks[isRecorded.y][isRecorded.x]);
+                        } else {
+                            if(unit.block.mapX !== 8){
+                                unit.blockMove(this.allBlocks[i][8]);
+                                i++;
+                            }
+                        }
+                        unit.ready = false;
+                    }
+                });
+            } else {
+                let i = 0;
+                this.units().forEach(unit => {
+                    if(unit.raw.granny) {
+                        console.log(unit);
+                        unit.blockMove(this.allBlocks[i][8]);
+                        unit.ready = false;
+                        i++;
+                    }
+                });
+            }
+        }
+        // remember previous spots in the map, store info in sceneManager
+    }
+    recordSpots(round) {
+        let get  = this.sceneManager.setSpot.find(spot => spot.name === `${this.text}`);
+        if(!get) {
+            const newSpot = { name: this.text };
+            this.sceneManager.setSpot.push(newSpot);
+            get = newSpot;
+        }
+
+        //for loop through all granny unit positions and add them to an object.
+        let arr = [];
+        this.allBlocks.forEach(column => column.forEach(block => {
+            if (block?.unit && block.unit.granny && block.unit.raw?.hp> 0) {
+                arr.push({granny: block.unit.raw.name, x: block.mapX, y: block.mapY});
+            }
+        }));
+        get[`round${round}`] = arr; // this should work lol.
+        console.log(get);
     }
 
     showText(text) {
@@ -128,6 +185,7 @@ class AutoBattler {
             block.unit = new CombatEntity(this.players[i], this, block);
             this.game.addEntity(block.unit);
         }
+        this.setSpots(this.currRound - 1);
         // initialize all enemy units and place onto battlefield
         for (let i = 0; i < this.enemies[this.currRound - 1].length; i++) {
             const curr = this.enemies[this.currRound - 1][i];
@@ -147,12 +205,18 @@ class AutoBattler {
             });
 
             return canStart;
-        }, () => {
+        }, () => { // HERE
+            this.recordSpots(this.currRound-1);
             this.units().forEach(unit => {
                 unit.ready = true;
             });
+
             this.prep = false;
+
+            if(this.drawTrans) this.drawTrans.removeFromWorld = true;
             this.drawTrans = null;
+            if(this.selectedBlock) this.selectedBlock.selected = false;
+            this.selectedBlock = null
         });
         this.game.addEntity(this.startButton);
         PLAY.battle1();
@@ -265,14 +329,7 @@ class AutoBattler {
                     this.cleanup();
                     this.sceneManager.restoreScene();
                 } : () => {
-                    let i = 0;
-                    this.units().forEach(unit => {
-                        console.log(unit);
-                        unit.blockMove(this.allBlocks[i][8]);
-                        unit.ready = false;
-                        i++;
-                    });
-                    this.prep = true;
+                    this.setSpots(this.currRound - 1);
                     this.showingDialog = false;
                     this.disableControl = false;
 
@@ -286,16 +343,20 @@ class AutoBattler {
                         block.unit = new CombatEntity(this.enemies[this.currRound - 1][i], this, block);
                         this.game.addEntity(block.unit);
                     }
+                    this.prep = true
+                    
                 }
 
                 let buttonLabel = ``;
-                if (this.currRound < this.totalRounds) {
+                if (this.currRound <= this.totalRounds) {
                     buttonLabel = `Next Round`;
-                } else if (this.currRound == this.totalRounds) {
-                    buttonLabel = `Start Boss`;
+                } 
+                // else if (this.currRound == this.totalRounds) {
+                //     buttonLabel = `Start Boss`;
                     // when we get to this round, we want to check if we have story checked,
                     // and play the dialogue.
-                } else {
+                // } 
+                else {
                     buttonLabel = `Return to Home`;
                 }
 
@@ -503,7 +564,6 @@ class GameOver {
     constructor(game, scene, battle) {
         Object.assign(this, { game, scene, battle });
         
-
         this.buttonWidth = 300;
         this.buttonHeight = 75;
         this.buttonX = (PARAMS.canvasWidth - this.buttonWidth) * 0.5;
