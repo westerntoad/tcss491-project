@@ -44,7 +44,6 @@ class AutoBattler {
     setSpots(round) { // also recordSpots when `start` is pressed.
         const get  = this.sceneManager.setSpot.find(spot => spot.name === `${this.text}`);
         if(get) {
-            console.log("we Got it");
             if(`round${round}` in get) {
                 let i = 0;
                 const got = get[`round${round}`];
