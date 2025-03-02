@@ -1,6 +1,6 @@
 const ENTITY_SIZE = 24;
 class AutoBattler {
-    constructor(game, sceneManager, players, enemies, text) {
+    constructor(game, sceneManager, players, enemies, text, grannyLimit) {
         this.game = game;
         this.sceneManager = sceneManager;
         this.players = players;
@@ -26,6 +26,7 @@ class AutoBattler {
         this.drawTrans = null;
 
         this.text = text;
+        this.grannyLimit = grannyLimit;
         if(!this.sceneManager.setSpot) this.sceneManager.setSpot = [{name: text}]; // remember spots
         if(text == "Endless") {
             this.initEndless();
@@ -37,36 +38,43 @@ class AutoBattler {
     blockImg(text) {
         console.log("Text being read: " + text);
         if(text === "Office" || text === "Derek King") {
-            console.log("isoBlock changed.")
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
+        } else if(text === "Woebegone Park" || text === "Melanie Martinez") {
+            this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock_park1.png");
         }
     }
-    setSpots(round) { // also recordSpots when `start` is pressed.
-        const get  = this.sceneManager.setSpot.find(spot => spot.name === `${this.text}`);
-        if(get) {
-            if(`round${round}` in get) {
-                let i = 0;
+    setSpots(round) {
+        const get = this.sceneManager.setSpot.find(spot => spot.name === `${this.text}`);
+        if (get) {
+            if (`round${round}` in get) {
+                // If the round data exists, place units in their recorded positions
                 const got = get[`round${round}`];
+                let i = 0;
                 this.units().forEach(unit => {
-                    if(unit.raw.granny) {
-                        console.log(unit);
+                    if (unit.raw.granny) {
                         const isRecorded = got.find(spot => spot.granny === unit.raw.name);
-                        if(isRecorded) {
+                        if (isRecorded) {
+                            // Move the unit to the recorded position
                             unit.blockMove(this.allBlocks[isRecorded.y][isRecorded.x]);
                         } else {
-                            if(unit.block.mapX !== 8){
-                                unit.blockMove(this.allBlocks[i][8]);
+                            // If no recorded position, move the unit to the bench
+                            while (this.allBlocks[i][8].unit) {
                                 i++;
                             }
+                            unit.blockMove(this.allBlocks[i][8]);
+                            i++;
                         }
                         unit.ready = false;
                     }
                 });
             } else {
+                // If no round data exists, place all granny units on the bench
                 let i = 0;
-                this.units().forEach(unit => {
-                    if(unit.raw.granny) {
-                        console.log(unit);
+                this.units(true, true).forEach(unit => {
+                    if (unit.raw.granny) {
+                        while(this.allBlocks[i][8].unit) {
+                            i++
+                        }
                         unit.blockMove(this.allBlocks[i][8]);
                         unit.ready = false;
                         i++;
@@ -74,8 +82,8 @@ class AutoBattler {
                 });
             }
         }
-        console.log(get);
-        // remember previous spots in the map, store info in sceneManager
+        console.log("settingSpot: ")
+        console.log(get); // Debugging: Log the spot object
     }
     recordSpots(round) {
         let get  = this.sceneManager.setSpot.find(spot => spot.name === `${this.text}`);
@@ -93,7 +101,8 @@ class AutoBattler {
             }
         }));
         get[`round${round}`] = arr; // this should work lol.
-        console.log(get);
+        console.log("recordingSpot: ")
+        console.log(get[`round${round}`]);
     }
 
     showText(text) {
@@ -105,10 +114,10 @@ class AutoBattler {
     }
 
     // return all units within each block
-    units() {
+    units(onField = false, granny = false) {
         let arr = [];
         this.allBlocks.forEach(column => column.forEach(block => {
-            if (block?.unit && block.unit.raw?.hp > 0) {
+            if (block?.unit && block.unit.raw?.hp > 0 && (onField ? block.mapX !== 8 : true) && (granny ? block.unit.granny : true)) {
                 arr.push(block.unit);
             }
         }));
@@ -198,16 +207,12 @@ class AutoBattler {
     }
     init() {
         this.startButton = new StartButton(this.game, () => {
-            let canStart = true;
-            this.units().forEach(unit => {
-                if (unit.blockX == 8 || unit.ready)
-                    canStart = false;
-            });
-
-            return canStart;
+            const len = this.units(true, true).length;
+            return (len > 0 && len <= this.grannyLimit && !this.startPressed);
         }, () => {
             this.recordSpots(this.currRound-1);
-            this.units().forEach(unit => {
+            this.startPressed = true;
+            this.units(true).forEach(unit => {
                 unit.ready = true;
             });
 
@@ -218,6 +223,11 @@ class AutoBattler {
             if(this.selectedBlock) this.selectedBlock.selected = false;
             this.selectedBlock = null
         });
+        this.startButton.grannyLimit = this.grannyLimit;
+        this.startButton.limit = () => {
+            console.log("pressed");
+            return this.units(true, true).length > this.grannyLimit;
+        };
         this.game.addEntity(this.startButton);
         PLAY.battle1();
     }
@@ -314,6 +324,7 @@ class AutoBattler {
 
             // player wins
             if (numAliveEnemies == 0 && !this.showingDialog) {
+                this.startPressed = false;
                 let adoration = 0; // adding adoration display on 'Round Complete' screen
                 this.enemies[this.currRound - 1].forEach((enemy) => {
                     adoration += enemy.exp;
@@ -367,7 +378,7 @@ class AutoBattler {
             }
         }
         // enemy wins
-        if (numAlivePlayers == 0) {
+        if (numAlivePlayers == 0 || (this.startPressed && this.units(true, true).length <= 0)) {
             // game over
             
             this.cleanup();
@@ -437,7 +448,6 @@ class StartButton {
 
     update() {
         this.enabled = this.isEnabled();
-
         const x = this.game.mouse?.x;
         const y = this.game.mouse?.y;
         if (this.game.click
@@ -449,6 +459,28 @@ class StartButton {
                 PLAY.select();
             } else {
                 PLAY.invalid();
+                if(this.limit()) { // shows the granny limit for the stage.
+                    this.game.addEntity({
+                        grannyLimit: this.grannyLimit,
+                        z: this.z + 1,
+                        expire: 25,
+                        fontSize: 25,
+                        removeFromWorld: false,
+                        draw: function(ctx){
+                            ctx.save();
+                            this.expire--;
+                            ctx.font = `bold ${this.fontSize}px runescape`;
+                            ctx.fillStyle = 'black';
+                            ctx.fillText(
+                                `RESTRICTED to ${this.grannyLimit} Grandmas!!`,
+                                x + 10, y - 10
+                            )
+                            ctx.restore();
+                            if(this.expire <= 0) this.removeFromWorld = true;
+                        },
+                        update: function() {}
+                    });
+                }
             }
         }
     }
@@ -610,7 +642,7 @@ class GameOver {
         ctx.font = '20px monospace';
         ctx.textAlign = "center";
         ctx.textBaseline = "center";
-        ctx.fillText("Return to Mary's House", PARAMS.canvasWidth * 0.5, (PARAMS.canvasHeight + this.buttonHeight) * 0.5 + 50);
+        ctx.fillText("Return to Entrance", PARAMS.canvasWidth * 0.5, (PARAMS.canvasHeight + this.buttonHeight) * 0.5 + 50);
 
         ctx.restore();
     }

@@ -17,10 +17,10 @@ class SceneManager {
 
         this.party = new Party(this.game, this);
         this.party.addMember(new Character("Mary Yott"));// initial party.
-        // this.party.addMember(new Character("Vera Mulberry"));// initial party.
-        // this.party.addMember(new Character("Pearl Martinez"));
-        // this.party.addMember(new Character("Ye-soon Kim"));
-        // this.party.addMember(new Character("Bernice Campbell"));
+        this.party.addMember(new Character("Vera Mulberry"));// initial party.
+        this.party.addMember(new Character("Pearl Martinez"));
+        this.party.addMember(new Character("Ye-soon Kim"));
+        this.party.addMember(new Character("Bernice Campbell"));
 
         this.hud = new HUD(this.game, this);
         this.game.addEntity(this.hud);
@@ -122,7 +122,8 @@ class SceneManager {
 
     draw(ctx) { /* ~ unused ~ */ }
 
-    battleScene(enemyArr, type, story = false, title = "", endless = false) {
+    battleScene(enemyArr, type, story = false, title = "", endless = false, grannyLimit = 6) {
+        const gLimit = grannyLimit;
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
@@ -162,7 +163,7 @@ class SceneManager {
 
         endless ?
         this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Endless")) : 
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `${title}`));
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `${title}`, gLimit));
         // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {
