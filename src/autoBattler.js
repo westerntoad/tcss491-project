@@ -338,6 +338,7 @@ class AutoBattler {
                 const callback = finalRound ? () => {
                     if(this.enemies.story) {console.log("story, here"); this.sceneManager.story = true;}
                     this.cleanup();
+                    STOP.battle1();
                     this.sceneManager.restoreScene();
                 } : () => {
                     this.setSpots(this.currRound - 1);
@@ -685,7 +686,7 @@ class Text {
         ctx.textAlign = 'center';
         ctx.textBaseline = "alphabetic";
         const textSize = 50; // modifiable
-        ctx.font = "" + textSize + "px serif";
+        ctx.font = "" + textSize + "px m6x11";
         ctx.fillStyle = 'black'
         ctx.fillText(this.text, this.x, this.y);
         ctx.restore();
