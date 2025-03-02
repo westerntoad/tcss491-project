@@ -4,6 +4,7 @@ class TitleScreen {
         this.width = width;
         this.height = height;
         this.z = 100; // Ensure it renders on top
+        this.started = false;
         
         // Background image
         this.backgroundImage = ASSET_MANAGER.getAsset("./assets/titleBackgroundTemp.png");
@@ -50,6 +51,11 @@ class TitleScreen {
     }
     
     handleClick(event) {
+        if (!this.started) {
+            this.started = true;
+            PLAY.title();
+            return;
+        }
         const rect = this.game.ctx.canvas.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
@@ -76,6 +82,7 @@ class TitleScreen {
         this.removeEventListener();
         // Remove title screen and start new game
         this.game.entities = this.game.entities.filter(entity => entity !== this);
+        STOP.allMusic();
         PLAY.overworld();
         const scene = new SceneManager(this.game, this.width, this.height);
     }
@@ -102,6 +109,17 @@ class TitleScreen {
     }
     
     draw(ctx) {
+        if (!this.started) {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, PARAMS.canvasWidth, PARAMS.canvasHeight);
+            ctx.fillStyle = "white";
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.font = '80pt runescape';
+            ctx.fillText('Click to start', PARAMS.canvasWidth / 2, PARAMS.canvasHeight / 2);
+            return;
+        }
+        ctx.textBaseline = 'alphabetic';
         // Draw background
         if (this.backgroundImage) {
             ctx.drawImage(this.backgroundImage, 0, 0, this.width, this.height);

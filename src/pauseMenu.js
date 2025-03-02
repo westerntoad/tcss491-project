@@ -19,11 +19,11 @@ class PauseMenu {
         const buttX = this.x + (this.width - this.buttonWidth) / 2;
         this.buttons = [
             {
-                text: "Settings",
+                text: "Party",
                 x: buttX,
                 y: this.buttonStartY,
-                //Go to the Options Menu
-                action: () => this.openSettings()
+                //Go to the party menu in the current game.
+                action: () => this.openParty()
             },
             { 
                 text: "Save",
@@ -33,11 +33,18 @@ class PauseMenu {
                 action: () => this.saveGame()
             },
             {
-                text: "Party",
+                text: "Settings",
                 x: buttX,
                 y: this.buttonStartY,
-                //Go to the party menu in the current game.
-                action: () => this.openParty()
+                //Go to the Options Menu
+                action: () => this.openSettings()
+            },
+            {
+                text: "Alt Music",
+                x: buttX,
+                y: this.buttonStartY,
+                //To swap between alternative tracks.
+                action: () => this.altMusic()
             },
             {
                 text: "Return to Title",
@@ -45,14 +52,6 @@ class PauseMenu {
                 y: this.buttonStartY,
                 //Close the game file.
                 action: () => this.openTitle()
-            },
-            {
-                text: "Alt Music?",
-                x: buttX,
-                y: this.buttonStartY,
-                //To swap between alternative tracks.
-                //action: () => this.altMusic()
-                action: () => console.log('todo')
             }
         ];
         let i = 0;
@@ -120,7 +119,11 @@ class PauseMenu {
 
     altMusic() {
         //this.game.ASSET_MANAGER.playAsset();
+        STOP.allMusic();
         PARAMS.altMusic ^= true; // true => false, false => true
+        PLAY.overworld();
+        console.log(PARAMS.altMusic);
+
     }
 
     update() {
@@ -152,55 +155,81 @@ class PauseMenu {
         //Title of the Menu
         ctx.fillStyle = "rgba(23, 186, 255, 0.49)";
         ctx.font = "28px Tahoma";
+        ctx.textBaseline = 'alphabetic';
         ctx.textAlign = "center";
         ctx.fillText("Pause Menu", this.x + this.width / 2, this.y + 40);
 
         //Adding Buttons to the Menu Canvas
         for (let i = 0; i < this.buttons.length; i++) {
             const currButt = this.buttons[i];
+            let tempWidth = this.buttonWidth;
+            // alt music toggle
+            if (currButt.text == 'Alt Music') {
+                tempWidth /= 1.5;
+                const h = this.buttonHeight;
+                const w = h;
+                const x = currButt.x + this.buttonWidth - h;
+                const y = currButt.y;
+                ctx.fillStyle = '#000000';
+                ctx.strokeStyle = '#ffffff';
+                ctx.fillRect(x, y, w, h);
+                ctx.strokeRect(x, y, w, h);
+                if (PARAMS.altMusic) {
+                    ctx.fillStyle = '#ff0000';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = '40pt monospace';
+                    ctx.fillText('✓', x + w / 2, y + h / 2 + 2);
+                }
+            }
             ctx.fillStyle = "#4a90e2";
-            ctx.fillRect(currButt.x, currButt.y, this.buttonWidth, this.buttonHeight);
+            ctx.fillRect(currButt.x, currButt.y, tempWidth, this.buttonHeight);
             ctx.strokeStyle = "white";
-            ctx.strokeRect(currButt.x, currButt.y, this.buttonWidth, this.buttonHeight);
+            ctx.strokeRect(currButt.x, currButt.y, tempWidth, this.buttonHeight);
 
             ctx.fillStyle = "rgba(0, 0, 0, 1)";
             ctx.font = "18px Trebuchet MS";
             ctx.textAlign = "center";
-            ctx.textBaseline = 'top';
+            ctx.textBaseline = 'alphabetic';
             ctx.fillText(
                 currButt.text,
-                currButt.x + this.buttonWidth / 2,
+                currButt.x + tempWidth / 2,
                 currButt.y + this.buttonHeight / 2 + 8
             );
 
-            // jerry giving a tip
-            ctx.drawImage(this.jerryImg, 0, 0, 32, 32, 100, 600, 100, 100);
-            ctx.font = '20pt runescape';
-            const measure = ctx.measureText(this.tip);
-            const numLines = Math.ceil(measure.width / 600);
-            const textHeight = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
-            const lines = splitStringByWords(this.tip, Math.ceil(numLines));
-            const w = 500;
-            const h = 20 + textHeight * numLines * 1.4;
-            const x = 290 - w / 2;
-            const y = 580 - h;
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.moveTo(180, 610);
-            ctx.lineTo(250, 580);
-            ctx.lineTo(210, 580);
-            ctx.fill();
-            ctx.fillRect(x, y, w, h);
-            ctx.strokeStyle = '#000000';
-            ctx.strokeRect(x, y, w, h);
-            ctx.fillStyle = '#000000';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
-            for (let i = 0; i < lines.length; i++) {
-                //ctx.fillRect(x + w / 2, y + 10 + textHeight * (i + 1), w, textHeight);
-                ctx.fillText(lines[i], x + w / 2, y + 10 + textHeight * i, w);
-            }
-            ctx.restore();
         }
+
+
+
+
+        // jerry giving a tip
+        ctx.drawImage(this.jerryImg, 0, 0, 32, 32, 100, 600, 100, 100);
+        ctx.font = '20pt runescape';
+        const measure = ctx.measureText(this.tip);
+        const numLines = Math.ceil(measure.width / 600);
+        const textHeight = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
+        const lines = splitStringByWords(this.tip, Math.ceil(numLines));
+        const w = 500;
+        const h = 20 + textHeight * numLines * 1.4;
+        const x = 290 - w / 2;
+        const y = 580 - h;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(180, 610);
+        ctx.lineTo(250, 580);
+        ctx.lineTo(210, 580);
+        ctx.fill();
+        ctx.fillRect(x, y, w, h);
+        ctx.strokeStyle = '#000000';
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        for (let i = 0; i < lines.length; i++) {
+            //ctx.fillRect(x + w / 2, y + 10 + textHeight * (i + 1), w, textHeight);
+            ctx.fillText(lines[i], x + w / 2, y + 10 + textHeight * i, w);
+        }
+        ctx.restore();
+        
     }
 }

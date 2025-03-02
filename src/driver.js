@@ -90,11 +90,16 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/defend.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/special.png");
 ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 
-// MUSIC 
+// MUSIC
 ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
-ASSET_MANAGER.queueDownload("./assets/gameover.wav");
+ASSET_MANAGER.queueDownload("./assets/soundtrack/TCSS-491-Mary-Yotts-Overworld.mp3");
+
+// ALT MUSIC 
+ASSET_MANAGER.queueDownload("./assets/main-menu.wav");
 ASSET_MANAGER.queueDownload("./assets/mary-theme.wav");
 ASSET_MANAGER.queueDownload("./assets/battle1.wav");
+ASSET_MANAGER.queueDownload("./assets/battle2.wav");
+ASSET_MANAGER.queueDownload("./assets/gameover.wav");
 
 // For Auto Battler
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh2.png");
@@ -322,11 +327,11 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
 
     gameEngine.init(ctx);
     PARAMS.tips = ASSET_MANAGER.getAsset("./assets/jerryTips.json");
-    console.log(PARAMS.tips);
+    console.log("Loaded Jerry's Tips:", PARAMS.tips);
 
-    //gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
+    gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
 
     gameEngine.start();
 
-    const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
+    //const scene = new SceneManager(gameEngine, canvas.width, canvas.height);
 });

@@ -102,15 +102,16 @@ class SceneManager {
                 }
                 this.game.pressed['z'] = false;
             }
-        } else if (this.game.pressed['x']){
-            if(!this.dialog) {
-                if(!this.party.partyGUI) {
-                    this.showParty();
-                } else {
-                    this.hideParty();
-                    this.game.pressed['x'] = false;
-                }
+        } else if (this.game.pressed['x'] && !this.dialog){
+            if (this.pauseMenu) {
+                this.hidePause();
+            } else if(this.party.partyGUI) {
+                this.hideParty();
+                this.showPause();
+            } else {
+                this.showPause();
             }
+            this.game.pressed['x'] = false;
         } else if (this.game.pressed['h']) {
             this.hud.toggle();
             this.party.changeSize();

@@ -2,16 +2,27 @@ PLAY = {};
 
 STOP = {};
 
-PLAY.__play = (path, volume, loop) => {
-    const audio = ASSET_MANAGER.getAsset(path);
-    audio.volume = volume;
+__CURRENT_SONG = undefined;
+__PLAYED_SONGS = [];
 
-    if (loop) {
-        audio.addEventListener("ended", () => {
-            audio.play();
-        });
+PLAY.__play = (path, volume, isMusic, endsEarly) => {
+    const audio = ASSET_MANAGER.getAsset(path);
+    if (isMusic) {
+        STOP.allMusic();
+        __CURRENT_SONG = {
+          aud: audio,
+          volume: volume
+        };
+        audio.volume = volume * PARAMS.musicVolume;
+        if (!__PLAYED_SONGS.includes(path) && !endsEarly) {
+            audio.addEventListener("ended", () => {
+                audio.play();
+            });
+            __PLAYED_SONGS.push(path);
+        }
         audio.play();
     } else {
+        audio.volume = volume * PARAMS.soundEffectsVolume;
         if (audio.currentTime != 0) {
             let bak = audio.cloneNode();
             bak.currentTime = 0;
@@ -24,6 +35,10 @@ PLAY.__play = (path, volume, loop) => {
     }
 }
 
+PLAY.update = () => {
+    __CURRENT_SONG.aud.volume = __CURRENT_SONG.volume * PARAMS.musicVolume;
+}
+
 STOP.__stop = (path) => {
     const audio = ASSET_MANAGER.getAsset(path);
     audio.pause();
@@ -31,45 +46,73 @@ STOP.__stop = (path) => {
 }
 
 // SOUND EFFECTS
-PLAY.select = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/select.wav', 1  * PARAMS.soundEffectsVolume)
-    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
-PLAY.invalid = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/invalid.wav', 1 * PARAMS.soundEffectsVolume)
-    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
-PLAY.death = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/death.wav', 1   * PARAMS.soundEffectsVolume)
-    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
-PLAY.hit1 = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/hit1.wav', 0.75   * PARAMS.soundEffectsVolume)
-    : () => PLAY.__play('./assets/invalid.wav', 0.6 * PARAMS.soundEffectsVolume); // placeholder
-PLAY.hit2 = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/hit1.wav', 1    * PARAMS.soundEffectsVolume)
-    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
+PLAY.select = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/select.wav', 1)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+PLAY.invalid = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/invalid.wav', 1)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+PLAY.death = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/death.wav', 1)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+PLAY.hit1 = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/hit1.wav', 0.75)
+    : PLAY.__play('./assets/invalid.wav', 0.6); // placeholder
+PLAY.hit2 = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/hit1.wav', 1    * PARAMS.soundEffectsVolume)
+    : PLAY.__play('./assets/invalid.wav', 0 * PARAMS.soundEffectsVolume); // placeholder
 
 // MUSIC
-PLAY.gameover = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/gameover.wav', 0.2 * PARAMS.musicVolume)
-    : () => PLAY.__play('./assets/invalid.wav', 0    * PARAMS.musicVolume); // placeholder
+PLAY.gameover = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/gameover.wav', 0.2, true, true)
+    : void 0; // placeholder
 
 // MUSIC ~ looped
-PLAY.battle1 = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/battle1.wav', 0.35 * PARAMS.musicVolume, true)
-    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.musicVolume); // placeholder
+PLAY.title = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/main-menu.wav', 0.20, true)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
 
-PLAY.overworld = PARAMS.altMusic
-    ? () => PLAY.__play('./assets/mary-theme.wav', 0.3 * PARAMS.musicVolume, true)
-    : () => PLAY.__play('./assets/invalid.wav', 0 * PARAMS.musicVolume); // placeholder
+PLAY.battle1 = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/battle1.wav', 0.35, true)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+
+PLAY.battle2 = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/battle2.wav', 0.35, true)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+
+PLAY.overworld = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/mary-theme.wav', 0.3, true)
+    : PLAY.__play("./assets/soundtrack/TCSS-491-Mary-Yotts-Overworld.mp3", 0.1, true); // placeholder
+
+STOP.gameover = () => {
+    // add other looped music here to avoid unstoppable music
+    STOP.__stop('./assets/gameover.wav');
+}
+
+STOP.title = () => {
+    // add other looped music here to avoid unstoppable music
+    STOP.__stop('./assets/main-menu.wav');
+}
 
 STOP.battle1 = () => {
     // add other looped music here to avoid unstoppable music
     STOP.__stop('./assets/battle1.wav');
 }
 
-STOP.overworld = () => {
-    STOP.__stop('./assets/mary-theme.wav');
+STOP.battle2 = () => {
+    // add other looped music here to avoid unstoppable music
+    STOP.__stop('./assets/battle2.wav');
 }
 
-STOP.__all = () => {
-    // todo
+STOP.overworld = () => {
+    STOP.__stop('./assets/mary-theme.wav');
+    STOP.__stop("./assets/soundtrack/TCSS-491-Mary-Yotts-Overworld.mp3");
+}
+
+STOP.allMusic = () => {
+    STOP.gameover();
+    STOP.title();
+    STOP.battle1();
+    STOP.battle2();
+    STOP.overworld();
 }
