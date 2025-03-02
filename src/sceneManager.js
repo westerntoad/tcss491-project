@@ -42,6 +42,19 @@ class SceneManager {
         this.map.player.disableMovement = false;
     }
 
+    showPause() {
+        this.hideHUD();
+        this.map.player.disableMovement = true;
+        this.pauseMenu = new PauseMenu(this.game, this);
+        this.game.addEntity(this.pauseMenu);
+    }
+    hidePause() {
+        this.map.player.disableMovement = false;
+        this.pauseMenu.removeFromWorld = true;
+        this.pauseMenu = undefined;
+    }
+
+
     showDialog(textArr) { //changed to accomodate an array of dialog.
         this.dialogArr = textArr;
         this.dialogIndex = 0;

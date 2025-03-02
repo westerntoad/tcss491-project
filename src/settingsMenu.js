@@ -1,12 +1,9 @@
-class settingsMenu {
+class SettingsMenu {
     constructor(game, width, height) {
         this.game = game;
         this.width = width;
         this.height = height;
 
-        //Background Image on the Canvas
-        this.background = ASSET_MANAGER.getAsset("./assets/menuTempBackground.js");
-        
         // Button dimensions and positions using Kaely's Title Screen as a base.
         this.buttonWidth = 200;
         this.buttonHeight = 50;
@@ -66,10 +63,6 @@ class settingsMenu {
     backToGame() {
         //Going back to the game.
         //this.game.;
-    }
-
-    deleteSave() {
-        //Logic to delete the save data.
     }
 
     update() {

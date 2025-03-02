@@ -61,6 +61,38 @@ const getDistance = (p1, p2) => {
 
 // undocumented :) (blame abe)
 const clamp = (min, val, max) => Math.min(max, Math.max(min, val));
+function splitStringByWords(text, n) { // thank you gpt :)
+    if (n <= 0) return [];
+    
+    const words = text.split(/\s+/);
+    const totalLength = words.reduce((sum, word) => sum + word.length, 0);
+    const targetSize = Math.ceil(totalLength / n);
+    
+    let result = [];
+    let currentChunk = "";
+    let currentSize = 0;
+    
+    for (let word of words) {
+        if (currentSize + word.length + (currentChunk ? 1 : 0) <= targetSize) {
+            currentChunk += (currentChunk ? " " : "") + word;
+            currentSize += word.length + (currentChunk ? 1 : 0);
+        } else {
+            result.push(currentChunk);
+            currentChunk = word;
+            currentSize = word.length;
+        }
+    }
+    
+    if (currentChunk) {
+        result.push(currentChunk);
+    }
+    
+    while (result.length < n) {
+        result.push("");
+    }
+    
+    return result;
+}
 
 class Animate {
     constructor() {

@@ -8,7 +8,8 @@ const PARAMS = {
     cellSize: 75,
     spaceHeight: 24,
     spaceHeightAdjusted: 15,
-    scale: 3
+    scale: 3,
+    tips: []
 };
 
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
@@ -112,6 +113,8 @@ ASSET_MANAGER.queueDownload("./assets/hit2.wav");
 // NOTE: fonts must not start with './'
 ASSET_MANAGER.queueDownload("assets/runescape.ttf");
 ASSET_MANAGER.queueDownload("assets/m6x11.ttf");
+
+ASSET_MANAGER.queueDownload("./assets/jerryTips.json");
 
 const DUNGEON_ENCOUNTERS = {
     "Grass": [
@@ -318,6 +321,8 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
     gameEngine.height = canvas.height; 
 
     gameEngine.init(ctx);
+    PARAMS.tips = ASSET_MANAGER.getAsset("./assets/jerryTips.json");
+    console.log(PARAMS.tips);
 
     //gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
 

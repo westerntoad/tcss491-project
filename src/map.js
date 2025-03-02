@@ -96,8 +96,9 @@ class Map {
         this.player.y = y;
     }
 
+    
     update() {
-        if (this.game.pressed['z']) {
+        if (this.game.pressed['z'] && !this.player.disableMovement) {
             if (!this.scene.dialog) {
                 const facedTile = this.player.facingTile();
                 const presentTiles = this.getTile(facedTile.x, facedTile.y);
@@ -105,6 +106,11 @@ class Map {
                     if(!presentTiles[i].removeFromWorld) presentTiles[i].interact?.();
                 }
             }
+        } else if (this.game.pressed['t']) {
+            if (!this.scene.pauseMenu)
+                this.scene.showPause();
+            else
+                this.scene.hidePause();
         }
     }
 
