@@ -199,7 +199,7 @@ MAPS.marysRoom = (map) => {
             ],
             [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
             ]
-            // at the end: vera & ye-soon to clear the small fries.
+            // at the end: bernice & pearl to clear the small fries.
             ], "Park", true, "Woebegone Park", false, 2);
     };
     json.specialTiles.push(portals1);
@@ -292,10 +292,24 @@ MAPS.marysMap = (map) => {
     for(let i = 0; i < 4; i++) { // Woebegone Park
         const zone = new Tile(map, false, 0, 13+i, -1, "./maps/areaOpen.png", 32, 0, 16, 16);
         zone.interact = () => {
-            map.scene.battleScene(
+            map.scene.battleScene( // bernice & vera
                 [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
-                {name: "droplet", x: 6, y: 2}, {name: "droplet", x: 6, y: 3}, {name: "droplet", x: 6, y: 4}
-                    ]], "Park", true, "Woebegone Park");
+                    {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
+                    {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
+                    {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
+                    {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
+                    {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
+                ],
+                // bernice & ye-soon
+                [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
+                    {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
+                    {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
+                    {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
+                ],
+                [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
+                ]
+                // at the end: bernice & pearl to clear the small fries.
+                ], "Park", true, "Woebegone Park", false, 2);
         }
         json.specialTiles.push(zone);
     }

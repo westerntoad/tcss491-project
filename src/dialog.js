@@ -51,11 +51,13 @@ class Dialog {
 
     draw(ctx) {
         ctx.save();
+        ctx.globalAlpha = 0.75;
         ctx.fillStyle = '#bbbbbb';
         ctx.fillRect(this.boxX, this.boxY, this.boxWidth, this.boxHeight);
-        
+        ctx.restore();
+        ctx.save();
         ctx.fillStyle = '#000000';
-        ctx.font = `${this.defaultFontSize}pt comic sans`;
+        ctx.font = `${this.defaultFontSize}pt m6x11`;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
         
@@ -65,7 +67,7 @@ class Dialog {
         for (let i = 0; i < wrappedLines.length; i++) {
           ctx.fillText(wrappedLines[i], this.padding * 2, this.boxY + 3 * this.padding + (i + 0.5) * (this.defaultFontSize + 10));
         }
-        ctx.font = `${this.defaultFontSize + 5}pt comic sans`;
+        ctx.font = `${this.defaultFontSize + 5}pt m6x11`;
         ctx.fillStyle = 'blue';
         ctx.fillText(this.speaker, this.padding * 1.5, this.boxY + this.padding);
         ctx.restore();
