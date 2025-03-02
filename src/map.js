@@ -106,11 +106,6 @@ class Map {
                     if(!presentTiles[i].removeFromWorld) presentTiles[i].interact?.();
                 }
             }
-        } else if (this.game.pressed['t']) {
-            if (!this.scene.pauseMenu)
-                this.scene.showPause();
-            else
-                this.scene.hidePause();
         }
     }
 

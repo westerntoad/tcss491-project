@@ -36,7 +36,8 @@ PLAY.__play = (path, volume, isMusic, endsEarly) => {
 }
 
 PLAY.update = () => {
-    __CURRENT_SONG.aud.volume = __CURRENT_SONG.volume * PARAMS.musicVolume;
+    if (__CURRENT_SONG)
+        __CURRENT_SONG.aud.volume = __CURRENT_SONG.volume * PARAMS.musicVolume;
 }
 
 STOP.__stop = (path) => {

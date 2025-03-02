@@ -69,8 +69,7 @@ class PauseMenu {
         //Debugging Code
         console.log("Options Button Clicked! :D"); 
         this.scene.hidePause();
-        //const options = new SettingsMenu();
-        //this.game.addEntity(options);
+        this.scene.showSettings();
     };
 
     saveGame() {

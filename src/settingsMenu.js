@@ -1,98 +1,75 @@
 class SettingsMenu {
-    constructor(game, width, height) {
+    constructor(game, scene) {
+        Object.assign(this, { game, scene });
         this.game = game;
-        this.width = width;
-        this.height = height;
+        this.width = PARAMS.canvasWidth / 3;
+        this.height = PARAMS.canvasHeight - 100;
+        this.x = PARAMS.canvasWidth - this.width - 100;
+        this.y = (PARAMS.canvasHeight - this.height) / 2;
+        this.z = 300_000;
 
-        // Button dimensions and positions using Kaely's Title Screen as a base.
-        this.buttonWidth = 200;
-        this.buttonHeight = 50;
-        this.buttonStartY = height / 2;
-        this.buttonSpacing = 70;
 
-        this.buttons = [
-            {
-                text: "Volume",
-                x: width / 2,
-                y: height / 2,
-                action: () => this.changeAudio()
-            },
-            {
-                text: "Mute",
-                x: width / 2,
-                y: height / 2,
-                action: () => this.changeAudio()
-            },
-            {
-                text: "Return to Game",
-                x: width / 2,
-                y: height / 2,
-                action: () => this.backToGame()
-            },
-            {
-                text: "Delete Save Data?",
-                x: width / 2,
-                y: height / 2,
-                action: () => this.deleteSave()
-            }
-        ]
+        const sW = this.width - 100;
+        const sX = this.x + (this.width - sW) / 2;
+        let sY = 200;
+        this.seSlider = document.createElement('input');
+        this.seSlider.min = 0;
+        this.seSlider.max = 1;
+        this.seSlider.step = 0.05;
+        this.seSlider.value = PARAMS.soundEffectsVolume;
+        this.seSlider.type = 'range';
+        this.seSlider.style.width = `${sW}px`;
+        this.seSlider.style.position = 'absolute';
+        this.seSlider.style.top = `${sY}px`;
+        this.seSlider.style.left = `${sX}px`;
 
+        sY += 200;
+        this.mSlider = document.createElement('input');
+        this.mSlider.min = 0;
+        this.mSlider.max = 1;
+        this.mSlider.step = 0.05;
+        this.mSlider.value = PARAMS.musicVolume;
+        this.mSlider.type = 'range';
+        this.mSlider.style.width = `${sW}px`;
+        this.mSlider.style.position = 'absolute';
+        this.mSlider.style.top = `${sY}px`;
+        this.mSlider.style.left = `${sX}px`;
+
+        // cheeky html business >.>
+        const wrap = document.getElementById("mainWrap");
+        wrap.appendChild(this.seSlider);
+        wrap.appendChild(this.mSlider);
+
+        //this.canvas = document.getElementById("gameWorld");
     };
-
-    handleClick(event) {
-        const rect = this.game.ctx.canvas.getBoundingClientRect();
-        const mouseX = event.clientX - rect.left;
-        const mouseY = event.clientY - rect.top;
-        
-        // Check if any button was clicked
-        this.buttons.forEach(button => {
-            if (mouseX >= button.x && 
-                mouseX <= button.x + this.buttonWidth &&
-                mouseY >= button.y && 
-                mouseY <= button.y + this.buttonHeight) {
-                button.action();
-            }
-        });
-    };
-
-    changeAudio() {
-        const scene = new SceneManager();
-        this.game.scene(updateAudio());
-    };
-
-    backToGame() {
-        //Going back to the game.
-        //this.game.;
-    }
 
     update() {
-
+        PARAMS.soundEffectsVolume = this.seSlider.value;
+        PARAMS.musicVolume = this.mSlider.value;
+        PLAY.update();
+        //this.canvas.focus();
     }
 
     draw(ctx) {
-        if (this.background) {
-            ctx.drawImage(this.background, 0, 0, this.width, this.height);
-        } else {
-            ctx.fillStyle = "rgba(255, 255, 255, 1)";
-            ctx.fillRect(0, 0, this.width, this.height);
-        }
+        ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-        //Title of the Menu
         ctx.fillStyle = "rgba(23, 186, 255, 0.49)";
-        ctx.font = "30px Trebuchet MS";
+        ctx.font = "28px Tahoma";
+        ctx.textBaseline = 'alphabetic';
         ctx.textAlign = "center";
-        ctx.fillText("Options Menu", this.width / 2, this.height / 2);
+        ctx.fillText("Settings", this.x + this.width / 2, this.y + 40);
 
-        //Adding Buttons to the Menu Canvas
-        this.buttons.forEach(button => {
-            ctx.fillStyle = "rgba(98, 0, 136, 1)";
-            ctx.fillRect(button.x, button.y, this.buttonWidth, this.buttonHeight);
-            ctx.fillStyle = "rgba(255, 255, 255, 1)";
-            ctx.font = "20px Tahoma";
-            ctx.textAlign = "center";
-            ctx.fillText(button.text,
-                         button.x + this.buttonWidth / 2,
-                         button.y + this.buttonHeight / 2 + 8);
-        });
+        ctx.font = "26px runescape";
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "left";
+        ctx.fillText("Sound Effects", this.x + 50, this.y + 130);
+        ctx.fillText("Music", this.x + 50, this.y + 330);
+        ctx.textAlign = "right";
+        ctx.fillText(Math.floor(this.seSlider.value * 100) + "%", this.x + this.width - 50, this.y + 130);
+        ctx.fillText(Math.floor(this.mSlider.value * 100) + "%", this.x + this.width - 50, this.y + 330);
     }
 }

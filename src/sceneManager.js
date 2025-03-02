@@ -53,6 +53,18 @@ class SceneManager {
         this.pauseMenu.removeFromWorld = true;
         this.pauseMenu = undefined;
     }
+    showSettings() {
+        this.settingsMenu = new SettingsMenu(this.game, this);
+        this.map.player.disableMovement = true;
+        this.game.addEntity(this.settingsMenu);
+    }
+    hideSettings() {
+        this.map.player.disableMovement = false;
+        this.settingsMenu.removeFromWorld = true;
+        this.settingsMenu.seSlider.remove();
+        this.settingsMenu.mSlider.remove();
+        this.settingsMenu = undefined;
+    }
 
 
     showDialog(textArr) { //changed to accomodate an array of dialog.
@@ -105,8 +117,11 @@ class SceneManager {
         } else if (this.game.pressed['x'] && !this.dialog){
             if (this.pauseMenu) {
                 this.hidePause();
-            } else if(this.party.partyGUI) {
+            } else if (this.party.partyGUI) {
                 this.hideParty();
+                this.showPause();
+            } else if (this.settingsMenu) {
+                this.hideSettings();
                 this.showPause();
             } else {
                 this.showPause();
