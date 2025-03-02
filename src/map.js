@@ -149,29 +149,29 @@ MAPS.marysRoom = (map) => {
 
     //testing combat in marysRoom
     //Chapter 1
-    const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
-    portals.interact = () => {
-        map.scene.battleScene(
-            [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
-            {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
-                ],
+    // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
+    // portals.interact = () => {
+    //     map.scene.battleScene(
+    //         [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
+    //         {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
+    //             ],
 
-                [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
-                    {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
-                    {name: "0verworked", x: 2, y: 0}],
+    //             [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
+    //                 {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
+    //                 {name: "0verworked", x: 2, y: 0}],
 
-                [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
-                    {name: "J4nitor", x: 5, y: 0},
-                    {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
-                    {name: "1ntern", x: 0, y: 5}],
+    //             [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
+    //                 {name: "J4nitor", x: 5, y: 0},
+    //                 {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
+    //                 {name: "1ntern", x: 0, y: 5}],
 
-                [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
-                    {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
-                    {name: "J4nitor", x: 6, y: 6},
-                    {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
-                    {name: "1ntern", x: 0, y: 4}
-                ]], "Office", true, "Office");
-    };
+    //             [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
+    //                 {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
+    //                 {name: "J4nitor", x: 6, y: 6},
+    //                 {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
+    //                 {name: "1ntern", x: 0, y: 4}
+    //             ]], "Office", true, "Office");
+    // };
     // const jerry = new Tile(map, false, 4, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
     // jerry.interact = () => {
     //     map.scene.battleScene([
@@ -179,30 +179,30 @@ MAPS.marysRoom = (map) => {
     //                 "Grass", false);
     // }
     // json.specialTiles.push(jerry);
-    json.specialTiles.push(portals);
+    // json.specialTiles.push(portals);
     //Chapter 2
-    const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
-    portals1.interact = () => {
-        map.scene.battleScene( // bernice & vera
-            [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
-                {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
-                {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
-                {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
-                {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
-                {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
-            ],
-            // bernice & ye-soon
-            [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
-                {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
-                {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
-                {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
-            ],
-            [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
-            ]
-            // at the end: bernice & pearl to clear the small fries.
-            ], "Park", true, "Woebegone Park", false, 2);
-    };
-    json.specialTiles.push(portals1);
+    // const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
+    // portals1.interact = () => {
+    //     map.scene.battleScene( // bernice & vera
+    //         [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
+    //             {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
+    //             {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
+    //             {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
+    //             {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
+    //             {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
+    //         ],
+    //         // bernice & ye-soon
+    //         [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
+    //             {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
+    //             {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
+    //             {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
+    //         ],
+    //         [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
+    //         ]
+    //         // at the end: bernice & pearl to clear the small fries.
+    //         ], "Park", true, "Woebegone Park", false, 2);
+    // };
+    // json.specialTiles.push(portals1);
     return json;
 };
 
