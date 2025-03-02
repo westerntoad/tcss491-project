@@ -166,6 +166,7 @@ class PauseMenu {
             ctx.fillStyle = "rgba(0, 0, 0, 1)";
             ctx.font = "18px Trebuchet MS";
             ctx.textAlign = "center";
+            ctx.textBaseline = 'top';
             ctx.fillText(
                 currButt.text,
                 currButt.x + this.buttonWidth / 2,
@@ -175,12 +176,13 @@ class PauseMenu {
             // jerry giving a tip
             ctx.drawImage(this.jerryImg, 0, 0, 32, 32, 100, 600, 100, 100);
             ctx.font = '20pt runescape';
-            const numLines = Math.ceil(ctx.measureText(this.tip).width / 700);
+            const measure = ctx.measureText(this.tip);
+            const numLines = Math.ceil(measure.width / 600);
+            const textHeight = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
             const lines = splitStringByWords(this.tip, Math.ceil(numLines));
-            console.log(lines);
             const w = 500;
-            const h = 60 + 40 * numLines;
-            const x = 280 - w / 2;
+            const h = 20 + textHeight * numLines * 1.4;
+            const x = 290 - w / 2;
             const y = 580 - h;
             ctx.fillStyle = '#ffffff';
             ctx.beginPath();
@@ -193,9 +195,10 @@ class PauseMenu {
             ctx.strokeRect(x, y, w, h);
             ctx.fillStyle = '#000000';
             ctx.textAlign = 'center';
-            ctx.textBaseline = 'center';
+            ctx.textBaseline = 'top';
             for (let i = 0; i < lines.length; i++) {
-                ctx.fillText(lines[i], x + w / 2, y + 40 + 40 * i);
+                //ctx.fillRect(x + w / 2, y + 10 + textHeight * (i + 1), w, textHeight);
+                ctx.fillText(lines[i], x + w / 2, y + 10 + textHeight * i, w);
             }
             ctx.restore();
         }
