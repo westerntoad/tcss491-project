@@ -109,6 +109,9 @@ class Map {
     }
 
     draw(ctx) {
+        ctx.save();
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = `#c8f6aa`;
         // draw tile outlines
         for (let i = 0; i < this.width * this.height; i++) {
             const x = i % this.width;
@@ -121,6 +124,7 @@ class Map {
             );
 
         }
+        ctx.restore();
     }
 }
 
@@ -147,8 +151,33 @@ MAPS.marysRoom = (map) => {
     };
     json.specialTiles.push(portalPoint);
 
+    // Chapter 1
+
+    const forest = new Tile(map, false, 4, 3, 5, "./maps/areaOpen.png");
+    forest.interact = () => {
+        map.scene.battleScene([
+            [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
+
+            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                {name: "Mad@Chu", x: 3, y: 3}],
+
+            [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+                {name: "D3pr3ss0", x: 3, y: 0}],
+
+            [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                {name: "D3pr3ss0", x: 0, y: 0}],
+
+            [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
+                {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
+                {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
+                {name: "D3pr3ss0", x: 4, y: 0},
+                {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
+                ], 
+                "Grass", true, "Lonely Forest");
+    }
+    json.specialTiles.push(forest);
     //testing combat in marysRoom
-    //Chapter 1
+    // Chapter 2
     // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
     // portals.interact = () => {
     //     map.scene.battleScene(
@@ -180,29 +209,36 @@ MAPS.marysRoom = (map) => {
     // }
     // json.specialTiles.push(jerry);
     // json.specialTiles.push(portals);
-    //Chapter 2
-    // const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
-    // portals1.interact = () => {
-    //     map.scene.battleScene( // bernice & vera
-    //         [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
-    //             {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
-    //             {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
-    //             {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
-    //             {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
-    //             {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
-    //         ],
-    //         // bernice & ye-soon
-    //         [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
-    //             {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
-    //             {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
-    //             {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
-    //         ],
-    //         [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
-    //         ]
-    //         // at the end: bernice & pearl to clear the small fries.
-    //         ], "Park", true, "Woebegone Park", false, 2);
-    // };
-    // json.specialTiles.push(portals1);
+
+    const portal2 = new Tile(map, false, 17, 15, 0, "");
+    portal2.interact = () => {
+        map.scene.battleScene([[{name: "chu", x: 0, y: 0}]], "Grass", false, "???", false, 1);
+    };
+    json.specialTiles.push(portal2);
+
+    //Chapter 3
+    const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
+    portals1.interact = () => {
+        map.scene.battleScene( // bernice & vera
+            [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
+                {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
+                {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
+                {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
+                {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
+                {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
+            ],
+            // bernice & ye-soon
+            [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
+                {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
+                {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
+                {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
+            ],
+            [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
+            ]
+            // at the end: bernice & pearl to clear the small fries.
+            ], "Park", true, "Woebegone Park", false, 2);
+    };
+    json.specialTiles.push(portals1);
     return json;
 };
 
@@ -212,6 +248,17 @@ MAPS.marysMap = (map) => {
     json.specialTiles = [];
     json.specialTiles.push(...map.story.load("marysMap"));
 
+    const mad = new Tile(map, false, 17, 15, 0, "");
+    mad.interact = () => {
+        map.scene.battleScene([[{name: "chu", x: 0, y: 0}]], "Grass", false, "????!", false, 1);
+    };
+    json.specialTiles.push(mad);
+
+    const dep = new Tile(map, false, 14, 20, 0, "");
+    dep.interact = () => {
+        map.scene.battleScene([[{name: "dep", x: 0, y: 0}]], "Grass", false, "??!??", false, 1);
+    };
+    json.specialTiles.push(dep);
     
     const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
     marysRoom.stepOn = () => {

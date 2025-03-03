@@ -100,6 +100,9 @@ class CombatEntity {
         }
         return null;
     }
+    bfsClosest(){ // only triggers when bfsMove fails
+
+    }
     attack() {
         this.attackElapsed += this.game.clockTick;
         if(this.attackElapsed >= this.raw.attackSpeed) {
@@ -139,6 +142,7 @@ class CombatEntity {
         if(this.raw.hp <= 0) {
             PLAY.death();
             // TODO: make a better exp thingy -> L.C.
+            if(!this.granny) this.game.addEntity(new AdorNum(this.game, this.block.isoX, this.block.isoY, this.raw.exp));
             this.battle.sceneManager.party.exp += this.raw.exp ? this.raw.exp :0;
             this.block.unit = null;
             this.removeFromWorld = true;
