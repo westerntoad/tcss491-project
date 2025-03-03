@@ -75,7 +75,15 @@ class PauseMenu {
     saveGame() {
         //Debugging Code
         console.log("Save Button Clicked! :D"); 
-        //Logic for Saving the Game
+        const save = {
+            globalProg: this.scene.map.story.globalProg,
+            loc: {x: this.scene.map.player.x, y: this.scene.map.player.y},
+            map: this.scene.map.currMapName
+        }
+        const date = new Date();
+        const saveName = `gvh_save-${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.txt`;
+        downloadFile(save, saveName);
+
     };
 
     openParty() {
@@ -108,6 +116,10 @@ class PauseMenu {
         this.game.entities = this.game.entities.filter(entity => entity !== this);
         const title = new TitleScreen();
         this.game.addEntity(title.showTitle());*/
+        this.game.entities.forEach(entity => entity.removeFromWorld = true);
+        const ts = new TitleScreen(this.game);
+        ts.started = true;
+        this.game.addEntity(ts);
     };
 
     //To add the Title Screen as an entity when changing between menus.

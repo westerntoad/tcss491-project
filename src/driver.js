@@ -329,7 +329,7 @@ ASSET_MANAGER.downloadAll(() => { // prototyping the battleScene. SceneManager w
     PARAMS.tips = ASSET_MANAGER.getAsset("./assets/jerryTips.json");
     console.log("Loaded Jerry's Tips:", PARAMS.tips);
 
-    gameEngine.addEntity(new TitleScreen(gameEngine, canvas.width, canvas.height));
+    gameEngine.addEntity(new TitleScreen(gameEngine));
 
     gameEngine.start();
 

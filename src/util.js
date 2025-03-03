@@ -94,6 +94,36 @@ function splitStringByWords(text, n) { // thank you gpt :)
     return result;
 }
 
+// https://stackoverflow.com/a/1431113
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
+
+const jumbleWithPhrase = (content, password) => {
+    let encrypted = content.slice(0);
+    for (let i = 0; i < encrypted.length; i++) {
+        const newChar = String.fromCharCode(encrypted.charCodeAt(i) ^ password.charCodeAt(i % password.length));
+        encrypted = encrypted.replaceAt(i, newChar);
+    }
+
+    return encrypted;
+}
+
+const downloadFile  = (content, defaultName) => {
+    const a = document.createElement("a");
+    const password = 'lukeisREALLYstinky123';
+    const encrypted = jumbleWithPhrase(JSON.stringify(content, null, null), password);
+    //const decrypted = jumbleWithPhrase(encrypted, password);
+
+    a.href = URL.createObjectURL(new Blob([encrypted], {
+        type: "text/plain"
+    }));
+    a.setAttribute("download", defaultName);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 class Animate {
     constructor() {
         throw new Error("Animate is a static class and cannot be instantiated.");

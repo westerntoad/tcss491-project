@@ -1,8 +1,8 @@
 class Story {
-    constructor(map){
+    constructor(map, save){
         Object.assign(this, {map});
         this.map = map;
-        this.globalProg = 0;
+        this.globalProg = save ? save.globalProg : 0;
         this.key = null;
         this.questIcon = './dialog/quest.png';
         this.dialog = ASSET_MANAGER.getAsset("./dialog/dialogLoad.json");

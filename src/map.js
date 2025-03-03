@@ -1,5 +1,5 @@
 class Map {
-    constructor(game, scene) {
+    constructor(game, scene, save) {
         Object.assign(this, { game, scene });
         this.z = -5;
         this.specialTiles = [];
@@ -8,8 +8,16 @@ class Map {
         this.player = new Player(game, scene, this, 0, 0);
         this.player.dir = 2; // set player facing south
         this.game.addEntity(this.player);
-        this.story = new Story(this);
-        this.changeMap(MAPS.marysRoom(this), 3, 2);
+        this.story = new Story(this, save);
+        if (save) {
+            if (save.map == 'marysRoom') {
+                this.changeMap(MAPS.marysRoom(this), save.loc.x, save.loc.y);
+            } else if (save.map == 'marysMap') {
+                this.changeMap(MAPS.marysMap(this), save.loc.x, save.loc.y);
+            }
+        } else {
+            this.changeMap(MAPS.marysRoom(this), 3, 2);
+        }
         this.globalDialogIndex = 0;
         this.secret = [false];
     }
@@ -50,6 +58,7 @@ class Map {
         this.tiles?.forEach(tile => tile.removeFromWorld = true);
 
         this.tiles = [];
+        this.currMapName = map.name;
         this.width = map.width;
         this.height = map.height;
 
@@ -138,6 +147,7 @@ MAPS.marysRoom = (map) => {
     const json = ASSET_MANAGER.getAsset("./maps/house.json");
     json.specialTiles = []; // receive a array of special tiles.
     const string = "marysRoom";
+    json.name = string;
     json.specialTiles.push(...map.story.load(string));
 
     const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
@@ -148,64 +158,6 @@ MAPS.marysRoom = (map) => {
     };
     json.specialTiles.push(portalPoint);
 
-    //testing combat in marysRoom
-    //Chapter 1
-    // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
-    // portals.interact = () => {
-    //     map.scene.battleScene([
-    //         [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
-
-    //             [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-    //                 {name: "Mad@Chu", x: 3, y: 3}],
-
-    //             [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-    //                 {name: "D3pr3ss0", x: 3, y: 0}],
-
-    //             [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-    //                 {name: "D3pr3ss0", x: 0, y: 0}],
-
-    //             [{name: "L0neb0ne", x: 1, y: 1}, {name:"L0neb0ne", x: 2, y: 1},
-    //                 {name: "L0neb0ne", x: 3, y: 1}, {name:"L0neb0ne", x: 4, y: 1},
-    //                 {name: "L0neb0ne", x: 5, y: 1},
-    //                 {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
-    //                 {name: "D3pr3ss0", x: 4, y: 0},
-    //                 {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
-    //                 ], 
-    //                 "Grass", true);
-    // };
-    // const jerry = new Tile(map, false, 4, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
-    // jerry.interact = () => {
-    //     map.scene.battleScene([
-    //         [{name: "Jerry Mulberry", x: 3, y: 0}]], 
-    //                 "Grass", false);
-    // }
-    // json.specialTiles.push(jerry);
-    // json.specialTiles.push(portals);
-    // //Chapter 2
-    // const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
-    // portals1.interact = () => {
-    //     map.scene.battleScene(
-    //         [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
-    //         {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
-    //             ],
-
-    //             [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
-    //                 {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
-    //                 {name: "0verworked", x: 2, y: 0}],
-
-    //             [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
-    //                 {name: "J4nitor", x: 5, y: 0},
-    //                 {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
-    //                 {name: "1ntern", x: 0, y: 5}],
-
-    //             [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
-    //                 {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
-    //                 {name: "J4nitor", x: 6, y: 6},
-    //                 {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
-    //                 {name: "1ntern", x: 0, y: 4}
-    //             ]], "Office", true, "Office");
-    // };
-    // json.specialTiles.push(portals1);
     return json;
 };
 
@@ -213,6 +165,7 @@ MAPS.marysMap = (map) => {
     const json = ASSET_MANAGER.getAsset("./maps/marysMap.json");
 
     json.specialTiles = [];
+    json.name = 'marysMap';
     json.specialTiles.push(...map.story.load("marysMap"));
 
     
@@ -223,7 +176,7 @@ MAPS.marysMap = (map) => {
     };
     json.specialTiles.push(marysRoom);
 
-    if(!map.secret[0]){
+    if(!map.secret || !map.secret[0]){
         const secret = new Tile(map, true, 6, 3, 0, './assets/portalPoint.png', 16, 16, 16, 16);
         secret.interact = () => {
             map.scene.party.exp += 15;

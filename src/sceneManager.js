@@ -1,5 +1,5 @@
 class SceneManager {
-    constructor(game, pxWidth, pxHeight) {
+    constructor(game, save) {
         this.game = game;
         this.z = 100;
         this.backgroundColor = '#ffffff';
@@ -8,7 +8,7 @@ class SceneManager {
         this.savedState = null; // save entity state
         this.savedMap = null; // save map state
 
-        this.map = new Map(this.game, this);
+        this.map = new Map(this.game, this, save);
         this.game.addEntity(this.map);
 
         this.game.addEntity(this);
@@ -25,6 +25,7 @@ class SceneManager {
         this.hud = new HUD(this.game, this);
         this.game.addEntity(this.hud);
         this.hud.visible = true;
+
         
     }
     addToParty(name){

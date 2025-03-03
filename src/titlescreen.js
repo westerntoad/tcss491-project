@@ -1,8 +1,10 @@
 class TitleScreen {
-    constructor(game, width, height) {
+    constructor(game) {
         this.game = game;
-        this.width = width;
-        this.height = height;
+        this.width = PARAMS.canvasWidth;
+        const width = this.width;
+        this.height = PARAMS.canvasHeight;
+        const height = this.height;
         this.z = 100; // Ensure it renders on top
         this.started = false;
         
@@ -77,19 +79,38 @@ class TitleScreen {
         this.game.ctx.canvas.removeEventListener("click", this.boundClickHandler);
     }
     
-    startNewGame() {
+    startNewGame(save) {
         // Cleans up event listener before removing the title screen.
         this.removeEventListener();
         // Remove title screen and start new game
         this.game.entities = this.game.entities.filter(entity => entity !== this);
         STOP.allMusic();
         PLAY.overworld();
-        const scene = new SceneManager(this.game, this.width, this.height);
+        this.newScene = new SceneManager(this.game, save);
     }
     
     loadGame() {
-        // Implement load game functionality?
         console.log("Load game clicked");
+        // https://stackoverflow.com/a/40971885
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = e => { 
+            let file = e.target.files[0]; 
+            let reader = new FileReader();
+            reader.readAsText(file,'UTF-8');
+
+            reader.onload = readerEvent => {
+                //let content = JSON.parse(readerEvent.target.result);
+                let content = readerEvent.target.result;
+                console.log("encrypted:", content);
+                const password = 'lukeisREALLYstinky123';
+                const decrypted = JSON.parse(jumbleWithPhrase(content, password));
+                console.log("decrypted:", decrypted);
+                this.startNewGame(decrypted);
+                console.log(this.newScene);
+            }
+        }
+        input.click();
     }
     
     openSettings() {
