@@ -116,7 +116,7 @@ const downloadFile  = (content, defaultName) => {
     //const decrypted = jumbleWithPhrase(encrypted, password);
 
     a.href = URL.createObjectURL(new Blob([encrypted], {
-        type: "text/plain"
+        type: "application/octet-stream"
     }));
     a.setAttribute("download", defaultName);
     document.body.appendChild(a);

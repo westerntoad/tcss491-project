@@ -3,11 +3,16 @@
  * Party will also bring up a gui that will allow upgrades to grandma objects.
  */
 class Party {
-    constructor(game, scene) {
+    constructor(game, scene, save) {
         Object.assign(this, {game, scene});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
         this.exp = 0; // keep track of total exp in the pot.
+
+        if (save) {
+            this.members = save.party.members;
+            this.exp = save.party.exp;
+        }
     }
     showParty(){
         // kick off the gui for the party.

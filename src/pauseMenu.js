@@ -78,10 +78,13 @@ class PauseMenu {
         const save = {
             globalProg: this.scene.map.story.globalProg,
             loc: {x: this.scene.map.player.x, y: this.scene.map.player.y},
-            map: this.scene.map.currMapName
+            map: this.scene.map.currMapName,
+            party: { ...this.scene.party }
         }
+        save.party.scene = undefined;
+        save.party.game = undefined;
         const date = new Date();
-        const saveName = `gvh_save-${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.txt`;
+        const saveName = `gvh_save-${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.bin`;
         downloadFile(save, saveName);
 
     };
@@ -119,6 +122,8 @@ class PauseMenu {
         this.game.entities.forEach(entity => entity.removeFromWorld = true);
         const ts = new TitleScreen(this.game);
         ts.started = true;
+        STOP.allMusic();
+        PLAY.title();
         this.game.addEntity(ts);
     };
 
