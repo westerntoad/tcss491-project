@@ -177,7 +177,7 @@ const DUNGEON_ENCOUNTERS = {
             hp: 11,
             attack: 23,
             defense: 0,
-            exp: 1,
+            exp: 500,
             attackSpeed: 0.05,
             moveSpeed: 0.05,
             asset: "./assets/enemies/Mad@Chu.png"
@@ -188,7 +188,7 @@ const DUNGEON_ENCOUNTERS = {
             hp: 1200,
             attack: 9999,
             defense: 0,
-            exp: 1,
+            exp: 500,
             attackSpeed: 3,
             moveSpeed: 0.1,
             asset: "./assets/enemies/D3pr3ss0.png"

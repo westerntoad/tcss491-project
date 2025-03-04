@@ -105,7 +105,9 @@ class CombatEntity {
     }
     attack() {
         this.attackElapsed += this.game.clockTick;
-        if(this.attackElapsed >= this.raw.attackSpeed) {
+        if(this.attackElapsed >= this.raw.attackSpeed) { 
+            // add special move here
+            
             const damage = Math.round((this.target.raw.defense ? 
                 1 - (this.target.raw.defense / (this.target.raw.defense + 50))
                 : 1) * this.raw.attack);
@@ -163,6 +165,7 @@ class CombatEntity {
             if(foundAttack) {
                 this.target = foundAttack;
                 this.attack();
+                
             } else { // foundAttack should return the enemy we can hit.
                 const foundMove = this.bfsMove();
                 if(foundMove){

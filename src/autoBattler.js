@@ -125,6 +125,10 @@ class AutoBattler {
         return arr;
     }
 
+    /**
+     * also, add a score board that is counting the exp as score.
+     * For Chapter 4, quit out of the battle and call it story complete.
+     */
     spawn(){
         // get spawnCost of enemies from input to autoBattler?
         // send in one of each enemy for the designated Chapter

@@ -12,6 +12,7 @@ class Story {
         this.npc = [false, false, false];
         this.storyCheck = [false, false, false, false, false];
         this.questBattle = null;
+        this.secret = [false, false, false];
         //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
@@ -315,6 +316,7 @@ class Story {
                 break;
         }
         this.openNpc();
+        this.getSecret();
         return this.specialTiles;
     }
     openNpc(){
@@ -376,6 +378,31 @@ class Story {
         if(this.questBattle && this.questBattle === this.globalProg) {
             this.dialogIndex--;
             this.next();
+        } else if(this.questBattle && this.questBattle >= 90) {
+            this.dialogueIndex--;
+            this.globalProg--;
+            this.secret[this.questBattle % 90] = true;
+            this.next();
+        }
+    }
+    getSecret() {
+        if(this.currMap === "marysMap") {
+            if(!this.secret[1]){
+                const dep = new Tile(this.map, false, 14, 20, 0, "");
+                dep.interact = () => {
+                    this.map.scene.battleScene([[{name: "dep", x: 0, y: 0}]], "Grass", true, "??!??", false, 1);
+                    this.questBattle = 91;
+                };
+                this.specialTiles.push(dep);
+            }
+            if(!this.secret[2]) {
+                const mad = new Tile(this.map, false, 17, 15, 0, "");
+                mad.interact = () => {
+                    this.map.scene.battleScene([[{name: "chu", x: 0, y: 0}]], "Grass", true, "????!", false, 1);
+                    this.questBattle = 92;
+                };
+                this.specialTiles.push(mad);
+            }
         }
     }
 }

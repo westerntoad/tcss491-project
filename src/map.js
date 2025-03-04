@@ -11,7 +11,7 @@ class Map {
         this.story = new Story(this);
         this.changeMap(MAPS.marysRoom(this), 3, 2);
         this.globalDialogIndex = 0;
-        this.secret = [false];
+        this.secret = [false, false, false];
     }
 
     hide() {
@@ -247,18 +247,6 @@ MAPS.marysMap = (map) => {
 
     json.specialTiles = [];
     json.specialTiles.push(...map.story.load("marysMap"));
-
-    const mad = new Tile(map, false, 17, 15, 0, "");
-    mad.interact = () => {
-        map.scene.battleScene([[{name: "chu", x: 0, y: 0}]], "Grass", false, "????!", false, 1);
-    };
-    json.specialTiles.push(mad);
-
-    const dep = new Tile(map, false, 14, 20, 0, "");
-    dep.interact = () => {
-        map.scene.battleScene([[{name: "dep", x: 0, y: 0}]], "Grass", false, "??!??", false, 1);
-    };
-    json.specialTiles.push(dep);
     
     const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
     marysRoom.stepOn = () => {
