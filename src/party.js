@@ -211,8 +211,6 @@ class PartyGUI {
             ctx.fillStyle = '#6a7ddb';
             ctx.fillRect(x + segmentX / 10, y + segmentY * (3/4),
             (x + segmentX * (3/10))-(x + segmentX / 10) + segmentX /8, segmentY / 8);
-            // TODO: for ITEMS ** >>
-            ctx.fillRect(x + segmentX / 10, y + segmentY * (9/16), 25, 25);
             ctx.restore();
             ctx.drawImage(this.plus, 0, 0, // plus
                 this.plusSize, this.plusSize,
@@ -321,6 +319,8 @@ class PartyGUI {
                 ctx.fillText(this.members[i].getNextExp(), detailX + detailWidth - detailPad, detailY + (fontSize + fontPadding*2.5) * 5);
             }
             ctx.restore();
+            // TODO: for ITEMS ** >>
+            ctx.fillRect(x + segmentX / 10, y + segmentY * (9/16), 25, 25);
             // *****
         }
         ctx.restore();

@@ -164,7 +164,13 @@ class CombatEntity {
         } else { // attempt to find another enemy in vacinity
             // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
             this.attacking = false;
-            const foundAttack = this.bfsAttack(); // enemies close enough for attack
+            let foundAttack = null;
+            if(this.raw.item?.bfsAttack && typeof this.raw.item.bfsAttack === `function`) {
+                foundAttack = this.raw.item.bfsAttack(this);
+            } else {
+                foundAttack = this.bfsAttack(); // enemies close enough for attack
+            }
+            
             if(foundAttack) {
                 this.target = foundAttack;
                 this.attack();

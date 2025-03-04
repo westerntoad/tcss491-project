@@ -1,33 +1,42 @@
-const directions = [
-    { dx: 0, dy: -1 },
-    { dx: 0, dy: 1 },
-    { dx: -1, dy: 0 },
-    { dx: 1, dy: 0 }
-];
 class Item { // am I keeping all items here?
     // static class
     constructor(){
         throw new Error("Item is a static class poo poo");
     }
-    static bfs(cEntity, startX, startY, ally = false, prev = null) { // lets look for all 
+    static bfs(cEntity, startX, startY, ally = false, prev = null, all = false) { // lets look for all 
         // search = true to look for allies, search = false for enemies
+        const directions = [
+            { dx: 0, dy: -1 },
+            { dx: 0, dy: 1 },
+            { dx: -1, dy: 0 },
+            { dx: 1, dy: 0 }
+        ];
         const queue = [];
         const visited = new Set();
+        const hitb4 = new Set();
         queue.push({x: startX, y: startY, dist: 0});
         visited.add(`${startX},${startY}`);
         if(prev) {
-            visited.add(...prev);
+            hitb4.add(...prev);
+        }
+        if(all) {
+            hitb4.add(`${startX},${startY}`);
         }
         let target = null;
+        if(all) target = [];
         while (queue.length) {
             const current = queue.shift();
             const currBlock = cEntity.allBlocks[current.y][current.x];
             if(current.dist > cEntity.raw.attackRange) continue;
             if(currBlock.unit?.raw.hp > 0) {
                 const isAlly = currBlock.unit.granny === cEntity.granny;
-                if((ally && isAlly) || (!ally && !isAlly)) {
-                    target = currBlock.unit;
-                    break;
+                if((ally && isAlly) || (!ally && !isAlly) && !hitb4.has(`${current.x},${current.y}`)) {
+                    if(all) {
+                        target.push(currBlock.unit);
+                    } else {
+                        target = currBlock.unit;
+                        break;
+                    }
                 }
             }
             for(const d of directions) {
@@ -48,7 +57,7 @@ class Item { // am I keeping all items here?
     }
     static createInitial() {
         const item = {
-            level: 1,
+            level: 3,
             expReq: [750, 2000],
             name: "",
             hasSpecial: true,
@@ -74,6 +83,40 @@ class Item { // am I keeping all items here?
         // just receive this, and then alter its properties.
         return item;
     }
+    static teaCup(){ // Mary's
+        const tea = this.createInitial();
+        tea.name = "Mary's Teacup";
+        tea.attack = function (cEntity) {
+            if(cEntity.target.raw.hp + cEntity.raw.attack > cEntity.target.raw.maxHp) cEntity.target.raw.hp = cEntity.target.raw.maxHp;
+            else cEntity.target.raw.hp += cEntity.raw.attack;
+
+            const destX  = cEntity.target.block.isoX + cEntity.target.block.width * 0.5;
+            const destY  = cEntity.target.block.isoY + cEntity.target.block.height * 0.2;
+
+            cEntity.game.addEntity(new HealNum(cEntity.game, destX, destY, cEntity.raw.attack));
+        }
+        tea.bfsAttack = function (cEntity) {
+            const num = tea.level;
+            const target = Item.bfs(cEntity, cEntity.blockX, cEntity.blockY, true, false, true);
+            console.log("here in bfsAttack");
+            console.log(target);
+            if(!target) return null;
+            let lowest = target[0];
+            target.forEach(t => {
+                const low = lowest.raw.hp / lowest.raw.maxHp;
+                const got = t.raw.hp / t.raw.maxHp;
+                lowest = low < got ? lowest : t; // if got is === low, it is farther away from source, which is better to heal.
+            });
+            if(lowest.blockX === cEntity.blockX && lowest.blockY === cEntity.blockY) return null;
+            return lowest;
+        }
+        tea.stat = {
+            attackSpeed: 2,
+            attack: 0.2,
+            range: 4
+        }
+        return tea;
+    }
     static laserPointer() {
         const laser = this.createInitial();
         laser.name = "Vera's Laser Pointer";
@@ -83,9 +126,9 @@ class Item { // am I keeping all items here?
             const struck = new Set();
             let startX = cEntity.blockX;
             let startY = cEntity.blockY;
-            while(bounce && target) { // break early if no more enemies that can be chained
+            while(bounce) { // break early if no more enemies that can be chained
                 
-                const target = Item.bfs(cEntity, startX, startY, false);
+                const target = Item.bfs(cEntity, startX, startY, false, struck);
                 if(!target) break;
                 struck.add(`${target.blockX},${target.blockY}`);
                 
@@ -114,8 +157,8 @@ class Item { // am I keeping all items here?
             // target that we get is fine.
             // we just need to create our own bfsAttackAgain()
         }
-        laser.bfsChain = (cEntity) => {
-
+        laser.stat = {
+            attack: 0.5
         }
         return laser;
     }
@@ -134,13 +177,6 @@ class Item { // am I keeping all items here?
         // make this return the object.
         return bingo;
     }
-    static teaCup(){ // Mary's
-        const tea = this.createInitial();
-        tea.name = "Mary's Teacup";
-        tea.attack = function (cEntity) {
-
-        }
-    }
     static cableNeedles() { // Pearl's
         const needle = this.createInitial();
         needle.name = "Pearl's Cable Needles";
@@ -150,5 +186,39 @@ class Item { // am I keeping all items here?
         needle.stat = () => {
 
         }
+    }
+}
+class HealNum {
+    constructor(game, x, y, num) {
+        // not very intuitive naming convetion here:
+        // isEnemyDealt will be true if this damage is being done
+        // to an enemy.
+        Object.assign(this, { game, num});
+        this.x = x + (Math.random() - 0.5) * 40;
+        this.y = y + (Math.random() - 0.5) * 40;
+        this.z = 100_000;
+        this.elapsed = 0;
+        this.lifetime = 1;
+        this.size = 16 + Math.sqrt(num);
+    }
+
+    update() {
+        this.elapsed += this.game.clockTick;
+        
+        if (this.elapsed >= this.lifetime) {
+            this.removeFromWorld = true;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "center";
+        ctx.font = `bold ${this.size}px runescape`;
+        ctx.fillStyle = 'green';
+        ctx.fillText("+" + this.num, this.x, this.y - this.elapsed * 50);
+
+        ctx.restore();
     }
 }
