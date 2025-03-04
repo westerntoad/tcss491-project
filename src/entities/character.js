@@ -20,7 +20,7 @@ class Character {
             return (this.defense / this.defense + 50);
         }
         this.expReq = [2, 3, 4, 5, 7, 10, 13, 17, 21, 
-            25, 30, 40, 50, 130, 170, 220, 280, 350]; // using the expRequirement.
+            25, 30, 40, 50, 60, 70, 80, 90, 110, 150]; // using the expRequirement.
         /** Everytime we level up, we push to the levelStack.
          *  If we want to remove levels, we pop from the levelStack and look at
          *      the amount to decrement for each stat improved.
@@ -45,7 +45,7 @@ class Character {
                 this.attackRange = 1; // default val for melees
                 this.defense = 0;
                 this.attackSpeed = 0.95; // atk & moveSpd currently is x * 1000 ms.
-                this.moveSpeed = 0.75; // so this is 1000ms.
+                this.moveSpeed = 0.70; // so this is 1000ms.
                 this.hpGrowth = 0.5; // specify the distribution rate
                 this.attackGrowth = 0.5;
                 this.hpCap = 75;
@@ -64,38 +64,38 @@ class Character {
                 this.attackGrowth = 0.25;
                 this.attackSpeedGrowth = 0.5;
                 this.hpCap = 25;
-                this.attackCap = 75;
+                this.attackCap = 77;
                 this.attackSpeedCap = 0.5;
                 break; // 25% hp, 50% atkSpeed, 25% atk 
             // Warrior (melee, high attack)
             case "Pearl Martinez":
                 this.granny = true;
-                this.hp = 2;
+                this.hp = 1;
                 this.attack = 4;
-                this.attackRange = 1;
+                this.attackRange = 2;
                 this.defense = 0;
-                this.attackSpeed = 1;
-                this.moveSpeed = 0.45; // 950ms
-                this.hpGrowth = 0.25;
+                this.attackSpeed = 1.15;
+                this.moveSpeed = 0.3; // 950ms
+                this.hpGrowth = 0.3;
                 this.attackGrowth = 0.75;
-                this.hpCap = 60;
-                this.attackCap = 175;
+                this.hpCap = 40;
+                this.attackCap = 201;
                 break; // 25% hp, 50% atk, 25% atkSpeed
             // Ranged (paper thin Hp, high attack)
             case "Ye-soon Kim":
                 this.granny = true;
                 this.hp = 1;
-                this.attack = 5;
-                this.attackRange = 3;
+                this.attack = 6;
+                this.attackRange = 4;
                 this.defense = 0;
                 this.attackSpeed = 1.25;
                 this.moveSpeed = 0.85;
                 this.hpGrowth = 0.25;
                 this.attackGrowth = 0.5;
-                this.attackSpeedGrowth = 0.3;
-                this.hpCap = 25;
-                this.attackCap = 90;
-                this.attackSpeedCap = 0.6;
+                this.attackSpeedGrowth = 0.15;
+                this.hpCap = 28;
+                this.attackCap = 100;
+                this.attackSpeedCap = 0.75;
                 break; // 25% hp, 50% atk, 25% atkSpeed
             // Tank (melee, high defensive). Actually has level-scaling defense.
             case "Bernice Campbell":
@@ -104,12 +104,12 @@ class Character {
                 this.attack = 1;
                 this.attackRange = 1;
                 this.defense = 5;
-                this.attackSpeed = 2;
-                this.moveSpeed = 1.25;
+                this.attackSpeed = 2.1;
+                this.moveSpeed = 1.2;
                 this.hpGrowth = 0.5;
                 this.defenseGrowth = 0.5;
                 this.attackGrowth = 0.25;
-                this.attackCap = 50;
+                this.attackCap = 10;
                 this.hpCap = 100;
                 this.defenseCap = 100;
                 break;// 50% hp, 50% def
@@ -190,7 +190,7 @@ class Character {
     getNextExp() { // return the amount of exp for next lvl;
         const get = this.expReq[this.level - 1];
 
-        return get ? (this.level == this.maxLevel ? `Max Lvl` : get) : `Max Lvl`;
+        return get ? (this.level == this.maxLevel ? `Max` : get) : `Max`;
     }
     takeDamage(amount) {
         this.hp -= Math.max(0, amount - this.defense); // Reduce damage by defense

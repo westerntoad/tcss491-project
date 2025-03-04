@@ -155,7 +155,8 @@ class SceneManager {
 
     draw(ctx) { /* ~ unused ~ */ }
 
-    battleScene(enemyArr, type, story = false, title = "", endless = false) {
+    battleScene(enemyArr, type, story = false, title = "", endless = false, grannyLimit = 6) {
+        const gLimit = grannyLimit;
         console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
@@ -195,7 +196,7 @@ class SceneManager {
 
         endless ?
         this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Endless")) : 
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `${title}`));
+        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `${title}`, gLimit));
         // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
     }
     restoreScene() {

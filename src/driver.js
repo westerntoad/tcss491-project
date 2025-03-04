@@ -103,6 +103,8 @@ ASSET_MANAGER.queueDownload("./assets/battle2.wav");
 ASSET_MANAGER.queueDownload("./assets/gameover.wav");
 
 // For Auto Battler
+ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock_park1.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock_park.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh2.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh3.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
@@ -180,12 +182,12 @@ const DUNGEON_ENCOUNTERS = {
             hp: 160,
             attack: 3,
             defense: 20,
-            exp: 25,
+            exp: 18,
             attackSpeed: 0.35,
             moveSpeed: Infinity,
             asset: "./assets/enemies/Jerry_Mulberry.png"
          },
-         { name: "testL0neb0ne",
+         { name: "chu",
             attackRange: 1,
             granny: false,
             hp: 50,
@@ -195,58 +197,99 @@ const DUNGEON_ENCOUNTERS = {
             attackSpeed: 0.2,
             moveSpeed: 0.4,
             asset: "./assets/enemies/L0neb0ne.png"
+         },
+         { name: "dep",
+            attackRange: 1,
+            granny: false,
+            hp: 50,
+            attack: 0,
+            defense: 0,
+            exp: 1,
+            attackSpeed: 0.2,
+            moveSpeed: 0.4,
+            asset: "./assets/enemies/D3pr3ss0.png"
          }
     ],
     "Office": [
         { name: "1ntern",
             attackRange: 3,
             granny: false,
-            hp: 25,
-            attack: 4,
+            hp: 30,
+            attack: 2,
             defense: 0,
             exp: 2,
-            attackSpeed: 0.85,
+            attackSpeed: 0.45,
             moveSpeed: 0.4,
             asset: "./assets/enemies/1ntern.png"
          },
          { name: "0verworked",
             attackRange: 1,
             granny: false,
-            hp: 80,
-            attack: 5,
-            defense: 20,
+            hp: 150,
+            attack: 6,
+            defense: 0,
             exp: 4,
-            attackSpeed: 1.25,
-            moveSpeed: 0.75,
+            attackSpeed: 0.9,
+            moveSpeed: 1,
             asset: "./assets/enemies/0verworked.png"
          },
          { name: "J4nitor",
             attackRange: 1,
             granny: false,
-            hp: 250,
-            attack: 12,
-            defense: 30,
-            exp: 7,
-            attackSpeed: 1.5,
-            moveSpeed: 1,
+            hp: 200,
+            attack: 14,
+            defense: 0,
+            exp: 3,
+            attackSpeed: 1.6,
+            moveSpeed: 1.25,
             asset: "./assets/enemies/J4nitor.png"
          },
          { name: "Derek King",
             attackRange: 5,
             granny: false,
-            hp: 3000,
-            attack: 30,
-            defense: 50,
-            exp: 150,
-            attackSpeed: 1,
+            hp: 2400,
+            attack: 16,
+            defense: 38,
+            exp: 75,
+            attackSpeed: 0.5,
             moveSpeed: Infinity,
             asset: "./assets/enemies/Derek_King.png"
          }
         ],
-    "Volcano": [
-        { name: "Fire Sprite", hp: 35, attack: 7 },
-        { name: "Lava Slime", hp: 45, attack: 10 },
-        { name: "Flame Serpent", hp: 80, attack: 18 }
+    "Park": [
+        { name: "droplet",
+            attackRange: 3,
+            granny: false,
+            hp: 50,
+            attack: 3,
+            defense: 0,
+            exp: 7,
+            attackSpeed: 0.65,
+            moveSpeed: 0.35,
+            asset: "./assets/enemies/droplet.png"
+         },
+         { name: "waneChime",
+            attackRange: 4,
+            granny: false,
+            hp: 110,
+            attack: 6,
+            defense: 0,
+            exp: 12,
+            attackSpeed: 0.95,
+            moveSpeed: 0.75,
+            asset: "./assets/enemies/waneChime.png"
+         },
+         { name: "hopless",
+            attackRange: 10,
+            granny: false,
+            hp: 1300,
+            attack: 25,
+            defense: 0,
+            exp: 25,
+            attackSpeed: 1.3,
+            moveSpeed: 10,
+            asset: "./assets/enemies/hopless.png"
+         }
     ]
 };
 
