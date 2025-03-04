@@ -19,6 +19,9 @@ class AutoBattler {
         this.spaceHeightAdjusted = 15;
         this.scale = 3;
 
+        this.bg = new AutoBG(this.game, 0);
+        this.game.addEntity(this.bg);
+
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text);
         this.blockImg(text);
@@ -318,6 +321,7 @@ class AutoBattler {
     }
 
     cleanup() {
+        this.bg.removeFromWorld = true;
         this.units().forEach(unit => unit.removeFromWorld = true);
         this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
