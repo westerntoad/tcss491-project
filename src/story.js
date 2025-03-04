@@ -7,7 +7,7 @@ class Story {
         this.questIcon = './dialog/quest.png';
         this.dialog = ASSET_MANAGER.getAsset("./dialog/dialogLoad.json");
         this.specialTiles = [];
-        this.dialogIndex = 0;
+        this.dialogIndex = save ? save.dialogIndex : 0;
         this.getPortal = null; // use to get portal.
         this.npc = [false, false, false];
         this.storyCheck = [false, false, false, false, false];

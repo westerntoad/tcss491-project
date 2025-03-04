@@ -76,10 +76,14 @@ class PauseMenu {
         //Debugging Code
         console.log("Save Button Clicked! :D"); 
         const save = {
+            dialogIndex: this.scene.map.story.dialogIndex,
             globalProg: this.scene.map.story.globalProg,
             loc: {x: this.scene.map.player.x, y: this.scene.map.player.y},
             map: this.scene.map.currMapName,
-            party: { ...this.scene.party }
+            party: {
+                members: this.scene.party.members,
+                exp: this.scene.party.exp
+            }
         }
         save.party.scene = undefined;
         save.party.game = undefined;

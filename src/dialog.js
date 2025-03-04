@@ -20,6 +20,12 @@ class Dialog {
         this.boxWidth = PARAMS.canvasWidth - 2 * this.padding;
         this.boxHeight = PARAMS.canvasHeight / 3 - 2 * this.padding;
 
+        this.scrolls = {
+            mary: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/mary1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/mary2.wav")
+            ]
+        };
     }
 
     update() {
@@ -28,6 +34,25 @@ class Dialog {
             this.timeElapsed -= this.textSpeed;
             this.dText += this.text.charAt(this.nextCharIndex);
             this.nextCharIndex++;
+            
+            if (Math.random() <= PARAMS.dialogScrollChance && this.dText != this.text) {
+                const scrolls = this.scrolls.mary;
+                const rand = Math.random();
+                for (let i = 0; i < scrolls.length; i++) {
+                    //scrolls[i].currentTime = 0;
+                    
+                    if (rand < i / scrolls.length) {
+                        const audio = scrolls[i];
+                        if (audio.currentTime != 0) {
+                            let bak = audio.cloneNode();
+                            bak.currentTime = 0;
+                            bak.volume = audio.volume;
+                            bak.play();
+                        }
+                        audio.play();
+                    }
+                }
+            }
         }
     }
     wrapText(ctx, text, maxWidth) {

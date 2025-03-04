@@ -9,6 +9,7 @@ const PARAMS = {
     spaceHeight: 24,
     spaceHeightAdjusted: 15,
     scale: 3,
+    dialogScrollChance: 0.25,
     tips: []
 };
 
@@ -113,6 +114,10 @@ ASSET_MANAGER.queueDownload("./assets/invalid.wav");
 ASSET_MANAGER.queueDownload("./assets/death.wav");
 ASSET_MANAGER.queueDownload("./assets/hit1.wav");
 ASSET_MANAGER.queueDownload("./assets/hit2.wav");
+
+// scrolls
+ASSET_MANAGER.queueDownload("./assets/scrolls/mary1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/mary2.wav");
 
 // Fonts
 // NOTE: fonts must not start with './'
