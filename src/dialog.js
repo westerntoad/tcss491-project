@@ -20,6 +20,7 @@ class Dialog {
         this.boxWidth = PARAMS.canvasWidth - 2 * this.padding;
         this.boxHeight = PARAMS.canvasHeight / 3 - 2 * this.padding;
 
+        this.playScroll = true;
         this.scrolls = {
             mary: [
                 ASSET_MANAGER.getAsset("./assets/scrolls/mary1.wav"),
@@ -29,29 +30,32 @@ class Dialog {
     }
 
     update() {
+        console.log(this.dText == this.text);
         this.timeElapsed += this.game.clockTick
         if (this.timeElapsed >= this.textSpeed) {
             this.timeElapsed -= this.textSpeed;
-            this.dText += this.text.charAt(this.nextCharIndex);
+            const dChar = this.text.charAt(this.nextCharIndex);
+            this.dText += dChar;
             this.nextCharIndex++;
             
-            if (Math.random() <= PARAMS.dialogScrollChance && this.dText != this.text) {
+            if (this.playScroll && this.dText != this.text) {
+                this.playScroll = false;
                 const scrolls = this.scrolls.mary;
                 const rand = Math.random();
-                for (let i = 0; i < scrolls.length; i++) {
-                    //scrolls[i].currentTime = 0;
-                    
-                    if (rand < i / scrolls.length) {
-                        const audio = scrolls[i];
-                        if (audio.currentTime != 0) {
-                            let bak = audio.cloneNode();
-                            bak.currentTime = 0;
-                            bak.volume = audio.volume;
-                            bak.play();
-                        }
-                        audio.play();
-                    }
+                let flag = true;
+                const flagIdx = this.text.includes('?') ? 0 : 1;
+                const audio = scrolls[flagIdx];
+                audio.currentTime = 0;
+                if (audio.currentTime != 0) {
+                    let bak = audio.cloneNode();
+                    bak.currentTime = 0;
+                    bak.volume = audio.volume;
+                    bak.play();
                 }
+                audio.play();
+            }
+            if (this.dText == this.text || dChar.match(/[.?!]/)) {
+                this.playScroll = true;
             }
         }
     }
