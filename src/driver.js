@@ -92,6 +92,9 @@ ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
 ASSET_MANAGER.queueDownload("./assets/gameover.wav");
 ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 
+//Items
+ASSET_MANAGER.queueDownload("./assets/items/laserPointer.png");
+
 // For Auto Battler
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock_park1.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock_park.png");

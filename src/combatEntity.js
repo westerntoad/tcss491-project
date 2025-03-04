@@ -107,23 +107,26 @@ class CombatEntity {
         this.attackElapsed += this.game.clockTick;
         if(this.attackElapsed >= this.raw.attackSpeed) { 
             // add special move here
-            
-            const damage = Math.round((this.target.raw.defense ? 
-                1 - (this.target.raw.defense / (this.target.raw.defense + 50))
-                : 1) * this.raw.attack);
-            this.target.raw.hp -= damage;
-
-            // determining damageNum and beam placement.
-            const origX  = this.block.isoX + this.block.width * 0.5;
-            const origY  = this.block.isoY - this.block.height * 0.2;
-            const destX  = this.target.block.isoX + this.target.block.width * 0.5;
-            const destY  = this.target.block.isoY + this.target.block.height * 0.2;
-            // damage number gen
-            this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
-
-            // if ranged, shoot beam
-            if (this.raw.attackRange > 1) {
-                this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+            if(this.raw.item?.attack && typeof this.raw.item.attack === `function`) {
+                this.raw.item.attack(this);
+            } else {
+                const damage = Math.round((this.target.raw.defense ? 
+                    1 - (this.target.raw.defense / (this.target.raw.defense + 50))
+                    : 1) * this.raw.attack);
+                this.target.raw.hp -= damage;
+    
+                // determining damageNum and beam placement.
+                const origX  = this.block.isoX + this.block.width * 0.5;
+                const origY  = this.block.isoY - this.block.height * 0.2;
+                const destX  = this.target.block.isoX + this.target.block.width * 0.5;
+                const destY  = this.target.block.isoY + this.target.block.height * 0.2;
+                // damage number gen
+                this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
+    
+                // if ranged, shoot beam
+                if (this.raw.attackRange > 1) {
+                    this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+                }
             }
 
             // temporary code - will replace with sounds unique to each combat entity
@@ -165,7 +168,7 @@ class CombatEntity {
             if(foundAttack) {
                 this.target = foundAttack;
                 this.attack();
-                
+                // do an else if for bfsClosest.
             } else { // foundAttack should return the enemy we can hit.
                 const foundMove = this.bfsMove();
                 if(foundMove){

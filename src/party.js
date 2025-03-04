@@ -324,6 +324,7 @@ class PartyGUI {
             // *****
         }
         ctx.restore();
+        // we can call to draw the item here. Just use Item's draw() function.
     }
     getDefaultMidStyle(ctx) {
         ctx.textAlign = "center";
