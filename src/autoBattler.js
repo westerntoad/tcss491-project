@@ -261,7 +261,7 @@ class AutoBattler {
                 this.currRound++;
 
                 const finalRound = this.currRound > this.totalRounds;
-                const title = `Round ${this.currRound} complete`; // if final round
+                let title = `Round ${this.currRound} complete`; // if final round
                 if (this.currRound == this.totalRounds + 1) { // boss complete  // otherwise, current round complete
                     title = `Boss Round complete`;
                 }

@@ -5,7 +5,7 @@ const PARAMS = {
     altMusic: true,
     soundEffectsVolume: 1,
     musicVolume: 1,
-    cellSize: 75,
+    cellSize: 96,
     spaceHeight: 24,
     spaceHeightAdjusted: 15,
     scale: 3,
