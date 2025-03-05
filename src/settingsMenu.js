@@ -6,7 +6,7 @@ class SettingsMenu {
         this.height = PARAMS.canvasHeight - 100;
         this.x = PARAMS.canvasWidth - this.width - 100;
         this.y = (PARAMS.canvasHeight - this.height) / 2;
-        this.z = 300_000;
+        this.z = 300_010;
 
 
         const sW = this.width - 100;
@@ -41,13 +41,36 @@ class SettingsMenu {
         wrap.appendChild(this.mSlider);
 
         //this.canvas = document.getElementById("gameWorld");
+
+        // return button
+        const width = 200;
+        const height = 50; 
+        this.rButt = {
+            w: width,
+            h: height,
+            x: this.x + (this.width - width) / 2,
+            y: 600
+        }
     };
 
     update() {
         PARAMS.soundEffectsVolume = this.seSlider.value;
         PARAMS.musicVolume = this.mSlider.value;
         PLAY.update();
+
         //this.canvas.focus();
+
+        const mX = this.game.click ? this.game.click.x : -999_999;
+        const mY = this.game.click ? this.game.click.y : -999_999;
+
+        if (this.game.keys['z'] || (mX >= this.rButt.x && mX <= this.rButt.x + this.rButt.w
+                                 && mY >= this.rButt.y && mY <= this.rButt.y + this.rButt.h)) {
+
+            this.scene.hideSettings();
+            this.scene.showPause();
+            this.scene.pauseMenu.highlightButtonIdx = 2;
+            this.game.keys['z'] = false;
+        }
     }
 
     draw(ctx) {
@@ -71,5 +94,24 @@ class SettingsMenu {
         ctx.textAlign = "right";
         ctx.fillText(Math.floor(this.seSlider.value * 100) + "%", this.x + this.width - 50, this.y + 130);
         ctx.fillText(Math.floor(this.mSlider.value * 100) + "%", this.x + this.width - 50, this.y + 330);
+
+        ctx.fillStyle = "#4a90e2";
+        ctx.fillRect(this.rButt.x, this.rButt.y, this.rButt.w, this.rButt.h);
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(this.rButt.x, this.rButt.y, this.rButt.w, this.rButt.h);
+
+        ctx.fillStyle = "rgba(0, 0, 0, 1)";
+        ctx.font = "18px Trebuchet MS";
+        ctx.textAlign = "center";
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillText(
+            "Return",
+            this.rButt.x + this.rButt.w / 2,
+            this.rButt.y + this.rButt.h / 2 + 8
+        );
+
+        ctx.strokeStyle = '#ff0000';
+        ctx.strokeRect(this.rButt.x - 10, this.rButt.y - 10, this.rButt.w + 20, this.rButt.h + 20);
+
     }
 }
