@@ -6,14 +6,15 @@ class HUD {
         this.visible = true;
         this.padding = 20;
         this.width = game.width / 4;
-        this.height = game.height / 4.5;
+        this.height = game.height / 4.1;
         this.x = game.width - this.width - this.padding;
         this.y = this.padding;
 
         // Controls to display
         this.controls = [
-            {key: "Z: ", description: "Interact / Advance Dialog"},
-            {key: "X: ", description: "Show/Hide Party Menu"},
+            {key: "Z: ", description: "Interact / Next Dialogue"},
+            {key: "Hold Z: ", description: "Skip Dialogue"},
+            {key: "X: ", description: "Party and Settings"},
             {key: "Arrow/WASD: ", description: "Move Character"},
             {key: "H: ", description: "Toggle Controls HUD"}
         ];
