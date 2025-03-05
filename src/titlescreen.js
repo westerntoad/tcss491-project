@@ -162,11 +162,14 @@ class TitleScreen {
         // Draw buttons
         this.buttons.forEach(button => {
             // Button background
-            ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+            ctx.fillStyle = "rgba(130, 145, 155, 0.8)";
             const radius = 6; // Adjust corner radius as needed
             ctx.beginPath();
             ctx.roundRect(button.x, button.y, this.buttonWidth, this.buttonHeight, radius);
             ctx.fill();
+
+            // Reset lineWidth for button border
+            ctx.lineWidth = 2; // Set consistent line width for all button borders
             
             // Button border
             ctx.strokeStyle = "#b347cc";
@@ -175,9 +178,18 @@ class TitleScreen {
             ctx.stroke();
             
             // Button text
-            ctx.fillStyle = "#b347cc";
             ctx.font = "36px runescape";
             ctx.textAlign = "center";
+
+            // button text outline
+            ctx.strokeStyle = "black";  // Color of the outline
+            ctx.lineWidth = 2;          // Thickness of the outline
+            ctx.strokeText(button.text,
+                button.x + this.buttonWidth / 2,
+                button.y + this.buttonHeight / 2 + 10);
+
+            // button text color
+            ctx.fillStyle = "#b347cc";
             ctx.fillText(button.text, 
                         button.x + this.buttonWidth / 2, 
                         button.y + this.buttonHeight / 2 + 10);
