@@ -33,8 +33,16 @@ ASSET_MANAGER.queueDownload("./maps/dev.json");
 ASSET_MANAGER.queueDownload("./maps/dev2.json");
 ASSET_MANAGER.queueDownload("./maps/house.json");
 ASSET_MANAGER.queueDownload("./maps/marysMap.json");
+ASSET_MANAGER.queueDownload("./maps/marysHouse.json");
+ASSET_MANAGER.queueDownload("./maps/marysHouse.png");
+ASSET_MANAGER.queueDownload("./maps/bed.png");
+ASSET_MANAGER.queueDownload("./maps/tableChairTop.png");
+ASSET_MANAGER.queueDownload("./maps/tableChairBot.png");
+ASSET_MANAGER.queueDownload("./maps/basketH.png");
 ASSET_MANAGER.queueDownload("./assets/tileSheet_main.png");
 ASSET_MANAGER.queueDownload("./maps/areaOpen.png");
+
+
 
 
 // Manga Panels + dialog

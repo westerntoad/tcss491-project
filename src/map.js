@@ -68,7 +68,8 @@ class Map {
             const entity = new Tile(
                 this, tile.traversable,
                 tile.x, tile.y, tile.z,
-                tile.asset, tile.sx, tile.sy
+                tile.asset, tile.sx, tile.sy,
+                ...(tile.sh && tile.sw ? [tile.sh, tile.sw] : [])
             );
 
             this.tiles.push(entity);
@@ -144,13 +145,13 @@ class Map {
 const MAPS = {}
 MAPS.marysRoom = (map) => {
     // initialize map from JSON asset
-    const json = ASSET_MANAGER.getAsset("./maps/house.json");
+    const json = ASSET_MANAGER.getAsset("./maps/marysHouse.json");
     json.specialTiles = []; // receive a array of special tiles.
     const string = "marysRoom";
     json.name = string;
     json.specialTiles.push(...map.story.load(string));
 
-    const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
+    const portalPoint = new Tile(map, true, 5, 4, 0, '');
     portalPoint.stepOn = () => {
         // change to next map
         map.changeMap(MAPS.marysMap(map), 5, 7);
@@ -227,7 +228,7 @@ MAPS.marysMap = (map) => {
     
     const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
     marysRoom.stepOn = () => {
-        map.changeMap(MAPS.marysRoom(map), 8, 1);
+        map.changeMap(MAPS.marysRoom(map), 5, 4);
         map.player.dir = 2;
     };
     json.specialTiles.push(marysRoom);

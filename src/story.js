@@ -43,7 +43,7 @@ class Story {
         switch(this.globalProg) {
             case 0:
                 if(this.currMap === "marysRoom") {
-                    const quest = new Tile(this.map, false, 2, 0, 5, this.questIcon);
+                    const quest = new Tile(this.map, false, 1, 0, 5, this.questIcon);
                     quest.interact = () => {
                         this.progress();
                         quest.interact = null;
@@ -54,8 +54,8 @@ class Story {
         
             case 1:
                 if(this.currMap == "marysRoom") {
-                    const quest = new Tile(this.map, true, 6, 0, 5, this.questIcon);
-                    const basket = new Tile(this.map, false, 6, 1, 5, './dialog/basket.png', 0, 0, 32, 32);
+                    const quest = new Tile(this.map, true, 1, 2, 5, this.questIcon);
+                    const basket = new Tile(this.map, false, 1, 3, 5, './maps/basketH.png', 0, 0, 32, 32);
                     basket.interact = () => {
                         this.progress();
                         basket.interact = null;
