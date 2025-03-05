@@ -36,13 +36,13 @@ class TitleScreen {
                 x: width / 2 - this.buttonWidth / 2,
                 y: this.buttonStartY + this.buttonSpacing * 2,
                 action: () => this.openSettings()
-            },
-            {
-                text: "Exit",
-                x: width / 2 - this.buttonWidth / 2,
-                y: this.buttonStartY + this.buttonSpacing * 3,
-                action: () => this.exitGame()
-            }
+             } //,
+            // {
+            //     text: "Exit",
+            //     x: width / 2 - this.buttonWidth / 2,
+            //     y: this.buttonStartY + this.buttonSpacing * 3,
+            //     action: () => this.exitGame()
+            // }
         ];
 
         //Storing click handler as a class property so it can be removed later
@@ -118,12 +118,12 @@ class TitleScreen {
         console.log("Settings clicked");
     }
     
-    exitGame() {
-        // Implement exit functionality
-        console.log("Exit clicked");
-        // Might want to show a confirmation dialog here?
-        window.close();
-    }
+    // exitGame() {
+    //     // Implement exit functionality
+    //     console.log("Exit clicked");
+    //     // Might want to show a confirmation dialog here?
+    //     window.close();
+    // }
     
     update() {
         // Update logic if needed
@@ -151,28 +151,36 @@ class TitleScreen {
         }
         
         // Draw title
-        ctx.fillStyle = "white";
-        ctx.font = "48px Arial";
+        ctx.fillStyle = "#b347cc";
+        ctx.strokeStyle = "black"; // Color of the outline
+        ctx.lineWidth = 5; // Thickness of the outline
+        ctx.font = "72px runescape";
         ctx.textAlign = "center";
-        ctx.fillText("Grandmas Versus Unhappiness", this.width / 2, this.height / 3);
+        ctx.strokeText("Grandmas vs. Unhappiness", this.width / 2, this.height / 3); // Draw the outline
+        ctx.fillText("Grandmas vs. Unhappiness", this.width / 2, this.height / 3); // Draw the text
         
         // Draw buttons
         this.buttons.forEach(button => {
             // Button background
             ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-            ctx.fillRect(button.x, button.y, this.buttonWidth, this.buttonHeight);
+            const radius = 6; // Adjust corner radius as needed
+            ctx.beginPath();
+            ctx.roundRect(button.x, button.y, this.buttonWidth, this.buttonHeight, radius);
+            ctx.fill();
             
             // Button border
-            ctx.strokeStyle = "white";
-            ctx.strokeRect(button.x, button.y, this.buttonWidth, this.buttonHeight);
+            ctx.strokeStyle = "#b347cc";
+            ctx.beginPath();
+            ctx.roundRect(button.x, button.y, this.buttonWidth, this.buttonHeight, radius);
+            ctx.stroke();
             
             // Button text
-            ctx.fillStyle = "white";
-            ctx.font = "24px Arial";
+            ctx.fillStyle = "#b347cc";
+            ctx.font = "36px runescape";
             ctx.textAlign = "center";
             ctx.fillText(button.text, 
                         button.x + this.buttonWidth / 2, 
-                        button.y + this.buttonHeight / 2 + 8);
+                        button.y + this.buttonHeight / 2 + 10);
         });
     }
 }
