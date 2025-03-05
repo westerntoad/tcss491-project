@@ -14,7 +14,7 @@ class PauseMenu {
         this.buttonWidth = 200;
         this.buttonHeight = 50;
         this.buttonStartY = this.y + 120;
-        this.buttonSpacing = 50;
+        this.buttonSpacing = 30;
 
         this.highlightButtonIdx = 0;
 
@@ -43,6 +43,12 @@ class PauseMenu {
                 action: () => this.openSettings()
             },
             {
+                text: "Wiki",
+                x: buttX,
+                y: this.buttonStartY,
+                action: () => window.open('https://github.com/westerntoad/tcss491-project/wiki', '_blank').focus()
+            },
+            {
                 text: "Alt Music",
                 x: buttX,
                 y: this.buttonStartY,
@@ -55,7 +61,7 @@ class PauseMenu {
                 y: this.buttonStartY,
                 //Close the game file.
                 action: () => this.openTitle()
-            }
+            },
         ];
         let i = 0;
         this.buttons.forEach(butt => {
