@@ -64,7 +64,7 @@ class Character {
                 this.attackGrowth = 0.25;
                 this.attackSpeedGrowth = 0.5;
                 this.hpCap = 25;
-                this.attackCap = 77;
+                this.attackCap = 70;
                 this.attackSpeedCap = 0.5;
                 break; // 25% hp, 50% atkSpeed, 25% atk 
             // Warrior (melee, high attack)
@@ -78,7 +78,7 @@ class Character {
                 this.moveSpeed = 0.3; // 950ms
                 this.hpGrowth = 0.3;
                 this.attackGrowth = 0.75;
-                this.hpCap = 40;
+                this.hpCap = 37;
                 this.attackCap = 201;
                 break; // 25% hp, 50% atk, 25% atkSpeed
             // Ranged (paper thin Hp, high attack)
@@ -91,9 +91,9 @@ class Character {
                 this.attackSpeed = 1.25;
                 this.moveSpeed = 0.85;
                 this.hpGrowth = 0.25;
-                this.attackGrowth = 0.5;
-                this.attackSpeedGrowth = 0.15;
-                this.hpCap = 28;
+                this.attackGrowth = 0.7;
+                this.attackSpeedGrowth = 0.25;
+                this.hpCap = 20;
                 this.attackCap = 100;
                 this.attackSpeedCap = 0.75;
                 break; // 25% hp, 50% atk, 25% atkSpeed

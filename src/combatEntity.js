@@ -100,25 +100,33 @@ class CombatEntity {
         }
         return null;
     }
+    bfsClosest(){ // only triggers when bfsMove fails
+
+    }
     attack() {
         this.attackElapsed += this.game.clockTick;
-        if(this.attackElapsed >= this.raw.attackSpeed) {
-            const damage = Math.round((this.target.raw.defense ? 
-                1 - (this.target.raw.defense / (this.target.raw.defense + 50))
-                : 1) * this.raw.attack);
-            this.target.raw.hp -= damage;
-
-            // determining damageNum and beam placement.
-            const origX  = this.block.isoX + this.block.width * 0.5;
-            const origY  = this.block.isoY - this.block.height * 0.2;
-            const destX  = this.target.block.isoX + this.target.block.width * 0.5;
-            const destY  = this.target.block.isoY + this.target.block.height * 0.2;
-            // damage number gen
-            this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
-
-            // if ranged, shoot beam
-            if (this.raw.attackRange > 1) {
-                this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+        if(this.attackElapsed >= this.raw.attackSpeed) { 
+            // add special move here
+            if(this.raw.item?.attack && typeof this.raw.item.attack === `function`) {
+                this.raw.item.attack(this);
+            } else {
+                const damage = Math.round((this.target.raw.defense ? 
+                    1 - (this.target.raw.defense / (this.target.raw.defense + 50))
+                    : 1) * this.raw.attack);
+                this.target.raw.hp -= damage;
+    
+                // determining damageNum and beam placement.
+                const origX  = this.block.isoX + this.block.width * 0.5;
+                const origY  = this.block.isoY - this.block.height * 0.2;
+                const destX  = this.target.block.isoX + this.target.block.width * 0.5;
+                const destY  = this.target.block.isoY + this.target.block.height * 0.2;
+                // damage number gen
+                this.game.addEntity(new DamageNum(this.game, destX, destY, damage, this.raw.granny));
+    
+                // if ranged, shoot beam
+                if (this.raw.attackRange > 1) {
+                    this.game.addEntity(new Beam(this.game, {x: origX, y: origY}, {x: destX, y: destY}, damage));
+                }
             }
 
             // temporary code - will replace with sounds unique to each combat entity
@@ -139,6 +147,8 @@ class CombatEntity {
         if(this.raw.hp <= 0) {
             PLAY.death();
             // TODO: make a better exp thingy -> L.C.
+            // adorNum is distracting.
+            // if(!this.granny) this.game.addEntity(new AdorNum(this.game, this.block.isoX, this.block.isoY, this.raw.exp));
             this.battle.sceneManager.party.exp += this.raw.exp ? this.raw.exp :0;
             this.block.unit = null;
             this.removeFromWorld = true;
@@ -154,10 +164,17 @@ class CombatEntity {
         } else { // attempt to find another enemy in vacinity
             // initial.x & initial.y to move, & x,y of closestEnemy, dist of enemy
             this.attacking = false;
-            const foundAttack = this.bfsAttack(); // enemies close enough for attack
+            let foundAttack = null;
+            if(this.raw.item?.bfsAttack && typeof this.raw.item.bfsAttack === `function`) {
+                foundAttack = this.raw.item.bfsAttack(this);
+            } else {
+                foundAttack = this.bfsAttack(); // enemies close enough for attack
+            }
+            
             if(foundAttack) {
                 this.target = foundAttack;
                 this.attack();
+                // do an else if for bfsClosest.
             } else { // foundAttack should return the enemy we can hit.
                 const foundMove = this.bfsMove();
                 if(foundMove){

@@ -110,6 +110,9 @@ ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 ASSET_MANAGER.queueDownload("./assets/battle2.wav");
 ASSET_MANAGER.queueDownload("./assets/gameover.wav");
 
+//Items
+ASSET_MANAGER.queueDownload("./assets/items/laserPointer.png");
+
 // For Auto Battler
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock_park1.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock_park.png");
@@ -198,23 +201,23 @@ const DUNGEON_ENCOUNTERS = {
          { name: "chu",
             attackRange: 1,
             granny: false,
-            hp: 50,
-            attack: 0,
+            hp: 11,
+            attack: 23,
             defense: 0,
-            exp: 1,
-            attackSpeed: 0.2,
-            moveSpeed: 0.4,
-            asset: "./assets/enemies/L0neb0ne.png"
+            exp: 500,
+            attackSpeed: 0.05,
+            moveSpeed: 0.05,
+            asset: "./assets/enemies/Mad@Chu.png"
          },
          { name: "dep",
             attackRange: 1,
             granny: false,
-            hp: 50,
-            attack: 0,
+            hp: 1200,
+            attack: 9999,
             defense: 0,
-            exp: 1,
-            attackSpeed: 0.2,
-            moveSpeed: 0.4,
+            exp: 500,
+            attackSpeed: 3,
+            moveSpeed: 0.1,
             asset: "./assets/enemies/D3pr3ss0.png"
          }
     ],
@@ -279,22 +282,22 @@ const DUNGEON_ENCOUNTERS = {
          { name: "waneChime",
             attackRange: 4,
             granny: false,
-            hp: 110,
+            hp: 210,
             attack: 6,
             defense: 0,
             exp: 12,
-            attackSpeed: 0.95,
+            attackSpeed: 0.85,
             moveSpeed: 0.75,
             asset: "./assets/enemies/waneChime.png"
          },
          { name: "hopless",
             attackRange: 10,
             granny: false,
-            hp: 1300,
-            attack: 25,
+            hp: 1000,
+            attack: 24,
             defense: 0,
             exp: 25,
-            attackSpeed: 1.3,
+            attackSpeed: 1.2,
             moveSpeed: 10,
             asset: "./assets/enemies/hopless.png"
          }

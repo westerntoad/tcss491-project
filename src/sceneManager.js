@@ -20,11 +20,15 @@ class SceneManager {
             this.party.addMember(new Character("Mary Yott"));// initial party.
         }
         // this.party.addMember(new Character("Vera Mulberry"));// initial party.
+        // const item = Object.assign({}, Item.laserPointer());
+        // console.log("item: ");
+        // console.log(item);
+        // this.party.members[1].item = item;
         // this.party.addMember(new Character("Pearl Martinez"));
         // this.party.addMember(new Character("Ye-soon Kim"));
         // this.party.addMember(new Character("Bernice Campbell"));
-
-
+        // const tea = Object.assign({}, Item.teaCup());
+        // this.party.members[0].item = tea;
         this.hud = new HUD(this.game, this);
         this.game.addEntity(this.hud);
         this.hud.visible = true;

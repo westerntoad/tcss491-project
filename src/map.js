@@ -19,7 +19,7 @@ class Map {
             this.changeMap(MAPS.marysRoom(this), 3, 2);
         }
         this.globalDialogIndex = 0;
-        this.secret = [false];
+        this.secret = [false, false, false];
     }
 
     hide() {
@@ -120,6 +120,9 @@ class Map {
     }
 
     draw(ctx) {
+        ctx.save();
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = `#c8f6aa`;
         // draw tile outlines
         for (let i = 0; i < this.width * this.height; i++) {
             const x = i % this.width;
@@ -132,6 +135,7 @@ class Map {
             );
 
         }
+        ctx.restore();
     }
 }
 
@@ -144,23 +148,47 @@ class Map {
  */
 const MAPS = {}
 MAPS.marysRoom = (map) => {
-    // initialize map from JSON asset
-    const json = ASSET_MANAGER.getAsset("./maps/marysHouse.json");
-    json.specialTiles = []; // receive a array of special tiles.
-    const string = "marysRoom";
-    json.name = string;
-    json.specialTiles.push(...map.story.load(string));
+    // // initialize map from JSON asset
+    // const json = ASSET_MANAGER.getAsset("./maps/house.json");
+    // json.specialTiles = []; // receive a array of special tiles.
+    // const string = "marysRoom";
+    // json.specialTiles.push(...map.story.load(string));
 
-    const portalPoint = new Tile(map, true, 5, 4, 0, '');
-    portalPoint.stepOn = () => {
-        // change to next map
-        map.changeMap(MAPS.marysMap(map), 5, 7);
-        map.player.dir = 2;
-    };
-    json.specialTiles.push(portalPoint);
+    // const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
+    // portalPoint.stepOn = () => {
+    //     // change to next map
+    //     map.changeMap(MAPS.marysMap(map), 5, 7);
+    //     map.player.dir = 2;
+    // };
+    // json.specialTiles.push(portalPoint);
 
+    // // Chapter 1
+
+    // const forest = new Tile(map, false, 4, 3, 5, "./maps/areaOpen.png");
+    // forest.interact = () => {
+    //     map.scene.battleScene([
+    //         [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
+
+    //         [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+    //             {name: "Mad@Chu", x: 3, y: 3}],
+
+    //         [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+    //             {name: "D3pr3ss0", x: 3, y: 0}],
+
+    //         [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+    //             {name: "D3pr3ss0", x: 0, y: 0}],
+
+    //         [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
+    //             {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
+    //             {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
+    //             {name: "D3pr3ss0", x: 4, y: 0},
+    //             {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
+    //             ], 
+    //             "Grass", true, "Lonely Forest");
+    // }
+    // json.specialTiles.push(forest);
     //testing combat in marysRoom
-    //Chapter 1
+    // Chapter 2
     // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
     // portals.interact = () => {
     //     map.scene.battleScene(
@@ -192,7 +220,14 @@ MAPS.marysRoom = (map) => {
     // }
     // json.specialTiles.push(jerry);
     // json.specialTiles.push(portals);
-    //Chapter 2
+
+    // const portal2 = new Tile(map, false, 17, 15, 0, "");
+    // portal2.interact = () => {
+    //     map.scene.battleScene([[{name: "chu", x: 0, y: 0}]], "Grass", false, "???", false, 1);
+    // };
+    // json.specialTiles.push(portal2);
+
+    // //Chapter 3
     // const portals1 = new Tile(map, false, 1, 3, 0, "./assets/enemies/Derek_King.png", 0, 0, 32, 32);
     // portals1.interact = () => {
     //     map.scene.battleScene( // bernice & vera
@@ -224,7 +259,6 @@ MAPS.marysMap = (map) => {
     json.specialTiles = [];
     json.name = 'marysMap';
     json.specialTiles.push(...map.story.load("marysMap"));
-
     
     const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
     marysRoom.stepOn = () => {

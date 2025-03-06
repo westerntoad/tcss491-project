@@ -17,7 +17,7 @@ class AutoBattler {
         this.spaceWidth = this.isoBlock.width;
         this.spaceHeight = 24; // hard value from image 32x32
         this.spaceHeightAdjusted = 15;
-        this.scale = 3;
+        this.scale = PARAMS.scale;
 
         this.bg = new AutoBG(this.game, 0);
         this.game.addEntity(this.bg);
@@ -45,7 +45,7 @@ class AutoBattler {
 
     showText(text) {
         const textWidth = this.game.ctx.measureText(this.text).width;
-        const frames = 120; // modifiable
+        const frames = 150; // modifiable
         const textStartFrames = Animate.moveExp(-textWidth, this.game.height/2, this.game.width / 2, 
             this.game.height/2, frames);
         this.game.addEntity(new Text(text, textStartFrames, frames));
@@ -63,6 +63,10 @@ class AutoBattler {
         return arr;
     }
 
+    /**
+     * also, add a score board that is counting the exp as score.
+     * For Chapter 4, quit out of the battle and call it story complete.
+     */
     spawn(){
         // get spawnCost of enemies from input to autoBattler?
         // send in one of each enemy for the designated Chapter
@@ -103,7 +107,7 @@ class AutoBattler {
         block.unit = new EndlessPortal(block, this.game); // create the portal
         this.game.addEntity(block.unit);
         this.spawnValue = 0;
-        this.spawnRate = // important for increasing the rate of spawn
+        this.spawnRate();// important for increasing the rate of spawn
         this.init();
     }
     
