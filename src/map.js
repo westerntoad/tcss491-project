@@ -164,29 +164,6 @@ MAPS.marysRoom = (map) => {
 
     // // Chapter 1
 
-    const forest = new Tile(map, false, 4, 3, 5, "./maps/areaOpen.png");
-    forest.interact = () => {
-        map.scene.battleScene([
-            [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
-
-            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-                {name: "Mad@Chu", x: 3, y: 3}],
-
-            [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-                {name: "D3pr3ss0", x: 3, y: 0}],
-
-            [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                {name: "D3pr3ss0", x: 0, y: 0}],
-
-            [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
-                {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
-                {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
-                {name: "D3pr3ss0", x: 4, y: 0},
-                {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
-                ], 
-                "Grass", true, "Lonely Forest");
-    }
-    json.specialTiles.push(forest);
     //testing combat in marysRoom
     // Chapter 2
     // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
