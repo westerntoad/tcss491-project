@@ -14,7 +14,9 @@ class PauseMenu {
         this.buttonWidth = 200;
         this.buttonHeight = 50;
         this.buttonStartY = this.y + 120;
-        this.buttonSpacing = 50;
+        this.buttonSpacing = 30;
+
+        this.highlightButtonIdx = 0;
 
         const buttX = this.x + (this.width - this.buttonWidth) / 2;
         this.buttons = [
@@ -23,7 +25,8 @@ class PauseMenu {
                 x: buttX,
                 y: this.buttonStartY,
                 //Go to the party menu in the current game.
-                action: () => this.openParty()
+                action: () => this.openParty(),
+                highlighted: true
             },
             { 
                 text: "Save",
@@ -40,6 +43,12 @@ class PauseMenu {
                 action: () => this.openSettings()
             },
             {
+                text: "Wiki",
+                x: buttX,
+                y: this.buttonStartY,
+                action: () => window.open('https://github.com/westerntoad/tcss491-project/wiki', '_blank').focus()
+            },
+            {
                 text: "Alt Music",
                 x: buttX,
                 y: this.buttonStartY,
@@ -52,7 +61,7 @@ class PauseMenu {
                 y: this.buttonStartY,
                 //Close the game file.
                 action: () => this.openTitle()
-            }
+            },
         ];
         let i = 0;
         this.buttons.forEach(butt => {
@@ -147,20 +156,31 @@ class PauseMenu {
     }
 
     update() {
-        if (!this.game.click) return;
-        const mouseX = this.game.click.x;
-        const mouseY = this.game.click.y;
-        
-        // Check if any button was clicked
-        this.buttons.forEach(button => {
-            if (mouseX >= button.x && 
-                mouseX <= button.x + this.buttonWidth &&
-                mouseY >= button.y && 
-                mouseY <= button.y + this.buttonHeight) {
-                button.action();
-            }
-        });
+        if (this.game.click) {
+            const mouseX = this.game.click.x;
+            const mouseY = this.game.click.y;
+            
+            // Check if any button was clicked
+            this.buttons.forEach(button => {
+                if (mouseX >= button.x && 
+                    mouseX <= button.x + this.buttonWidth &&
+                    mouseY >= button.y && 
+                    mouseY <= button.y + this.buttonHeight) {
+                    button.action();
+                }
+            });
+        }
 
+        if (this.game.keys['ArrowDown']) {
+            this.highlightButtonIdx = (this.highlightButtonIdx + 1) % this.buttons.length;
+            this.game.keys['ArrowDown'] = false;
+        } else if (this.game.keys['ArrowUp']) {
+            this.highlightButtonIdx = ((this.highlightButtonIdx - 1) + this.buttons.length) % this.buttons.length;
+            this.game.keys['ArrowUp'] = false;
+        } else if (this.game.keys['z']) {
+            this.buttons[this.highlightButtonIdx].action();
+            this.game.keys['z'] = false;
+        }
     }
 
     draw(ctx) {
@@ -202,6 +222,12 @@ class PauseMenu {
                     ctx.fillText('✓', x + w / 2, y + h / 2 + 2);
                 }
             }
+
+            if (i == this.highlightButtonIdx) {
+                ctx.strokeStyle = '#ff0000'
+                ctx.strokeRect(currButt.x - 10, currButt.y - 10, tempWidth + 20, this.buttonHeight + 20);
+            }
+
             ctx.fillStyle = "#4a90e2";
             ctx.fillRect(currButt.x, currButt.y, tempWidth, this.buttonHeight);
             ctx.strokeStyle = "white";
@@ -218,9 +244,6 @@ class PauseMenu {
             );
 
         }
-
-
-
 
         // jerry giving a tip
         ctx.drawImage(this.jerryImg, 0, 0, 32, 32, 100, 600, 100, 100);
