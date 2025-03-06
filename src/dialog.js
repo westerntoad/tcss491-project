@@ -97,7 +97,26 @@ class Dialog {
           ctx.fillText(wrappedLines[i], this.padding * 2, this.boxY + 3 * this.padding + (i + 0.5) * (this.defaultFontSize + 10));
         }
         ctx.font = `${this.defaultFontSize + 5}pt m6x11`;
-        ctx.fillStyle = 'blue';
+        if (this.speaker = "Mary") {
+            ctx.fillstyle = '#ff98cf';
+        } if (this.speaker = "Vera" || "Vera (from the background)") {
+            ctx.fillstyle = '#f5a169';
+        } if (this.speaker = "Pearl") {
+            ctx.fillstyle = '#57d9d9';
+        } if (this.speaker = "Ye-soon") {
+            ctx.fillstyle = '#87db37';
+        } if (this.speaker = "Bernice") {
+            ctx.fillstyle = '#e6e3ac';
+        } if (this.speaker = "Mr.Mulberry") {
+            ctx.fillstyle = '#c7c501';
+        } if (this.speaker = "Mrs.Mulberry") {
+            ctx.fillstyle = '#840ea7';
+        } if (this.speaker = 'Jerry') {
+            ctx.fillstyle = '#2d0bd5';
+        } if (this.speaker = 'Derek King') {
+            ctx.fillstyle = '#cc1503';
+        }
+        //ctx.fillStyle = 'blue';
         ctx.fillText(this.speaker, this.padding * 1.5, this.boxY + this.padding);
         ctx.restore();
       }
