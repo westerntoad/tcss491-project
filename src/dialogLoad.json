@@ -32,14 +32,14 @@
     {"speaking": "Vera", "content": "I want to help him, Mary, but I don’t know what to do."},
     {"speaking": "Mary", "content": "You know, I have a fresh batch of berries ripe on my vine."},
     {"speaking": "Mary", "content": "I remember you mentioned Jerry loved blueberries."},
-    {"speaking": "Mary", "content": "How about you and I go talk with Jerry tomorrow?"},
+    {"speaking": "Mary", "content": "How about you and I go talk with Jerry?"},
     {"speaking": "Mary", "content": "I’ll bring a fresh harvest."},
     {"speaking": "Vera", "content": "Ah yes! That could do."},
     {"speaking": "Vera", "content": "And I can bring my foster cats along, he always does love spending time with them."},
     {"speaking": "Vera", "content": "Yes, I think that could be it."},
     {"speaking": "Vera", "content": "Thank you, Mary!"},
-    {"speaking": "Vera", "content": "I’ll see you tomorrow."},
-    {"speaking": "Mary", "content": "See you tomorrow! Buh-bye now, dear.", "end": true}
+    {"speaking": "Vera", "content": "I’ll see you soon."},
+    {"speaking": "Mary", "content": "See you soon! Buh-bye now, dear.", "end": true}
     ],
 
     [{"speaking": "Mary", "content": "That’ll be Vera here to pick me up."},
@@ -52,11 +52,11 @@
     {"speaking": "Mary", "content": "Of course, my dear friend."},
     {"speaking": "Mary", "content": "Now, let’s see if we can together also be a reassurance for your grandson, shall we?"},
     {"speaking": "Vera", "content": "Yes, let's! I’ve let my son know we’ll be dropping in."},
-    {"speaking": "Vera", "content": "We just follow the road East, now."}
+    {"speaking": "Vera", "content": "We just follow the road East to their house, now."}
     ],
 
     [
-    {"speaking": "Mr.Mulberry", "content": "Ma! Vera! Well howdy do?"},
+    {"speaking": "Mr.Mulberry", "content": "Ma! Mary! Well howdy do?"},
     {"speaking": "Vera", "content": "Well hello to you, too, son!"},
     {"speaking": "Vera", "content": "Mary and I were hoping to pay a visit to Jerry, is he here?"}, 
     {"speaking": "Mrs.Mulberry", "content": "We let him know you were coming, but he left right after we mentioned it."}, 
@@ -93,7 +93,7 @@
     {"speaking": "Mrs.Mulberry", "content": "…"}, 
     {"speaking": "Vera", "content": "…"}, 
     {"speaking": "Mary", "content": "*Chuckles* No need to be so *sappy* now."},
-    {"speaking": "Mary", "content": "Anyways, we’ll be back later. Buh bye, now!"}
+    {"speaking": "Mary", "content": "Anyways, we’ll be back later. Time for us to travel East to the Forest. Buh bye, now!"}
     ],
 
     [
