@@ -149,44 +149,44 @@ class Map {
 const MAPS = {}
 MAPS.marysRoom = (map) => {
     // // initialize map from JSON asset
-    // const json = ASSET_MANAGER.getAsset("./maps/house.json");
-    // json.specialTiles = []; // receive a array of special tiles.
-    // const string = "marysRoom";
-    // json.specialTiles.push(...map.story.load(string));
+    const json = ASSET_MANAGER.getAsset("./maps/marysHouse.json");
+    json.specialTiles = []; // receive a array of special tiles.
+    const string = "marysRoom";
+    json.specialTiles.push(...map.story.load(string));
 
-    // const portalPoint = new Tile(map, true, 8, 0, 0, './assets/portalPoint.png');
-    // portalPoint.stepOn = () => {
-    //     // change to next map
-    //     map.changeMap(MAPS.marysMap(map), 5, 7);
-    //     map.player.dir = 2;
-    // };
-    // json.specialTiles.push(portalPoint);
+    const portalPoint = new Tile(map, true, 5, 4, 0, '');
+    portalPoint.stepOn = () => {
+        // change to next map
+        map.changeMap(MAPS.marysMap(map), 5, 7);
+        map.player.dir = 2;
+    };
+    json.specialTiles.push(portalPoint);
 
     // // Chapter 1
 
-    // const forest = new Tile(map, false, 4, 3, 5, "./maps/areaOpen.png");
-    // forest.interact = () => {
-    //     map.scene.battleScene([
-    //         [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
+    const forest = new Tile(map, false, 4, 3, 5, "./maps/areaOpen.png");
+    forest.interact = () => {
+        map.scene.battleScene([
+            [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
 
-    //         [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-    //             {name: "Mad@Chu", x: 3, y: 3}],
+            [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+                {name: "Mad@Chu", x: 3, y: 3}],
 
-    //         [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-    //             {name: "D3pr3ss0", x: 3, y: 0}],
+            [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+                {name: "D3pr3ss0", x: 3, y: 0}],
 
-    //         [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-    //             {name: "D3pr3ss0", x: 0, y: 0}],
+            [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+                {name: "D3pr3ss0", x: 0, y: 0}],
 
-    //         [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
-    //             {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
-    //             {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
-    //             {name: "D3pr3ss0", x: 4, y: 0},
-    //             {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
-    //             ], 
-    //             "Grass", true, "Lonely Forest");
-    // }
-    // json.specialTiles.push(forest);
+            [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
+                {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
+                {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
+                {name: "D3pr3ss0", x: 4, y: 0},
+                {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
+                ], 
+                "Grass", true, "Lonely Forest");
+    }
+    json.specialTiles.push(forest);
     //testing combat in marysRoom
     // Chapter 2
     // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
