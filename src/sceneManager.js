@@ -18,7 +18,7 @@ class SceneManager {
         this.party = new Party(this.game, this, save);
         if (!save) {
             this.party.addMember(new Character("Mary Yott"));// initial party.
-            this.party.addMember(new Character("Vera Mulberry"));
+            //this.party.addMember(new Character("Vera Mulberry"));
         }
         // this.party.addMember(new Character("Vera Mulberry"));// initial party.
         // const item = Object.assign({}, Item.laserPointer());
