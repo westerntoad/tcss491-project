@@ -336,9 +336,9 @@ class AutoBattler {
                 this.currRound++;
 
                 const finalRound = this.currRound > this.totalRounds;
-                const title = `Round ${this.currRound - 1} complete`; // if final round
+                let title = `Round ${this.currRound - 1} complete`; // if final round
                                          // boss complete  // otherwise, current round complete
-                if(this.story) title = 'Story complete';
+                if(this.enemies.story) title = `${this.text} complete`;
                 const callback = finalRound ? () => {
                     if(this.enemies.story) {console.log("story, here"); this.sceneManager.story = true;}
                     this.cleanup();
@@ -373,7 +373,7 @@ class AutoBattler {
                     // and play the dialogue.
                 // } 
                 else {
-                    buttonLabel = `Return to Home`;
+                    buttonLabel = `Return to Map`;
                 }
 
                 this.showingDialog = true;
@@ -570,13 +570,13 @@ class RoundComplete {
             const adorationDisplaySpeed = 320;
             const deltaAdoration = Math.min(this.adoration, Math.round((this.elapsed - this.adorationDelay) * adorationDisplaySpeed));
             ctx.fillStyle = '#d087e0';
-            ctx.font = '30px m6x11';
+            ctx.font = '35px m6x11';
             ctx.strokeStyle = `black`;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 1;
             ctx.textAlign = "center";
             ctx.textBaseline = "center";
-            ctx.fillText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 80);
-            ctx.strokeText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 80);
+            ctx.fillText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 120);
+            ctx.strokeText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 120);
         }
 
         // callback button

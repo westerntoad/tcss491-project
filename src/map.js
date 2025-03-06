@@ -187,6 +187,12 @@ MAPS.marysRoom = (map) => {
                 "Grass", true, "Lonely Forest");
     }
     json.specialTiles.push(forest);
+    const jerry = new Tile(map, false, 4, 4, 5, "./assets/enemies/Jerry_Mulberry.png");
+    jerry.interact = () => {
+        map.scene.battleScene(
+            [[{name: "Jerry Mulberry", x: 3, y: 3}]], "Grass", true, "Jerry Mulberry");
+    }
+    json.specialTiles.push(jerry);
     //testing combat in marysRoom
     // Chapter 2
     // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
