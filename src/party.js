@@ -103,10 +103,11 @@ class PartyGUI {
                 this.index.index = 0;
             } else {
                 this.index.index = 1;
-                if(this.index.col == 0 && this.squArr[this.index.col+1][this.index.row] !== null) {
-                    this.index.col = this.colSize;
-                } else{
+                if(this.index.col > 0 && this.squArr[this.index.col - 1][this.index.row] !== null) {
                     this.index.col--;
+                } else{
+                    if(this.squArr[this.colSize][this.index.row] == null) this.index.col = 0;
+                    else this.index.col = this.colSize;
                 }
             } this.game.keys[`ArrowLeft`] = false;
         }
