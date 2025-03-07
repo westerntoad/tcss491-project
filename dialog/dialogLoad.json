@@ -269,16 +269,7 @@
     {"speaking": "Pearl", "content": "Anyways, have a lovely night! This scarf won’t knit itself!",
         "end": true}
     ],
-
-    [
-    {"speaking": "Jerry", "content": "I know you weren’t expecting me, but I may have some things that could help you."},
-    {"speaking": "Jerry", "content": "Anytime you need it, just let me know and I can show you what I have in stock."},
-    {"speaking": "Vera", "content": "The boy has some interesting ideas!"},
-    {"speaking": "Vera", "content": "We’ll wait over here while you take a look, Mary."},
-    {"speaking": "Vera", "content": "Let us know when you’re ready to go.",
-        "end": true}
-    ],
-
+    
     [
     {"speaking": "Ye-soon", "content": "…And you all plan to go to the office to speak with him?"}, 
     {"speaking": "Ye-soon", "content": "Wow! That is quite the tale."},
