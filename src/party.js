@@ -452,7 +452,7 @@ class PartyGUI {
             }
             ctx.restore();
             // TODO: for ITEMS ** >>
-            ctx.fillRect(x + segmentX / 10, y + segmentY * (9/16), 25, 25);
+            // ctx.fillRect(x + segmentX / 10, y + segmentY * (9/16), 25, 25);
             // *****
         }
 
