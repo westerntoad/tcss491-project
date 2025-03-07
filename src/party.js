@@ -10,9 +10,10 @@ class Party {
         this.exp = 10; // keep track of total exp in the pot.
 
         if (save) {
-            save.party.members.array.forEach(mem => {
+            save.party.members.forEach(mem => {
                 let newMember = new Character(mem.name);
                 Object.assign(newMember, mem);
+                this.members.push(newMember);
             });
             this.exp = save.party.exp;
             console.log(this.members);

@@ -92,7 +92,9 @@ class PauseMenu {
             party: {
                 members: this.scene.party.members,
                 exp: this.scene.party.exp
-            }
+            },
+            soundEffectsVolume: PARAMS.soundEffectsVolume,
+            musicVolume: PARAMS.musicVolume
         }
         save.party.scene = undefined;
         save.party.game = undefined;

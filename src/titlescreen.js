@@ -87,6 +87,13 @@ class TitleScreen {
         STOP.allMusic();
         PLAY.overworld();
         this.newScene = new SceneManager(this.game, save);
+        if (save) {
+            PARAMS.soundEffectsVolume = save.soundEffectsVolume;
+            PARAMS.musicVolume = save.musicVolume;
+        } else {
+            PARAMS.soundEffectsVolume = 1;
+            PARAMS.musicVolume = 1;
+        }
     }
     
     loadGame() {
