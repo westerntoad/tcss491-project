@@ -162,7 +162,7 @@ class SceneManager {
 
     battleScene(enemyArr, type, story = false, title = "", endless = false, grannyLimit = 6) {
         const gLimit = grannyLimit;
-        z("Entered Battle Scene");
+        console.log("Entered Battle Scene");
         this.savedState = this.game.entities;
         this.savedMap = this.map;
         // enemyArr = CHAPTER1_ROUNDS;
