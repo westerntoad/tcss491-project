@@ -7,7 +7,7 @@ class Party {
         Object.assign(this, {game, scene});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
-        this.exp = 0; // keep track of total exp in the pot.
+        this.exp = 1000; // keep track of total exp in the pot.
 
         if (save) {
             save.party.members.array.forEach(mem => {
@@ -49,9 +49,15 @@ class PartyGUI {
         this.baseBordersSize = this.baseBorders.width;
 
         this.changeSize();
-    }
-    init(){
 
+        this.squArr = Array.from({ length: 2 }, () => Array(3).fill(null));
+        this.init();
+        // this.redSquare = {
+        //     w: width,
+        //     h: height,
+        //     x: this.sX,
+        //     y: 600
+        // }
     }
     changeSize(){
         if(this.party.scene.hud.visible){
@@ -64,7 +70,63 @@ class PartyGUI {
         }
     }
     // lets start drawing this.
+    init() {
+        const numRows = 3;
+        for(let i = 0; i < this.members.length; i++) {
+            const col = Math.floor(i / numRows);
+            const row = i % numRows;
+            this.squArr[col][row] = 0;
+            this.squArr[col][row] = 0;
+        }
+        this.colSize = Math.floor((this.members.length - 1) / 3);
+        this.index = {
+            row: 0,
+            col: 0,
+            index: 0
+        };
+    }
     update(){
+        if(this.game.keys[`ArrowRight`]) {
+            if(this.index.index == 0) {
+                this.index.index = 1;
+            } else {
+                this.index.index = 0;
+                if(this.colSize > this.index.col && this.squArr[this.index.col+1][this.index.row] !== null) {
+                    this.index.col++;
+                } else {
+                    this.index.col = 0;
+                }
+            } this.game.keys[`ArrowRight`] = false;
+        }
+        if(this.game.keys[`ArrowLeft`]) {
+            if(this.index.index == 1) {
+                this.index.index = 0;
+            } else {
+                this.index.index = 1;
+                if(this.index.col == 0 && this.squArr[this.index.col+1][this.index.row] !== null) {
+                    this.index.col = this.colSize;
+                } else{
+                    this.index.col--;
+                }
+            } this.game.keys[`ArrowLeft`] = false;
+        }
+        if(this.game.keys[`ArrowDown`]) {
+            if(this.index.row < 2 && this.squArr[this.index.col][this.index.row+1] !== null) {
+                this.index.row++;
+            } else {
+                this.index.row = 0;
+            } this.game.keys[`ArrowDown`] = false;
+        }
+        if(this.game.keys[`ArrowUp`]) {
+            if(this.index.row > 0 && this.squArr[this.index.col][this.index.row-1] !== null) {
+                this.index.row--;
+            } else {
+                this.index.row = 2;
+                while(this.squArr[this.index.col][this.index.row] === null) {
+                    this.index.row--;
+                }
+            } this.game.keys[`ArrowUp`] = false;
+        }
 
         let mouseX = this.game.mouse?.x;
         let mouseY = this.game.mouse?.y;
@@ -90,6 +152,7 @@ class PartyGUI {
                     if(used === 0) {
                         PLAY.invalid();
                         this.game.addEntity({
+                            click: (this.game.click ? true : false),
                             z: this.z + 1,
                             expire: 30,
                             exp: this.members[i].expReq[this.members[i].level - 1],
@@ -100,7 +163,8 @@ class PartyGUI {
                                 ctx.fillStyle = 'black';
                                 ctx.fillText(
                                     `can't :(`,
-                                    mouseX + 10, mouseY - 10
+                                    mouseX + 10, 
+                                    mouseY - 10
                                 )
                                 ctx.restore();
                                 if(this.expire <= 0) this.removeFromWorld = true;
@@ -119,6 +183,7 @@ class PartyGUI {
                     if(gain === 0) {
                         PLAY.invalid();
                         this.game.addEntity({
+                            click: (this.game.click ? true : false),
                             z: this.z + 1,
                             expire: 30,
                             exp: this.members[i].expReq[this.members[i].level - 1],
@@ -129,17 +194,74 @@ class PartyGUI {
                                 ctx.fillStyle = 'black';
                                 ctx.fillText(
                                     `nope :o`,
-                                    mouseX + 10, mouseY - 10
+                                    mouseX + 10, 
+                                    mouseY - 10
                                 )
                                 ctx.restore();
                                 if(this.expire <= 0) this.removeFromWorld = true;
                             },
                             update: function() {}
                         });
-                        
                     }
                     this.party.exp += gain;
                 }
+            }
+            else if(this.index.col == col && this.index.row == row && this.game.pressed[`z`]){
+                if(this.index.index == 0) {
+                    const used = this.members[i].levelUp(this.party.exp);
+                    used === 0 ? PLAY.invalid() : PLAY.select();
+                    if(used === 0) {
+                        PLAY.invalid();
+                        this.game.addEntity({
+                            click: (this.game.click ? true : false),
+                            z: this.z + 1,
+                            expire: 30,
+                            exp: this.members[i].expReq[this.members[i].level - 1],
+                            draw: function(ctx) {
+                                ctx.save();
+                                this.expire--;
+                                ctx.font = `bold 16px runescape`;
+                                ctx.fillStyle = 'black';
+                                ctx.fillText(
+                                    `can't :(`,
+                                    x + segmentX / 10, 
+                                    y + segmentY * (3/4)
+                                )
+                                ctx.restore();
+                                if(this.expire <= 0) this.removeFromWorld = true;
+                            },
+                            update: function() {}
+                        });
+                    }
+                    this.party.exp -= used;
+                } else {
+                    const gain = this.members[i].levelDown();
+                    gain === 0 ? PLAY.invalid() : PLAY.select();
+                    if(gain === 0) {
+                        PLAY.invalid();
+                        this.game.addEntity({
+                            click: (this.game.click ? true : false),
+                            z: this.z + 1,
+                            expire: 30,
+                            exp: this.members[i].expReq[this.members[i].level - 1],
+                            draw: function(ctx) {
+                                ctx.save();
+                                this.expire--;
+                                ctx.font = `bold 16px runescape`;
+                                ctx.fillStyle = 'black';
+                                ctx.fillText(
+                                    `nope :o`,
+                                    x + segmentX / (10/3), 
+                                    y + segmentY * (3/4)
+                                )
+                                ctx.restore();
+                                if(this.expire <= 0) this.removeFromWorld = true;
+                            },
+                            update: function() {}
+                        });
+                    }
+                    this.party.exp += gain;
+                } this.game.pressed[`z`] = false;
             }
         }
     }
@@ -233,6 +355,7 @@ class PartyGUI {
                 y + segmentY * (3/4),
                 segmentX / 8, segmentY / 8
             );
+            
 
             // draw Character
             const img = ASSET_MANAGER.getAsset(this.members[i].asset);
@@ -332,6 +455,17 @@ class PartyGUI {
             ctx.fillRect(x + segmentX / 10, y + segmentY * (9/16), 25, 25);
             // *****
         }
+
+        const x = segmentX* this.index.col + startX;
+        const y = segmentY* this.index.row + startY;
+            ctx.save();
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(
+                x + segmentX / (this.index.index ? (10/3) : (10)) - 5,
+                y + segmentY * (3/4) - 5, // placement tested.
+                segmentX / 8 + 10, segmentY / 8 + 10);
+            ctx.restore();
         ctx.restore();
         // we can call to draw the item here. Just use Item's draw() function.
     }

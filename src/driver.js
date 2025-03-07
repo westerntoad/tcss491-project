@@ -27,6 +27,7 @@ ASSET_MANAGER.queueDownload("./assets/plus.png");
 
 //Title screen
 ASSET_MANAGER.queueDownload("./assets/titleBackgroundTemp.png");
+ASSET_MANAGER.queueDownload("./assets/bigFinger.png");
 
 // Maps
 ASSET_MANAGER.queueDownload("./maps/dev.json");
