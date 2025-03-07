@@ -572,7 +572,7 @@ class RoundComplete {
             ctx.fillStyle = '#d087e0';
             ctx.font = '35px m6x11';
             ctx.strokeStyle = `black`;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.textAlign = "center";
             ctx.textBaseline = "center";
             ctx.fillText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 120);
