@@ -154,13 +154,13 @@ MAPS.marysRoom = (map) => {
     const string = "marysRoom";
     json.specialTiles.push(...map.story.load(string));
 
-    const portalPoint = new Tile(map, true, 5, 4, 0, '');
-    portalPoint.stepOn = () => {
-        // change to next map
-        map.changeMap(MAPS.marysMap(map), 5, 7);
-        map.player.dir = 2;
-    };
-    json.specialTiles.push(portalPoint);
+    // const portalPoint = new Tile(map, true, 5, 4, 0, '');
+    // portalPoint.stepOn = () => {
+    //     // change to next map
+    //     map.changeMap(MAPS.marysMap(map), 5, 7);
+    //     map.player.dir = 2;
+    // };
+    // json.specialTiles.push(portalPoint);
 
     // // Chapter 1
 
@@ -308,7 +308,7 @@ MAPS.marysMap = (map) => {
                         {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
                         {name: "1ntern", x: 0, y: 4}
                     ]], "Office", true, "Office");
-                map.story.questBattle = 15;
+                map.story.questBattle = 14;
         }
         json.specialTiles.push(zone);
     }
@@ -334,6 +334,7 @@ MAPS.marysMap = (map) => {
                 ]
                 // at the end: bernice & pearl to clear the small fries.
                 ], "Park", true, "Woebegone Park", false, 2);
+                map.story.questBattle = 20;
         }
         json.specialTiles.push(zone);
     }

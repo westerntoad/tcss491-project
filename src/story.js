@@ -60,6 +60,7 @@ class Story {
                     basket.interact = () => {
                         this.progress();
                         basket.interact = null;
+                        this.npc[1] = true;
                     }
                     this.specialTiles.push(basket);
                     this.specialTiles.push(quest);
@@ -190,17 +191,17 @@ class Story {
                     this.specialTiles.push(quest);
                 }
                 break;
-            case 13: // talk to jerry
+            // case 13: // talk to jerry
+            //     if(this.currMap == "marysMap") {
+            //         const quest2 = new Tile(this.map, true, 11, 18, 5, this.questIcon);
+            //         const jerry2 = new Tile(this.map, false, 11, 19, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
+            //         jerry2.interact = () => this.progress();
+            //         this.specialTiles.push(quest2, jerry2);
+            //     }
+            //     break;
+            case 13: // talk to Ye-soon
                 if(this.currMap == "marysMap") {
-                    const quest2 = new Tile(this.map, true, 11, 18, 5, this.questIcon);
-                    const jerry2 = new Tile(this.map, false, 11, 19, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
-                    jerry2.interact = () => this.progress();
-                    this.specialTiles.push(quest2, jerry2);
-                }
-                break;
-            case 14: // talk to Ye-soon
-                if(this.currMap == "marysMap") {
-                    this.npc[0] = true; // jerry's shop is open
+                    // this.npc[0] = true; // jerry's shop is open
 
                     const quest = new Tile(this.map, true, 10, 22, 5, this.questIcon);
                     const yesoon = new Tile(this.map, false, 10, 23, 5, './assets/grandmas/Ye-soon_Kim.png', 0, 0, 32, 32)
@@ -211,7 +212,7 @@ class Story {
                     this.specialTiles.push(yesoon, quest);
                 }
                 break;
-            case 15: // Office map is the quest
+            case 14: // Office map is the quest
                 if(this.currMap == "marysMap") {
                     for(let i = 0; i < 3; i++){
                         const quest = new Tile(this.map, true, 10+i, 30, 5, this.questIcon);
@@ -219,7 +220,7 @@ class Story {
                     }
                 }
                 break;
-            case 16: // recruit bernice
+            case 15: // recruit bernice
                 if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 10, 25, 5, this.questIcon);
                     const bernice = new Tile(this.map, false, 10, 26, 5, './assets/grandmas/Bernice_Campbell.png', 0, 0, 32, 32)
@@ -230,7 +231,7 @@ class Story {
                     this.specialTiles.push(bernice, quest);
                 }
                 break;
-            case 17: // talk to Derek King
+            case 16: // talk to Derek King
                 if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 12, 27, 5, this.questIcon);
                     const derek = new Tile(this.map, false, 12, 28, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32)
@@ -240,7 +241,7 @@ class Story {
                     this.specialTiles.push(derek, quest);
                 }
                 break;
-            case 18: // fight Derek King
+            case 17: // fight Derek King
                 if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 12, 27, 5, this.questIcon);
                     const derek = new Tile(this.map, false, 12, 28, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32)
@@ -251,7 +252,7 @@ class Story {
                     this.specialTiles.push(derek, quest);
                 }
                 break;
-            case 19: // talk to Derek King // Chapter 2 Over
+            case 18: // talk to Derek King // Chapter 2 Over
                 if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 12, 27, 5, this.questIcon);
                     const derek = new Tile(this.map, false, 12, 28, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32)
@@ -260,23 +261,23 @@ class Story {
                     };
                     this.specialTiles.push(derek, quest);
                 }
-            case 20: // at Mary's house
+            case 19: // at Mary's house
                 if(this.currMap == "marysMap") {
                     const quest = new Tile(this.map, true, 6, 5, 5, this.questIcon);
                     this.specialTiles.push(quest);
                 } else if(this.currMap == "marysRoom") {
-                    const vera = new Tile(this.map, false, 6, 1, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
-                    const pearl = new Tile(this.map, false, 6, 2, 2, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
+                    const vera = new Tile(this.map, false, 1, 1, 2, './assets/grandmas/Vera_Mulberry.png', 0, 0, 32, 32);
+                    const pearl = new Tile(this.map, false, 0, 2, 2, './assets/grandmas/Pearl_Martinez.png', 0, 0, 32, 32);
                     pearl.interact = () => {
                         this.progress();
                     };
-                    const quest = new Tile(this.map, true, 6, 1, 5, this.questIcon);
-                    const yesoon = new Tile(this.map, false, 10, 1, 2, './assets/grandmas/Ye-soon_Kim.png', 0, 0, 32, 32);
-                    const bernice = new Tile(this.map, false, 10, 2, 2, './assets/grandmas/Bernice_Campbell.png', 0, 0, 32, 32);
+                    const quest = new Tile(this.map, true, 0, 1, 5, this.questIcon);
+                    const yesoon = new Tile(this.map, false, 4, 2, 2, './assets/grandmas/Ye-soon_Kim.png', 0, 0, 32, 32);
+                    const bernice = new Tile(this.map, false, 2, 4, 2, './assets/grandmas/Bernice_Campbell.png', 0, 0, 32, 32);
                     this.specialTiles.push(vera, pearl, yesoon, bernice, quest);
                 }
                 break;
-            case 21: // Quest in the Woebegone Park
+            case 20: // Quest in the Woebegone Park
                 if(this.currMap == "marysMap") {
                     for(let i = 0; i < 4; i++) {
                         const quest = new Tile(this.map, true, 0, 13+i, 2, this.questIcon);
@@ -284,7 +285,7 @@ class Story {
                     }
                 }
                 break;
-            case 22: // Talk to Melanie
+            case 21: // Talk to Melanie
                 if(this.currMap == "marysMap") {
                     const derek = new Tile(this.map, false, 2, 14, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32);
                     derek.interact = () => {
@@ -293,7 +294,7 @@ class Story {
                     this.specialTiles.push(derek);
                 }
                 break;
-            case 23: // Fight Melanie
+            case 22: // Fight Melanie
                 if(this.currMap == "marysMap") {
                     const derek = new Tile(this.map, false, 2, 14, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32);
                     derek.interact = () => {
@@ -303,7 +304,7 @@ class Story {
                     this.specialTiles.push(derek);
                 }
                 break;
-            case 24: // Talk to Melanie // Chapter 3 Over
+            case 23: // Talk to Melanie // Chapter 3 Over
                 if(this.currMap == "marysMap") {
                     const derek = new Tile(this.map, false, 2, 14, 5, './assets/enemies/Derek_King.png', 0, 0, 32, 32);
                     derek.interact = () => {
@@ -325,6 +326,16 @@ class Story {
                 const jerry = new Tile(this.map, false, 11, 19, 5, './assets/enemies/Jerry_Mulberry.png', 0, 0, 32, 32);
                 jerry.interact = () => {};// this.map.scene.openShop();
                 this.specialTiles.push(jerry);
+            }
+        } else if(this.currMap == "marysRoom") {
+            if(this.npc[1]) {
+                const roomExit = new Tile(this.map, true, 5, 4, 0, '');
+                roomExit.stepOn = () => {
+                    // change to next map
+                    this.map.changeMap(MAPS.marysMap(this.map), 5, 7);
+                    this.map.player.dir = 2;
+                };
+                this.specialTiles.push(roomExit);
             }
         }
     }

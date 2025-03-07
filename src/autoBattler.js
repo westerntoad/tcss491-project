@@ -338,7 +338,7 @@ class AutoBattler {
                 const finalRound = this.currRound > this.totalRounds;
                 let title = `Round ${this.currRound - 1} complete`; // if final round
                                          // boss complete  // otherwise, current round complete
-                if(this.enemies.story) title = `${this.text} complete`;
+                if(this.enemies.story && finalRound) title = `${this.text} complete`;
                 const callback = finalRound ? () => {
                     if(this.enemies.story) {console.log("story, here"); this.sceneManager.story = true;}
                     this.cleanup();

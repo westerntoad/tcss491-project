@@ -146,7 +146,8 @@ class PartyGUI {
             const x = segmentX* col + startX;
             const y = segmentY* row + startY;
             if(mouseX > x + segmentX / 10 && mouseX < x + segmentX / 10 + segmentX/8 &&
-                mouseY > y + segmentY * (3/4) && mouseY < y + segmentY * (3/4) + segmentY/8){
+                mouseY > y + segmentY * (3/4) && mouseY < y + segmentY * (3/4) + segmentY/8
+                && this.game.click){
                 if(this.game.click){
                     const used = this.members[i].levelUp(this.party.exp);
                     used === 0 ? PLAY.invalid() : PLAY.select();
@@ -177,7 +178,8 @@ class PartyGUI {
                 }
             }
             else if(mouseX > x + segmentX * (3/10) && mouseX < x + segmentX * (3/10) + segmentX/8 &&
-                mouseY > y + segmentY * (3/4) && mouseY < y + segmentY * (3/4) + segmentY/8){
+                mouseY > y + segmentY * (3/4) && mouseY < y + segmentY * (3/4) + segmentY/8
+                && this.game.click){
                 if(this.game.click){
                     const gain = this.members[i].levelDown();
                     gain === 0 ? PLAY.invalid() : PLAY.select();
