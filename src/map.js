@@ -243,101 +243,92 @@ MAPS.marysMap = (map) => {
         map.player.dir = 2;
     };
     json.specialTiles.push(marysRoom);
-
-    if(!map.secret || !map.secret[0]){
-        const secret = new Tile(map, true, 6, 3, 0, './assets/portalPoint.png', 16, 16, 16, 16);
-        secret.interact = () => {
-            map.scene.party.exp += 15;
-            secret.removeFromWorld = true;
-            map.secret[0] = true;
-        };
-        json.specialTiles.push(secret);
-    }
+    
     //ASSET_MANAGER.queueDownload("./assets/maps/areaOpen.png");
-    const forest = [];
-    forest.push(new Tile(map, false, 24, 9, -1, "./maps/areaOpen.png"));
-    forest.push(new Tile(map, false, 24, 10, -1, "./maps/areaOpen.png"));
-    forest.push(new Tile(map, false, 24, 11, -1, "./maps/areaOpen.png"));
-    forest.push(new Tile(map, false, 24, 12, -1, "./maps/areaOpen.png"));
-    forest.forEach(portals => {
-        portals.interact = () => {
-            map.scene.battleScene([
-                [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
+    // const forest = [];
+    // forest.push(new Tile(map, false, 24, 9, -1, "./maps/areaOpen.png"));
+    // forest.push(new Tile(map, false, 24, 10, -1, "./maps/areaOpen.png"));
+    // forest.push(new Tile(map, false, 24, 11, -1, "./maps/areaOpen.png"));
+    // forest.push(new Tile(map, false, 24, 12, -1, "./maps/areaOpen.png"));
+    // forest.forEach(portals => {
+    //     portals.interact = () => {
+    //         map.scene.battleScene([
+    //             [{name: "L0neb0ne", x: 0, y: 3}, {name:"L0neb0ne", x: 6, y: 3}],
 
-                [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
-                    {name: "Mad@Chu", x: 3, y: 3}],
+    //             [{name: "L0neb0ne", x: 1, y: 3}, {name:"L0neb0ne", x: 5, y: 3},
+    //                 {name: "Mad@Chu", x: 3, y: 3}],
 
-                [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
-                    {name: "D3pr3ss0", x: 3, y: 0}],
+    //             [{name: "Mad@Chu", x: 2, y: 1}, {name:"Mad@Chu", x: 4, y: 1},
+    //                 {name: "D3pr3ss0", x: 3, y: 0}],
 
-                [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
-                    {name: "D3pr3ss0", x: 0, y: 0}],
+    //             [{name:"Mad@Chu", x: 1, y: 1}, {name: "D3pr3ss0", x: 0, y: 1}, 
+    //                 {name: "D3pr3ss0", x: 0, y: 0}],
 
-                [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
-                    {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
-                    {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
-                    {name: "D3pr3ss0", x: 4, y: 0},
-                    {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
-                    ], 
-                    "Grass", true, "Lonely Forest");
-            map.story.questBattle = 7;
-        };
-    });
-    json.specialTiles.push(...forest);
+    //             [{name: "Mad@Chu", x: 1, y: 1}, {name: "Mad@Chu", x: 5, y: 1},
+    //                 {name: "Mad@Chu", x: 2, y: 1}, {name: "Mad@Chu", x: 4, y: 1},
+    //                 {name: "D3pr3ss0", x: 3, y: 0}, {name: "D3pr3ss0", x: 2, y: 0},
+    //                 {name: "D3pr3ss0", x: 4, y: 0},
+    //                 {name: "Mad@Chu", x: 0, y: 0}, {name:"Mad@Chu", x: 6, y: 0}]
+    //                 ], 
+    //                 "Grass", true, "Lonely Forest");
+    //         map.story.questBattle = 7;
+    //     };
+    // });
+    // json.specialTiles.push(...forest);
 
-    for(let i = 0; i < 3; i++) { // Office
-        const zone = new Tile(map, false, 10 + i, 30, -1, "./maps/areaOpen.png", 16, 0, 16, 16);
-        zone.interact = () => {
-            map.scene.battleScene(
-                [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
-                {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
-                    ],
+    // for(let i = 0; i < 3; i++) { // Office
+    //     const zone = new Tile(map, false, 10 + i, 30, -1, "./maps/areaOpen.png", 16, 0, 16, 16);
+    //     zone.interact = () => {
+    //         map.scene.battleScene(
+    //             [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
+    //             {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
+    //                 ],
     
-                    [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
-                        {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
-                        {name: "0verworked", x: 2, y: 0}],
+    //                 [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
+    //                     {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
+    //                     {name: "0verworked", x: 2, y: 0}],
     
-                    [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
-                        {name: "J4nitor", x: 5, y: 0},
-                        {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
-                        {name: "1ntern", x: 0, y: 5}],
+    //                 [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
+    //                     {name: "J4nitor", x: 5, y: 0},
+    //                     {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
+    //                     {name: "1ntern", x: 0, y: 5}],
     
-                    [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
-                        {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
-                        {name: "J4nitor", x: 6, y: 6},
-                        {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
-                        {name: "1ntern", x: 0, y: 4}
-                    ]], "Office", true, "Office");
-                map.story.questBattle = 14;
-        }
-        json.specialTiles.push(zone);
-    }
+    //                 [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
+    //                     {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
+    //                     {name: "J4nitor", x: 6, y: 6},
+    //                     {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
+    //                     {name: "1ntern", x: 0, y: 4}
+    //                 ]], "Office", true, "Office");
+    //             map.story.questBattle = 14;
+    //     }
+    //     json.specialTiles.push(zone);
+    // }
 
-    for(let i = 0; i < 4; i++) { // Woebegone Park
-        const zone = new Tile(map, false, 0, 13+i, -1, "./maps/areaOpen.png", 32, 0, 16, 16);
-        zone.interact = () => {
-            map.scene.battleScene( // bernice & vera
-                [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
-                    {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
-                    {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
-                    {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
-                    {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
-                    {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
-                ],
-                // bernice & ye-soon
-                [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
-                    {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
-                    {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
-                    {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
-                ],
-                [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
-                ]
-                // at the end: bernice & pearl to clear the small fries.
-                ], "Park", true, "Woebegone Park", false, 2);
-                map.story.questBattle = 20;
-        }
-        json.specialTiles.push(zone);
-    }
+    // for(let i = 0; i < 4; i++) { // Woebegone Park
+    //     const zone = new Tile(map, false, 0, 13+i, -1, "./maps/areaOpen.png", 32, 0, 16, 16);
+    //     zone.interact = () => {
+    //         map.scene.battleScene( // bernice & vera
+    //             [[{name: "droplet", x: 0, y: 2}, {name: "droplet", x: 0, y: 3}, {name: "droplet", x: 0, y: 4},
+    //                 {name: "droplet", x: 1, y: 2}, {name: "droplet", x: 1, y: 3}, {name: "droplet", x: 1, y: 4},
+    //                 {name: "droplet", x: 0, y: 1}, {name: "droplet", x: 0, y: 5},
+    //                 {name: "droplet", x: 1, y: 1}, {name: "droplet", x: 1, y: 5},
+    //                 {name: "droplet", x: 0, y: 0}, {name: "droplet", x: 1, y: 0},
+    //                 {name: "droplet", x: 0, y: 6}, {name: "droplet", x: 1, y: 6}
+    //             ],
+    //             // bernice & ye-soon
+    //             [{name: "waneChime", x: 2, y: 2}, {name: "waneChime", x: 1, y: 3}, {name: "waneChime", x: 2, y: 4},
+    //                 {name: "waneChime", x: 1, y: 2}, {name: "waneChime", x: 2, y: 3}, {name: "waneChime", x: 1, y: 4},
+    //                 {name: "waneChime", x: 0, y: 2}, {name: "waneChime", x: 0, y: 3}, {name: "waneChime", x: 0, y: 4},
+    //                 {name: "waneChime", x: 6, y: 6}, {name: "waneChime", x: 6, y: 0}
+    //             ],
+    //             [{name: "hopless", x: 0, y: 0}, {name: "hopless", x: 6, y: 0}, {name: "hopless", x: 3, y: 0}
+    //             ]
+    //             // at the end: bernice & pearl to clear the small fries.
+    //             ], "Park", true, "Woebegone Park", false, 2);
+    //             map.story.questBattle = 20;
+    //     }
+    //     json.specialTiles.push(zone);
+    // }
     return json;
 }
 
