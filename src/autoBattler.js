@@ -18,6 +18,7 @@ class AutoBattler {
         this.scale = PARAMS.scale;
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
+        this.allShadows = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text);
         this.blockImg(text);
         this.prep = true;
@@ -36,6 +37,7 @@ class AutoBattler {
     blockImg(text) {
         console.log("Text being read: " + text);
         this.backGround = ASSET_MANAGER.getAsset("./assets/autoBattler/forestBG.png");
+        this.shadow = ASSET_MANAGER.getAsset("./assets/autoBattler/forestShadow.png");
         if(text === "Office" || text === "Derek King") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
             this.backGround = null;
@@ -44,6 +46,17 @@ class AutoBattler {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock_park1.png");
             this.backGround = null;
             // set BG here.
+        }
+        if(this.backGround) {
+            this.extra = {
+                img: ASSET_MANAGER.getAsset("./assets/autoBattler/forestBush.png"),
+                z: -2,
+                draw: function(ctx) {
+                    ctx.drawImage(this.img, 0, 0, ctx.canvas.width, ctx.canvas.height);
+                },
+                update: () => {}
+            };
+            this.game.addEntity(this.extra);
         }
     }
     setSpots(round) {
@@ -183,6 +196,12 @@ class AutoBattler {
             block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
+            const shadow = new Block((i % 7) + 5, Math.floor(i / 7) + 5, this.shadow, -3);
+            shadow.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
+            this.allShadows[i % 7][Math.floor(i/7)] = shadow;
+            block.shadow = shadow;
+            this.game.addEntity(shadow);
+
             this.game.addEntity(block);
         }
 
@@ -191,6 +210,12 @@ class AutoBattler {
             const block = new Block(8, i, this.isoBlock);
             block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
+
+            const shadow = new Block (8 + 5, i + 5, this.shadow, -3);
+            shadow.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
+            this.allShadows[7][i] = shadow;
+            block.shadow = shadow;
+            this.game.addEntity(shadow);
 
             this.game.addEntity(block);
         }
@@ -307,6 +332,7 @@ class AutoBattler {
                         }
                     } else {
                         block.hovered = false;
+                        block.shadow.hovered = false;
                     }
                 }
             }
@@ -399,7 +425,9 @@ class AutoBattler {
     cleanup() {
         this.units().forEach(unit => unit.removeFromWorld = true);
         this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
+        this.allShadows.forEach(column => column.forEach(shadow => shadow ? shadow.removeFromWorld = true : void 0));
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
+        this.extra.removeFromWorld = true;
         this.removeFromWorld = true;
     }
 
