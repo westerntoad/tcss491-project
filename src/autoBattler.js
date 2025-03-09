@@ -196,7 +196,7 @@ class AutoBattler {
             block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
-            const shadow = new Block((i % 7) + 5, Math.floor(i / 7) + 5, this.shadow, -3);
+            const shadow = new Block((i % 7) + 2.5, Math.floor(i / 7) + 2.5, this.shadow, -3);
             shadow.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
             this.allShadows[i % 7][Math.floor(i/7)] = shadow;
             block.shadow = shadow;
@@ -211,7 +211,7 @@ class AutoBattler {
             block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
 
-            const shadow = new Block (8 + 5, i + 5, this.shadow, -3);
+            const shadow = new Block (8 + 2.5, i + 2.5, this.shadow, -3);
             shadow.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allShadows[7][i] = shadow;
             block.shadow = shadow;
@@ -427,7 +427,7 @@ class AutoBattler {
         this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
         this.allShadows.forEach(column => column.forEach(shadow => shadow ? shadow.removeFromWorld = true : void 0));
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
-        this.extra.removeFromWorld = true;
+        if(this.extra) this.extra.removeFromWorld = true;
         this.removeFromWorld = true;
     }
 
