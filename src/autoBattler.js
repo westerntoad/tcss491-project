@@ -5,8 +5,6 @@ class AutoBattler {
         this.sceneManager = sceneManager;
         this.players = players;
         this.enemies = enemies;
-
-        this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
         this.z = -5; // draw this first.
 
         this.currRound = 1;
@@ -37,10 +35,13 @@ class AutoBattler {
     }
     blockImg(text) {
         console.log("Text being read: " + text);
+        this.backGround = ASSET_MANAGER.getAsset("./assets/autoBattler/forestBG.png");
         if(text === "Office" || text === "Derek King") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
+            // set BG here.
         } else if(text === "Woebegone Park" || text === "Melanie Martinez") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock_park1.png");
+            // set BG here.
         }
     }
     setSpots(round) {
@@ -402,9 +403,11 @@ class AutoBattler {
 
     draw(ctx) { // ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.save();
-        ctx.fillStyle = "grey";
-        ctx.fillRect(0, 0, this.game.width, this.game.height);
-        //ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        // ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
+        // ctx.fillStyle = "grey";
+        // ctx.fillRect(0, 0, this.game.width, this.game.height);
+        ctx.drawImage(this.backGround, 0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.restore();
         
     }

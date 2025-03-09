@@ -121,6 +121,7 @@ ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh2.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh3.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/forestBG.png");
 
 // Sound effects
 ASSET_MANAGER.queueDownload("./assets/select.wav");
