@@ -38,9 +38,11 @@ class AutoBattler {
         this.backGround = ASSET_MANAGER.getAsset("./assets/autoBattler/forestBG.png");
         if(text === "Office" || text === "Derek King") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
+            this.backGround = null;
             // set BG here.
         } else if(text === "Woebegone Park" || text === "Melanie Martinez") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock_park1.png");
+            this.backGround = null;
             // set BG here.
         }
     }
@@ -405,9 +407,12 @@ class AutoBattler {
         ctx.save();
 
         // ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
-        // ctx.fillStyle = "grey";
-        // ctx.fillRect(0, 0, this.game.width, this.game.height);
-        ctx.drawImage(this.backGround, 0, 0, ctx.canvas.width, ctx.canvas.height);
+        if(this.backGround) {
+            ctx.drawImage(this.backGround, 0, 0, ctx.canvas.width, ctx.canvas.height);
+        } else {
+            ctx.fillStyle = "grey";
+            ctx.fillRect(0, 0, this.game.width, this.game.height);
+        }
         ctx.restore();
         
     }
