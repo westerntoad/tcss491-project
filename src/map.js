@@ -166,37 +166,37 @@ MAPS.marysRoom = (map) => {
 
     //testing combat in marysRoom
     // Chapter 2
-    const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
-    portals.interact = () => {
-        map.scene.battleScene(
-            [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
-            {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
-                ],
+    // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
+    // portals.interact = () => {
+    //     map.scene.battleScene(
+    //         [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
+    //         {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
+    //             ],
 
-                [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
-                    {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
-                    {name: "0verworked", x: 2, y: 0}],
+    //             [{name: "1ntern", x: 0, y: 1}, {name: "1ntern", x: 0, y: 0},
+    //                 {name: "1ntern", x: 1, y: 0}, {name: "0verworked", x: 0, y: 2},
+    //                 {name: "0verworked", x: 2, y: 0}],
 
-                [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
-                    {name: "J4nitor", x: 5, y: 0},
-                    {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
-                    {name: "1ntern", x: 0, y: 5}],
+    //             [{name: "J4nitor", x: 6, y: 0}, {name: "J4nitor", x: 6, y: 1},
+    //                 {name: "J4nitor", x: 5, y: 0},
+    //                 {name: "1ntern", x: 0, y: 6}, {name: "1ntern", x: 1, y: 6},
+    //                 {name: "1ntern", x: 0, y: 5}],
 
-                [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
-                    {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
-                    {name: "J4nitor", x: 6, y: 6},
-                    {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
-                    {name: "1ntern", x: 0, y: 4}
-                ]], "Office", true, "Office");
-    };
-    const jerry = new Tile(map, false, 4, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
-    jerry.interact = () => {
-        map.scene.battleScene([
-            [{name: "Jerry Mulberry", x: 3, y: 0}]], 
-                    "Grass", false);
-    }
-    json.specialTiles.push(jerry);
-    json.specialTiles.push(portals);
+    //             [{name: "J4nitor", x: 3, y: 6}, {name: "J4nitor", x: 3, y: 0},
+    //                 {name: "J4nitor", x: 6, y: 3}, {name: "J4nitor", x: 6, y: 0},
+    //                 {name: "J4nitor", x: 6, y: 6},
+    //                 {name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, 
+    //                 {name: "1ntern", x: 0, y: 4}
+    //             ]], "Office", true, "Office");
+    // };
+    // const jerry = new Tile(map, false, 4, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
+    // jerry.interact = () => {
+    //     map.scene.battleScene([
+    //         [{name: "Jerry Mulberry", x: 3, y: 0}]], 
+    //                 "Grass", false);
+    // }
+    // json.specialTiles.push(jerry);
+    // json.specialTiles.push(portals);
 
     // const portal2 = new Tile(map, false, 17, 15, 0, "");
     // portal2.interact = () => {
