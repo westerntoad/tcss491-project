@@ -63,7 +63,7 @@ class SettingsMenu {
         const mX = this.game.click ? this.game.click.x : -999_999;
         const mY = this.game.click ? this.game.click.y : -999_999;
 
-        if (this.game.keys['z'] || (mX >= this.rButt.x && mX <= this.rButt.x + this.rButt.w
+        if ((this.game.keys['z'] || this.game.pressed['e']) || (mX >= this.rButt.x && mX <= this.rButt.x + this.rButt.w
                                  && mY >= this.rButt.y && mY <= this.rButt.y + this.rButt.h)) {
 
             this.scene.hideSettings();

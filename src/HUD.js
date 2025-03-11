@@ -12,9 +12,9 @@ class HUD {
 
         // Controls to display
         this.controls = [
-            {key: "Z: ", description: "Interact / Next Dialogue"},
-            {key: "Hold Z: ", description: "Skip Dialogue"},
-            {key: "X: ", description: "Party and Settings"},
+            {key: "Z or E: ", description: "Interact / Next Dialogue"},
+            {key: "Hold Z or E: ", description: "Skip Dialogue"},
+            {key: "X or R: ", description: "Party and Settings"},
             {key: "Arrow/WASD: ", description: "Move Character"},
             {key: "H: ", description: "Toggle Controls HUD"}
         ];
