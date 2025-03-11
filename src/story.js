@@ -10,7 +10,6 @@ class Story {
         this.dialogIndex = save ? save.dialogIndex : 0;
         this.getPortal = null; // use to get portal.
         this.npc = save ? save.npc : [false, false, false, false, false, false];
-        this.storyCheck = [false, false, false, false, false];
         this.questBattle = null;
         this.secret = save ? save.secret : [false, false, false];
         //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];

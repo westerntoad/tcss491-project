@@ -25,7 +25,19 @@ class Dialog {
             mary: [
                 ASSET_MANAGER.getAsset("./assets/scrolls/mary1.wav"),
                 ASSET_MANAGER.getAsset("./assets/scrolls/mary2.wav")
-            ]
+            ],
+            vera: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/vera1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/vera2.wav")
+            ],
+            yesoon: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/yesoon1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/yesoon2.wav")
+            ],
+            bernice: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/bernice1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/bernice2.wav")
+            ],
         };
     }
 
@@ -40,10 +52,37 @@ class Dialog {
             
             if (this.playScroll && this.dText != this.text) {
                 this.playScroll = false;
-                const scrolls = this.scrolls.mary;
+                let scrolls = undefined;
+                if (this.speaker == "Mary") {
+                    scrolls = this.scrolls.mary;
+                } else if (this.speaker == "Vera" || this.speaker == "Vera (from the background)") {
+                    scrolls = this.scrolls.vera;
+                    scrolls[0].volume = 0.1;
+                    scrolls[1].volume = 0.1;
+                } else if (this.speaker == "Pearl") {
+                    scrolls = this.scrolls.mary;
+                } else if (this.speaker == "Ye-soon") {
+                    scrolls = this.scrolls.yesoon;
+                    scrolls[0].volume = 0.15;
+                    scrolls[1].volume = 0.15;
+                } else if (this.speaker == "Bernice") {
+                    scrolls = this.scrolls.bernice;
+                    scrolls[0].volume = 0.15;
+                    scrolls[1].volume = 0.15;
+                } else if (this.speaker == "Mr.Mulberry") {
+                    scrolls = this.scrolls.mary;
+                } else if (this.speaker == "Mrs.Mulberry") {
+                    scrolls = this.scrolls.mary;
+                } else if (this.speaker == 'Jerry') {
+                    scrolls = this.scrolls.mary;
+                } else if (this.speaker == 'Derek King') {
+                    scrolls = this.scrolls.mary;
+                } else {
+                    scrolls = this.scrolls.mary;
+                }
                 const rand = Math.random();
                 let flag = true;
-                const flagIdx = this.text.includes('?') ? 0 : 1;
+                const flagIdx = this.text.includes('?') ? 1 : 0;
                 const audio = scrolls[flagIdx];
                 audio.currentTime = 0;
                 if (audio.currentTime != 0) {
@@ -59,6 +98,7 @@ class Dialog {
             }
         }
     }
+
     wrapText(ctx, text, maxWidth) {
         const words = text.split(' ');
         let lines = [];

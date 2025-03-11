@@ -135,6 +135,12 @@ ASSET_MANAGER.queueDownload("./assets/hit2.wav");
 // scrolls
 ASSET_MANAGER.queueDownload("./assets/scrolls/mary1.wav");
 ASSET_MANAGER.queueDownload("./assets/scrolls/mary2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/vera1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/vera2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/bernice1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/bernice2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/yesoon1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/yesoon2.wav");
 
 // Fonts
 // NOTE: fonts must not start with './'

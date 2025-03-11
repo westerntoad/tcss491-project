@@ -141,23 +141,6 @@ class AutoBattler {
         return arr;
     }
 
-    /**
-     * also, add a score board that is counting the exp as score.
-     * For Chapter 4, quit out of the battle and call it story complete.
-     */
-    spawn(){
-        // get spawnCost of enemies from input to autoBattler?
-        // send in one of each enemy for the designated Chapter
-        // Can we determine their cost via how much exp they give?
-
-        //get spawnValue, determine which enemies to put out.
-        //  Taking big reference from Risk of Rain spawning mechanic
-        //increment spawnValue with spawnRate.
-    }
-    spawnRate(){
-        //return spawnRate for the this.game.tick*
-    }
-
     initEndless() {
         // initialize all blocks in battlefield
         for (let i = 0; i < 7*7; i++) {
@@ -238,7 +221,7 @@ class AutoBattler {
         this.init();
     }
     init() {
-        this.startButton = new StartButton(this.game, () => {
+        this.startButton = new StartButton(this.game, this, () => {
             const len = this.units(true, true).length;
             return (len > 0 && len <= this.grannyLimit && !this.startPressed);
         }, () => {
@@ -257,7 +240,6 @@ class AutoBattler {
         });
         this.startButton.grannyLimit = this.grannyLimit;
         this.startButton.limit = () => {
-            console.log("pressed");
             return this.units(true, true).length > this.grannyLimit;
         };
         this.game.addEntity(this.startButton);
@@ -475,8 +457,9 @@ class AutoBattler {
 }
 
 class StartButton {
-    constructor(game, isEnabled, onClick) {
+    constructor(game, battle, isEnabled, onClick) {
         this.game = game;
+        this.battle = battle;
         this.onClick = onClick;
         this.isEnabled = isEnabled;
         this.enabled = isEnabled();
@@ -488,7 +471,7 @@ class StartButton {
     }
 
     update() {
-        this.enabled = this.isEnabled();
+        this.enabled = this.isEnabled() && !this.battle.disableControl;
         const x = this.game.mouse?.x;
         const y = this.game.mouse?.y;
         if (this.game.click
