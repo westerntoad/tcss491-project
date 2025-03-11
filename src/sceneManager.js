@@ -106,7 +106,7 @@ class SceneManager {
 
     update() {
         // if a dialog is on screen, advance the dialog.
-        if (this.game.pressed['z']) {
+        if (this.game.pressed['z'] || this.game.pressed['e']) {
             if (this.dialog) {
                 if(this.dialogIndex < this.dialogArr.length){
                     this.dialog.removeFromWorld = true;
@@ -122,8 +122,9 @@ class SceneManager {
                     this.hideDialog();
                 }
                 this.game.pressed['z'] = false;
+                this.game.pressed['e'] = false;
             }
-        } else if (this.game.pressed['x'] && !this.dialog){
+        } else if ((this.game.pressed['x'] || this.game.pressed['r']) && !this.dialog){
             if (this.pauseMenu) {
                 this.hidePause();
             } else if (this.party.partyGUI) {
@@ -136,6 +137,7 @@ class SceneManager {
                 this.showPause();
             }
             this.game.pressed['x'] = false;
+            this.game.pressed['r'] = false;
         } else if (this.game.pressed['h']) {
             this.hud.toggle();
             this.party.changeSize();

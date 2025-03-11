@@ -108,7 +108,7 @@ class Map {
 
     
     update() {
-        if (this.game.pressed['z'] && !this.player.disableMovement) {
+        if ((this.game.pressed['z'] || this.game.pressed['e']) && !this.player.disableMovement) {
             if (!this.scene.dialog) {
                 const facedTile = this.player.facingTile();
                 const presentTiles = this.getTile(facedTile.x, facedTile.y);

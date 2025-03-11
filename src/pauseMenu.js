@@ -181,9 +181,10 @@ class PauseMenu {
         } else if (this.game.keys['ArrowUp']) {
             this.highlightButtonIdx = ((this.highlightButtonIdx - 1) + this.buttons.length) % this.buttons.length;
             this.game.keys['ArrowUp'] = false;
-        } else if (this.game.keys['z']) {
+        } else if (this.game.keys['z'] || this.game.keys['e']) {
             this.buttons[this.highlightButtonIdx].action();
             this.game.keys['z'] = false;
+            this.game.keys['e'] = false;
         }
     }
 
