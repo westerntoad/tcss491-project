@@ -30,13 +30,13 @@ class TitleScreen {
                 x: width / 2 - this.buttonWidth / 2,
                 y: this.buttonStartY + this.buttonSpacing,
                 action: () => this.loadGame()
-            },
-            {
-                text: "Settings",
-                x: width / 2 - this.buttonWidth / 2,
-                y: this.buttonStartY + this.buttonSpacing * 2,
-                action: () => this.openSettings()
-             } //,
+            }
+            // {
+            //     text: "Settings",
+            //     x: width / 2 - this.buttonWidth / 2,
+            //     y: this.buttonStartY + this.buttonSpacing * 2,
+            //     action: () => this.openSettings()
+            //  } //,
             // {
             //     text: "Exit",
             //     x: width / 2 - this.buttonWidth / 2,
