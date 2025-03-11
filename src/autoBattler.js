@@ -33,6 +33,11 @@ class AutoBattler {
         } else {
             this.initStory();
         }
+        if (text == "Office") {
+            PLAY.battle2();
+        } else {
+            PLAY.battle1();
+        }
     }
     blockImg(text) {
         console.log("Text being read: " + text);
@@ -243,7 +248,6 @@ class AutoBattler {
             return this.units(true, true).length > this.grannyLimit;
         };
         this.game.addEntity(this.startButton);
-        PLAY.battle1();
     }
     update() {
         // force game over
@@ -411,6 +415,7 @@ class AutoBattler {
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
         if(this.extra) this.extra.removeFromWorld = true;
         this.removeFromWorld = true;
+        PLAY.overworld();
     }
 
     draw(ctx) { // ctx.fillRect(this.x, this.y, this.width, this.height);
