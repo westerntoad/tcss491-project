@@ -87,6 +87,8 @@ class PauseMenu {
         const save = {
             dialogIndex: this.scene.map.story.dialogIndex,
             globalProg: this.scene.map.story.globalProg,
+            npc: this.scene.map.story.npc,
+            secret: this.scene.map.story.secret,
             loc: {x: this.scene.map.player.x, y: this.scene.map.player.y},
             map: this.scene.map.currMapName,
             party: {

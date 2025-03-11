@@ -9,10 +9,10 @@ class Story {
         this.specialTiles = [];
         this.dialogIndex = save ? save.dialogIndex : 0;
         this.getPortal = null; // use to get portal.
-        this.npc = [false, false, false, false, false, false];
+        this.npc = save ? save.npc : [false, false, false, false, false, false];
         this.storyCheck = [false, false, false, false, false];
         this.questBattle = null;
-        this.secret = [false, false, false];
+        this.secret = save ? save.secret : [false, false, false];
         //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
@@ -131,7 +131,6 @@ class Story {
                 break;
             case 7: // beat forest
                 if(this.currMap == "marysMap") {
-                    console.log("case 6 reached");
                     for(let i = 0; i < 4; i++){
                         const quest = new Tile(this.map, true, 24, 9 + i, 2, this.questIcon);
                         this.specialTiles.push(quest);
