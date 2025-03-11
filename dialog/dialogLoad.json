@@ -58,7 +58,7 @@
         "asset": "./dialog/panelExample.png"},
     {"speaking": "Mary", "content": "I remember you mentioned Jerry loved blueberries.",
         "asset": "./dialog/panelExample.png"},
-    {"speaking": "Mary", "content": "How about you and I go talk with Jerry tomorrow?",
+    {"speaking": "Mary", "content": "How about you and I go talk with Jerry?",
         "asset": "./dialog/panelExample.png"},
     {"speaking": "Mary", "content": "I’ll bring a fresh harvest.",
         "asset": "./dialog/panelExample.png"},
@@ -70,9 +70,9 @@
         "asset": "./dialog/panelExample.png"},
     {"speaking": "Vera", "content": "Thank you, Mary!",
         "asset": "./dialog/panelExample.png"},
-    {"speaking": "Vera", "content": "I’ll see you tomorrow.",
+    {"speaking": "Vera", "content": "I’ll see you soon.",
         "asset": "./dialog/panelExample.png"},
-    {"speaking": "Mary", "content": "See you tomorrow! Buh-bye now, dear.",
+    {"speaking": "Mary", "content": "See you soon! Buh-bye now, dear.",
         "asset": "./dialog/panelExample.png", "end": true}
     ],
 
@@ -91,7 +91,7 @@
     ],
 
     [
-    {"speaking": "Mr.Mulberry", "content": "Ma! Vera! Well howdy do?",
+    {"speaking": "Mr.Mulberry", "content": "Ma! Mary! Well howdy do?",
         "asset": "./dialog/panelExample2.png"},
     {"speaking": "Vera", "content": "Well hello to you, too, son!",
         "asset": "./dialog/panelExample2.png"},
