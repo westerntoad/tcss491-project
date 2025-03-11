@@ -1,12 +1,14 @@
 class Block {
-    constructor(mapX, mapY, img = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png")) {
+    constructor(mapX, mapY, img = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock.png"), z = null) {
         Object.assign(this, {mapX, mapY})
         this.scale = PARAMS.scale;
         this.width = PARAMS.spaceWidth * PARAMS.scale;
         this.height = PARAMS.spaceHeight * PARAMS.scale;
         this.isoX = (mapY - mapX) * PARAMS.spaceWidth * PARAMS.scale / 2 + 500;
         this.isoY = (mapY + mapX) * PARAMS.spaceHeight * PARAMS.scale / 3 + 200;
-        this.z = this.isoY; // TODO better calculation
+
+        if(!z) this.z = this.isoY; // TODO better calculation
+        else this.z = z;
 
         this.hovered = false;
         this.selected = false;
@@ -38,6 +40,7 @@ class Block {
         }
 
         if (this.hovered || this.selected) {
+            if(this.shadow) this.shadow.hovered = true;
             this.isoY += this.height * 0.25;
         }
     }
@@ -48,6 +51,7 @@ class Block {
             this.isoX, this.isoY,
             PARAMS.spaceWidth * PARAMS.scale, PARAMS.spaceHeight * PARAMS.scale
         );
+        
     }
     position(position){
         this.position = position;

@@ -99,7 +99,7 @@ class Dialog {
         ctx.font = `${this.defaultFontSize + 5}pt m6x11`;
         if (this.speaker == "Mary") {
             ctx.fillStyle = '#ff98cf';
-        } else if (this.speaker == "Vera" || "Vera (from the background)") {
+        } else if (this.speaker == "Vera" || this.speaker == "Vera (from the background)") {
             ctx.fillStyle = '#f5a169';
         } else if (this.speaker == "Pearl") {
             ctx.fillStyle = '#57d9d9';

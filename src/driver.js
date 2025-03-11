@@ -27,6 +27,7 @@ ASSET_MANAGER.queueDownload("./assets/plus.png");
 
 //Title screen
 ASSET_MANAGER.queueDownload("./assets/titleBackgroundTemp.png");
+ASSET_MANAGER.queueDownload("./assets/bigFinger.png");
 
 // Maps
 ASSET_MANAGER.queueDownload("./maps/dev.json");
@@ -120,6 +121,9 @@ ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh2.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlockCh3.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/isoBlock.png");
 ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/forestBG.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/forestShadow.png");
+ASSET_MANAGER.queueDownload("./assets/autoBattler/forestBush.png");
 
 // Sound effects
 ASSET_MANAGER.queueDownload("./assets/select.wav");

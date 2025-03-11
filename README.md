@@ -1,6 +1,6 @@
 # tcss491-project
 
-University of Washington Winter 2025 TCSS491: Game and Simulation Design final group project. Name TBD.
+University of Washington Winter 2025 TCSS491: Game and Simulation Design final group project, Grandmas vs. Unhappiness.
 
 ## Attributions
 
@@ -14,3 +14,7 @@ The original skeleton for this project was originally forked from this class' ga
 - [Kaely Willhite](https://github.com/NatTEA20)
 
 [Play the game!](https://westerntoad.github.io/tcss491-project/)
+
+[Watch the trailer!](https://youtu.be/oofsY7V8g94)
+
+[Check out the wiki!](https://github.com/westerntoad/tcss491-project/wiki)

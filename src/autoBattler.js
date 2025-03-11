@@ -5,8 +5,6 @@ class AutoBattler {
         this.sceneManager = sceneManager;
         this.players = players;
         this.enemies = enemies;
-
-        this.background = ASSET_MANAGER.getAsset("./maps/battle_bg.png"); // Load battle background
         this.z = -5; // draw this first.
 
         this.currRound = 1;
@@ -20,6 +18,7 @@ class AutoBattler {
         this.scale = PARAMS.scale;
 
         this.allBlocks = Array.from({ length: 8 }, () => Array(8).fill(null));
+        this.allShadows = Array.from({ length: 8 }, () => Array(8).fill(null));
         this.showText(text);
         this.blockImg(text);
         this.prep = true;
@@ -37,10 +36,27 @@ class AutoBattler {
     }
     blockImg(text) {
         console.log("Text being read: " + text);
+        this.backGround = ASSET_MANAGER.getAsset("./assets/autoBattler/forestBG.png");
+        this.shadow = ASSET_MANAGER.getAsset("./assets/autoBattler/forestShadow.png");
         if(text === "Office" || text === "Derek King") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlockCh3.png");
+            this.backGround = null;
+            // set BG here.
         } else if(text === "Woebegone Park" || text === "Melanie Martinez") {
             this.isoBlock = ASSET_MANAGER.getAsset("./assets/autoBattler/isoBlock_park1.png");
+            this.backGround = null;
+            // set BG here.
+        }
+        if(this.backGround) {
+            this.extra = {
+                img: ASSET_MANAGER.getAsset("./assets/autoBattler/forestBush.png"),
+                z: -2,
+                draw: function(ctx) {
+                    ctx.drawImage(this.img, 0, 0, ctx.canvas.width, ctx.canvas.height);
+                },
+                update: () => {}
+            };
+            this.game.addEntity(this.extra);
         }
     }
     setSpots(round) {
@@ -180,6 +196,12 @@ class AutoBattler {
             block.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
             this.allBlocks[block.mapY][block.mapX] = block;
 
+            const shadow = new Block((i % 7) + 2.5, Math.floor(i / 7) + 2.5, this.shadow, -3);
+            shadow.animate(Animate.moveExp(0, -block.isoY, 0, 0, 50), i);
+            this.allShadows[i % 7][Math.floor(i/7)] = shadow;
+            block.shadow = shadow;
+            this.game.addEntity(shadow);
+
             this.game.addEntity(block);
         }
 
@@ -188,6 +210,12 @@ class AutoBattler {
             const block = new Block(8, i, this.isoBlock);
             block.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
             this.allBlocks[block.mapY][block.mapX] = block;
+
+            const shadow = new Block (8 + 2.5, i + 2.5, this.shadow, -3);
+            shadow.animate(Animate.moveExp(0, 1050 - block.isoY, 0, 0, 40), i + 64);
+            this.allShadows[7][i] = shadow;
+            block.shadow = shadow;
+            this.game.addEntity(shadow);
 
             this.game.addEntity(block);
         }
@@ -304,6 +332,7 @@ class AutoBattler {
                         }
                     } else {
                         block.hovered = false;
+                        block.shadow.hovered = false;
                     }
                 }
             }
@@ -336,9 +365,9 @@ class AutoBattler {
                 this.currRound++;
 
                 const finalRound = this.currRound > this.totalRounds;
-                const title = `Round ${this.currRound - 1} complete`; // if final round
+                let title = `Round ${this.currRound - 1} complete`; // if final round
                                          // boss complete  // otherwise, current round complete
-                if(this.story) title = 'Story complete';
+                if(this.enemies.story && finalRound) title = `${this.text} complete`;
                 const callback = finalRound ? () => {
                     if(this.enemies.story) {console.log("story, here"); this.sceneManager.story = true;}
                     this.cleanup();
@@ -373,7 +402,7 @@ class AutoBattler {
                     // and play the dialogue.
                 // } 
                 else {
-                    buttonLabel = `Return to Home`;
+                    buttonLabel = `Return to Map`;
                 }
 
                 this.showingDialog = true;
@@ -396,15 +425,22 @@ class AutoBattler {
     cleanup() {
         this.units().forEach(unit => unit.removeFromWorld = true);
         this.allBlocks.forEach(column => column.forEach(block => block ? block.removeFromWorld = true : void 0));
+        this.allShadows.forEach(column => column.forEach(shadow => shadow ? shadow.removeFromWorld = true : void 0));
         this.startButton ? this.startButton.removeFromWorld = true : void 0;
+        if(this.extra) this.extra.removeFromWorld = true;
         this.removeFromWorld = true;
     }
 
     draw(ctx) { // ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.save();
-        ctx.fillStyle = "grey";
-        ctx.fillRect(0, 0, this.game.width, this.game.height);
-        //ctx.drawImage(this.background, 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        // ASSET_MANAGER.queueDownload("./assets/autoBattler/redSpot.png");
+        if(this.backGround) {
+            ctx.drawImage(this.backGround, 0, 0, ctx.canvas.width, ctx.canvas.height);
+        } else {
+            ctx.fillStyle = "grey";
+            ctx.fillRect(0, 0, this.game.width, this.game.height);
+        }
         ctx.restore();
         
     }
@@ -570,13 +606,13 @@ class RoundComplete {
             const adorationDisplaySpeed = 320;
             const deltaAdoration = Math.min(this.adoration, Math.round((this.elapsed - this.adorationDelay) * adorationDisplaySpeed));
             ctx.fillStyle = '#d087e0';
-            ctx.font = '30px m6x11';
+            ctx.font = '35px m6x11';
             ctx.strokeStyle = `black`;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 1.5;
             ctx.textAlign = "center";
             ctx.textBaseline = "center";
-            ctx.fillText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 80);
-            ctx.strokeText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 80);
+            ctx.fillText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 120);
+            ctx.strokeText(`+${deltaAdoration}`, PARAMS.canvasWidth * 0.5, backgroundY + 120);
         }
 
         // callback button

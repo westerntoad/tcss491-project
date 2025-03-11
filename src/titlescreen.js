@@ -9,12 +9,12 @@ class TitleScreen {
         this.started = false;
         
         // Background image
-        this.backgroundImage = ASSET_MANAGER.getAsset("./assets/titleBackgroundTemp.png");
+        this.backgroundImage = ASSET_MANAGER.getAsset("./assets/bigFinger.png");
         
         // Button dimensions and positions
         this.buttonWidth = 200;
         this.buttonHeight = 50;
-        this.buttonStartY = height / 2;
+        this.buttonStartY = height *(3/8);
         this.buttonSpacing = 70;
         
         // Create buttons
@@ -150,6 +150,8 @@ class TitleScreen {
         ctx.textBaseline = 'alphabetic';
         // Draw background
         if (this.backgroundImage) {
+            ctx.fillStyle = "#292929";
+            ctx.fillRect(0, 0, this.width, this.height);
             ctx.drawImage(this.backgroundImage, 0, 0, this.width, this.height);
         } else {
             // Fallback background color
@@ -160,11 +162,11 @@ class TitleScreen {
         // Draw title
         ctx.fillStyle = "#b347cc";
         ctx.strokeStyle = "black"; // Color of the outline
-        ctx.lineWidth = 5; // Thickness of the outline
+        ctx.lineWidth = 10; // Thickness of the outline
         ctx.font = "72px runescape";
         ctx.textAlign = "center";
-        ctx.strokeText("Grandmas vs. Unhappiness", this.width / 2, this.height / 3); // Draw the outline
-        ctx.fillText("Grandmas vs. Unhappiness", this.width / 2, this.height / 3); // Draw the text
+        ctx.strokeText("Grandmas vs. Unhappiness", this.width / 2, this.height / 4); // Draw the outline
+        ctx.fillText("Grandmas vs. Unhappiness", this.width / 2, this.height / 4); // Draw the text
         
         // Draw buttons
         this.buttons.forEach(button => {
@@ -190,7 +192,7 @@ class TitleScreen {
 
             // button text outline
             ctx.strokeStyle = "black";  // Color of the outline
-            ctx.lineWidth = 2;          // Thickness of the outline
+            ctx.lineWidth = 3.5;          // Thickness of the outline
             ctx.strokeText(button.text,
                 button.x + this.buttonWidth / 2,
                 button.y + this.buttonHeight / 2 + 10);
