@@ -18,3 +18,7 @@ The original skeleton for this project was originally forked from this class' ga
 [Watch the trailer!](https://youtu.be/oofsY7V8g94)
 
 [Check out the wiki!](https://github.com/westerntoad/tcss491-project/wiki)
+
+[Main OST Playlist!](https://www.youtube.com/playlist?list=PLOTFPRylAbI7LHP4dmuX9VEOUnFKMmPSC)
+
+[Alt OST Playlist!](https://www.youtube.com/playlist?list=PLh8x6DthDj9jj9YYcsagi6nnlyqO7iE8w)
