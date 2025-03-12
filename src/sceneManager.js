@@ -165,8 +165,9 @@ class SceneManager {
     battleScene(enemyArr, type, story = false, title = "", endless = false, grannyLimit = 6) {
         const gLimit = grannyLimit;
         console.log("Entered Battle Scene");
-        this.savedState = this.game.entities;
+        this.savedState = [...this.game.entities];
         this.savedMap = this.map;
+        
         // enemyArr = CHAPTER1_ROUNDS;
         const enemies = [];
         const random = Math.floor(Math.random() * 2);
@@ -198,13 +199,39 @@ class SceneManager {
 
         console.log('Enemies:', enemies);
         console.log('Players:', players);
+        this.map.player.disableMovement = true;
+        this.game.addEntity(new Transition(this.game, [
+            () => {
+                this.map.player.disableMovement = false;
+                for (let i = this.game.entities.length - 1; i >= 0; --i) {
+                    if (!this.game.entities[i].isTransitionThing) {
+                        this.game.entities.splice(i, 1);
+                    }
+                }
+                let battle = undefined;
+                this.__battle = endless ?
+                    new AutoBattler(this.game, this, players, enemies, "Endless") : 
+                    new AutoBattler(this.game, this, players, enemies, `${title}`, gLimit);
 
-        this.game.entities = []; // Clear current entities
+                for (let i = 0; i < this.game.entities.length; i++) {
+                    const entity = this.game.entities[i]
+                    if (!entity.isTransitionThing) {
+                        this.game.entities[i].noUpdate = true;
+                    }
+                }
+                this.game.addEntity(this.__battle);
+            },
+            () => {
+                for (let i = 0; i < this.game.entities.length; i++) {
+                    if (!this.game.entities[i].isTransitionThing) {
+                        this.game.entities[i].noUpdate = false;
+                    }
+                }
+                this.__battle = undefined;
+            }
+        ]));
 
-        endless ?
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, "Endless")) : 
-        this.game.addEntity(new AutoBattler(this.game, this, players, enemies, `${title}`, gLimit));
-        // ASSET_MANAGER.getAsset("./assets/soundtrack/battle-theme.mp3").play();
+
     }
     restoreScene() {
         console.log("Restoring Overworld State");

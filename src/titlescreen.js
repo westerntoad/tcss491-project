@@ -100,7 +100,11 @@ class TitleScreen {
         // Remove title screen and start new game
         this.game.entities = this.game.entities.filter(entity => entity !== this);
         STOP.allMusic();
-        PLAY.overworld();
+        if (!PARAMS.altMusic) {
+            PLAY.house();
+        } else {
+            PLAY.overworld();
+        }
         this.newScene = new SceneManager(this.game, save);
         if (save) {
             PARAMS.soundEffectsVolume = save.soundEffectsVolume;

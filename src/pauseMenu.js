@@ -116,26 +116,6 @@ class PauseMenu {
     }
 
     openTitle() {
-        /*const save = false;
-        if (save == false) {
-            //Open a pop-up window to double check if a player wants to save their progress.
-            const question = "Do you want to leave without saving?";
-            const response = false; 
-            if (response == false) {
-                this.game.entities = this.game.entities.filter(entity => entity !== this);
-                const title = new TitleScreen();
-                this.game.addEntity(title.showTitle());
-                //break;
-            } else {
-                this.game.entities = this.game.entities.filter(entity => entity !== this);
-                const menu = new pauseMenu();
-                this.game.addEntity(menu.showMenu());
-                //break;
-            }
-        }
-        this.game.entities = this.game.entities.filter(entity => entity !== this);
-        const title = new TitleScreen();
-        this.game.addEntity(title.showTitle());*/
         this.game.entities.forEach(entity => entity.removeFromWorld = true);
         const ts = new TitleScreen(this.game);
         ts.started = true;
@@ -144,17 +124,16 @@ class PauseMenu {
         this.game.addEntity(ts);
     };
 
-    //To add the Title Screen as an entity when changing between menus.
-    showMenu() {
-        //this.game.addEntity(this.draw(ctx));
-        //this.game.ctx.drawImage
-    }
-
     altMusic() {
-        //this.game.ASSET_MANAGER.playAsset();
+        console.log('\n\n\n\nREACHED\n\n\n\n');
         STOP.allMusic();
         PARAMS.altMusic ^= true; // true => false, false => true
-        PLAY.overworld();
+        console.log(this.scene.map.currMapName);
+        if (!PARAMS.altMusic && this.scene.map.currMapName == 'marysRoom') {
+            PLAY.house();
+        } else {
+            PLAY.overworld();
+        }
 
     }
 
@@ -257,7 +236,6 @@ class PauseMenu {
         const textHeight = 28;
         const lines = splitStringByWords(this.tip, numLines);
         numLines = lines.length;
-        console.log(numLines);
         const w = 500;
         const h = 20 + textHeight * numLines;
         const x = 290 - w / 2;
