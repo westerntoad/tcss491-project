@@ -7,7 +7,7 @@ class Party {
         Object.assign(this, {game, scene});
         this.members = []; // Array to store party members
         this.maxSize = 6; // Maximum party size (can be adjusted)
-        this.exp = 0; // keep track of total exp in the pot.
+        this.exp = 2; // keep track of total exp in the pot.
 
         if (save) {
             save.party.members.forEach(mem => {

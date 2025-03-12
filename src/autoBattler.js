@@ -35,7 +35,7 @@ class AutoBattler {
         }
         if (text == "Office") {
             PLAY.battle2();
-        } else if (text == "Tutorial") {
+        } else if (text == "Tutorial" || text == "Dog Level") {
             PLAY.dogfight();
         } else {
             PLAY.battle1();
@@ -64,6 +64,35 @@ class AutoBattler {
                 update: () => {}
             };
             this.game.addEntity(this.extra);
+        }
+        if(text == "Dog Level") {
+            let max = 1;
+            this.players.forEach(player => {
+                max = Math.max(player.level, max);
+            });
+            if(max > 1) {
+                this.loseText = [null, null, null];
+                this.loseText[0] = "Dogs don't like"
+                this.loseText[1] = max == 20 ? 
+                    "Maxed Lvls." : `Lvl ${max}s.`;
+                this.loseText[2] = "Everyone knows that...";
+                this.enemies[0].forEach(enemy => {
+                    enemy.maxHp = 9999;
+                    enemy.hp = 9999;
+                    enemy.attack = 9999;
+                    enemy.moveSpeed = 0.1;
+                });
+            } if(this.players.length < 5) {
+                this.loseText = [null, null];
+                this.loseText[0] = "Dogs require 5 grandmas.";
+                this.loseText[1] = "Everyone knows that...";
+                this.enemies[0].forEach(enemy => {
+                    enemy.maxHp = 9999;
+                    enemy.hp = 9999;
+                    enemy.attack = 9999;
+                    enemy.moveSpeed = 0.1;
+                });
+            }
         }
     }
     setSpots(round) {
@@ -406,7 +435,8 @@ class AutoBattler {
             this.cleanup();
             STOP.battle1();
             PLAY.gameover();
-            this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
+            if(this.loseText) this.game.addEntity(new GameOver(this.game, this.sceneManager, this, this.loseText));
+            else this.game.addEntity(new GameOver(this.game, this.sceneManager, this));
         }
     }
 
@@ -631,7 +661,7 @@ class RoundComplete {
 }
 
 class GameOver {
-    constructor(game, scene, battle) {
+    constructor(game, scene, battle, loseText = null) {
         Object.assign(this, { game, scene, battle });
         
         this.buttonWidth = 300;
@@ -639,6 +669,8 @@ class GameOver {
         this.buttonX = (PARAMS.canvasWidth - this.buttonWidth) * 0.5;
         this.buttonY = PARAMS.canvasHeight * 0.5 + 50;
         this.buttonHighlighted = false;
+
+        this.loseText = loseText;
     }
 
     update() {
@@ -667,6 +699,21 @@ class GameOver {
         ctx.textAlign = "center";
         ctx.textBaseline = "center";
         ctx.fillText("Game Over", PARAMS.canvasWidth * 0.5, PARAMS.canvasHeight * 0.5 - 100);
+
+        // if loseText
+        if(this.loseText) {
+            const fontSize = 30;
+            ctx.font = `${fontSize}px monospace`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "center";
+            ctx.tex
+            let i = 0;
+            this.loseText.forEach(txt => {
+                ctx.fillText(txt, PARAMS.canvasWidth * 0.5, 
+                    PARAMS.canvasHeight * 0.575 - 100 + (fontSize*1.2 * i));
+                    i++;
+            });
+        }
 
         // button
         ctx.fillStyle = this.buttonHighlighted ? '#aaaaaa' : '#ffffff';
