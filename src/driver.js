@@ -68,6 +68,9 @@ ASSET_MANAGER.queueDownload("./assets/enemies/endlessPortal.png");
 
 ASSET_MANAGER.queueDownload("./assets/enemies/Mad@Chu.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/D3pr3ss0.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/upDog.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/guideDog.png");
+
 ASSET_MANAGER.queueDownload("./assets/enemies/L0neb0ne.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/0bL1V15k.png");
@@ -81,6 +84,7 @@ ASSET_MANAGER.queueDownload("./assets/enemies/Derek_King.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/droplet.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/waneChime.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/hopless.png");
+
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
@@ -231,6 +235,28 @@ const DUNGEON_ENCOUNTERS = {
             asset: "./assets/enemies/Mad@Chu.png"
          },
          { name: "dep",
+            attackRange: 1,
+            granny: false,
+            hp: 1200,
+            attack: 9999,
+            defense: 0,
+            exp: 500,
+            attackSpeed: 3,
+            moveSpeed: 0.1,
+            asset: "./assets/enemies/D3pr3ss0.png"
+         },
+         { name: "upDog",
+            attackRange: 1,
+            granny: false,
+            hp: 1200,
+            attack: 9999,
+            defense: 0,
+            exp: 500,
+            attackSpeed: 3,
+            moveSpeed: 0.1,
+            asset: "./assets/enemies/D3pr3ss0.png"
+         },
+         { name: "guideDog",
             attackRange: 1,
             granny: false,
             hp: 1200,
