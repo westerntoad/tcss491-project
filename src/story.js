@@ -427,10 +427,16 @@ class Story {
                         () => {
                             this.map.changeMap(MAPS.marysMap(this.map), 5, 7);
                             this.map.player.dir = 2;
+                            if (!PARAMS.altMusic) {
+                                STOP.allMusic();
+                            }
                         },
                         () => {
                             this.map.player.noUpdate = false;
                             this.map.noUpdate = false;
+                            if (!PARAMS.altMusic) {
+                                PLAY.overworld();
+                            }
                         }
                     ]));
                 };

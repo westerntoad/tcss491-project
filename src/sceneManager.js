@@ -228,8 +228,6 @@ class SceneManager {
                     }
                 }
                 this.__battle = undefined;
-                console.log(this.game.entities);
-                console.log(this.savedState);
             }
         ]));
 

@@ -18,7 +18,6 @@ class Map {
         } else {
             this.changeMap(MAPS.marysRoom(this), 3, 2);
         }
-        this.globalDialogIndex = 0;
         this.secret = [false, false, false];
     }
 
@@ -152,6 +151,7 @@ MAPS.marysRoom = (map) => {
     const json = ASSET_MANAGER.getAsset("./maps/marysHouse.json");
     json.specialTiles = []; // receive a array of special tiles.
     const string = "marysRoom";
+    json.name = string;
     json.specialTiles.push(...map.story.load(string));
 
     return json;
@@ -166,8 +166,25 @@ MAPS.marysMap = (map) => {
     
     const marysRoom = new Tile(map, true, 6, 6, 0, './assets/portalPoint.png');
     marysRoom.stepOn = () => {
-        map.changeMap(MAPS.marysRoom(map), 5, 4);
-        map.player.dir = 2;
+        map.player.noUpdate = true;
+        map.noUpdate = true;
+        map.game.addEntity(new Transition(map.game, [
+            () => {
+                map.changeMap(MAPS.marysRoom(map), 5, 4);
+                map.player.dir = 2;
+                if (!PARAMS.altMusic) {
+                    STOP.allMusic();
+                }
+            },
+            () => {
+                map.player.noUpdate = false;
+                map.noUpdate = false;
+                if (!PARAMS.altMusic) {
+                    PLAY.house();
+                }
+            }
+        ]));
+
     };
     json.specialTiles.push(marysRoom);
     return json;

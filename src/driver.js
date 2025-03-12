@@ -107,6 +107,11 @@ ASSET_MANAGER.queueDownload("./assets/battleScene/endButton.png");
 
 // MUSIC
 ASSET_MANAGER.queueDownload("./assets/soundtrack/battle-theme.mp3");
+ASSET_MANAGER.queueDownload("./assets/soundtrack/Chapter1Battle.qt");
+ASSET_MANAGER.queueDownload("./assets/soundtrack/Passed-Away.mp3");
+ASSET_MANAGER.queueDownload("./assets/soundtrack/title.qt");
+ASSET_MANAGER.queueDownload("./assets/soundtrack/Chapter1ThemePhoneCallToANewAdventure.qt");
+ASSET_MANAGER.queueDownload("./assets/soundtrack/Chapter2Battle.qt");
 ASSET_MANAGER.queueDownload("./assets/soundtrack/TCSS-491-Mary-Yotts-Overworld.mp3");
 
 // ALT MUSIC 
