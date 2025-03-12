@@ -11,7 +11,7 @@ class Story {
         this.getPortal = null; // use to get portal.
         this.npc = save ? save.npc : [false, false, false, false, false, false];
         this.questBattle = null;
-        this.secret = save ? save.secret : [false, false, false];
+        this.secret = save ? save.secret : [false, false, false, false];
         //this.globalExp = [0, 0, 0, 0, 0, 0, 0, 0];
     }
     // PLEASE DON'T ERASE THIS YET (mentally processing next steps).
@@ -511,6 +511,32 @@ class Story {
                     this.questBattle = 92;
                 };
                 this.specialTiles.push(mad);
+            }
+            if(!this.secret[3]) {
+                const dogs = new Tile(this.map, false, 18, 22, 0, "");
+                dogs.interact = () => {
+                    this.map.scene.battleScene(
+                        [[{name: "upDog", x: 6, y: 0}, {name: "upDog", x: 6, y: 3}, {name: "upDog", x: 6, y: 6},
+                            {name: "upDog", x: 0, y: 0}, {name: "upDog", x: 0, y: 6}, {name: "upDog", x: 0, y: 2}
+                            ],
+                            [{name: "upDog", x: 6, y: 6}, {name: "upDog", x: 5, y: 6},
+                                {name: "upDog", x: 0, y: 0}, {name: "upDog", x: 0, y: 1}, {name: "guideDog", x: 3, y: 3},
+                                {name: "guideDog", x: 0, y: 6}, {name: "guideDog", x: 6, y: 0},
+                                {name: "guideDog", x: 0, y: 5}, {name: "guideDog", x: 5, y: 0}
+                                ],
+                            [{name: "guideDog", x: 3, y: 3}, {name: "guideDog", x: 6, y: 3},
+                                {name: "guideDog", x: 0, y: 3}, {name: "guideDog", x: 3, y: 6}
+                                ],
+                            [
+                            {name: "upDog", x: 6, y: 0}, {name: "upDog", x: 6, y: 3}, {name: "upDog", x: 6, y: 6},
+                            {name: "upDog", x: 0, y: 0}, {name: "upDog", x: 0, y: 6}, {name: "upDog", x: 0, y: 2},
+            
+                            ],
+                            [{name: "dogBone", x: 3, y: 3}]
+                        ], "Grass", true, "Dog Level", false, 3);
+                    this.questBattle = 93;
+                };
+                this.specialTiles.push(dogs);
             }
         }
     }

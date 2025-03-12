@@ -169,6 +169,28 @@ MAPS.marysRoom = (map) => {
     // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
     // portals.interact = () => {
     //     map.scene.battleScene(
+    //         [[{name: "upDog", x: 6, y: 0}, {name: "upDog", x: 6, y: 3}, {name: "upDog", x: 6, y: 6},
+    //             {name: "upDog", x: 0, y: 0}, {name: "upDog", x: 0, y: 6}, {name: "upDog", x: 0, y: 2}
+    //             ],
+    //             [{name: "upDog", x: 6, y: 6}, {name: "upDog", x: 5, y: 6},
+    //                 {name: "upDog", x: 0, y: 0}, {name: "upDog", x: 0, y: 1}, {name: "guideDog", x: 3, y: 3},
+    //                 {name: "guideDog", x: 0, y: 6}, {name: "guideDog", x: 6, y: 0},
+    //                 {name: "guideDog", x: 0, y: 5}, {name: "guideDog", x: 5, y: 0}
+    //                 ],
+    //             [{name: "guideDog", x: 3, y: 3}, {name: "guideDog", x: 6, y: 3},
+    //                 {name: "guideDog", x: 0, y: 3}, {name: "guideDog", x: 3, y: 6}
+    //                 ],
+    //             [
+    //             {name: "upDog", x: 6, y: 0}, {name: "upDog", x: 6, y: 3}, {name: "upDog", x: 6, y: 6},
+    //             {name: "upDog", x: 0, y: 0}, {name: "upDog", x: 0, y: 6}, {name: "upDog", x: 0, y: 2},
+
+    //             ],
+    //             [{name: "dogBone", x: 3, y: 3}]
+    //             ], "Grass", true, "Dog Level", false, 3);
+    // };
+    // const portals = new Tile(map, false, 1, 1, 0, "./assets/enemies/Jerry_Mulberry.png", 0, 0, 32, 32);
+    // portals.interact = () => {
+    //     map.scene.battleScene(
     //         [[{name: "1ntern", x: 0, y: 2}, {name: "1ntern", x: 0, y: 3}, {name: "1ntern", x: 0, y: 4},
     //         {name: "1ntern", x: 6, y: 2}, {name: "1ntern", x: 6, y: 3}, {name: "1ntern", x: 6, y: 4}
     //             ],

@@ -68,6 +68,10 @@ ASSET_MANAGER.queueDownload("./assets/enemies/endlessPortal.png");
 
 ASSET_MANAGER.queueDownload("./assets/enemies/Mad@Chu.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/D3pr3ss0.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/upDog.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/guideDog.png");
+ASSET_MANAGER.queueDownload("./assets/enemies/dogBone.png");
+
 ASSET_MANAGER.queueDownload("./assets/enemies/L0neb0ne.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/Jerry_Mulberry.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/0bL1V15k.png");
@@ -81,6 +85,7 @@ ASSET_MANAGER.queueDownload("./assets/enemies/Derek_King.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/droplet.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/waneChime.png");
 ASSET_MANAGER.queueDownload("./assets/enemies/hopless.png");
+
 
 // For BattleScene
 ASSET_MANAGER.queueDownload("./maps/battle_bg.png");
@@ -240,7 +245,40 @@ const DUNGEON_ENCOUNTERS = {
             attackSpeed: 3,
             moveSpeed: 0.1,
             asset: "./assets/enemies/D3pr3ss0.png"
-         }
+         },
+         { name: "upDog",
+            attackRange: 1,
+            granny: false,
+            hp: 4,
+            attack: 1,
+            defense: 0,
+            exp: 0,
+            attackSpeed: 1,
+            moveSpeed: 0.65,
+            asset: "./assets/enemies/upDog.png"
+         },
+         { name: "guideDog",
+            attackRange: 4,
+            granny: false,
+            hp: 1,
+            attack: 1,
+            defense: 0,
+            exp: 0,
+            attackSpeed: 1.5,
+            moveSpeed: 1.25,
+            asset: "./assets/enemies/guideDog.png"
+         },
+         { name: "dogBone",
+            attackRange: 5,
+            granny: false,
+            hp: 24,
+            attack: 9999,
+            defense: 0,
+            exp: 1333,
+            attackSpeed: 5.5,
+            moveSpeed: Infinity,
+            asset: "./assets/enemies/dogBone.png"
+         },
     ],
     "Office": [
         { name: "1ntern",
