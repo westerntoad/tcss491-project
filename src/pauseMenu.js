@@ -253,11 +253,13 @@ class PauseMenu {
         ctx.drawImage(this.jerryImg, 0, 0, 32, 32, 100, 600, 100, 100);
         ctx.font = '20pt runescape';
         const measure = ctx.measureText(this.tip);
-        const numLines = Math.ceil(measure.width / 600);
-        const textHeight = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
-        const lines = splitStringByWords(this.tip, Math.ceil(numLines));
+        let numLines = Math.ceil(measure.width / 500);
+        const textHeight = 28;
+        const lines = splitStringByWords(this.tip, numLines);
+        numLines = lines.length;
+        console.log(numLines);
         const w = 500;
-        const h = 20 + textHeight * numLines * 1.4;
+        const h = 20 + textHeight * numLines;
         const x = 290 - w / 2;
         const y = 580 - h;
         ctx.fillStyle = '#ffffff';
