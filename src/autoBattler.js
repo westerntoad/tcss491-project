@@ -35,6 +35,8 @@ class AutoBattler {
         }
         if (text == "Office") {
             PLAY.battle2();
+        } else if (text == "Tutorial") {
+            PLAY.dogfight();
         } else {
             PLAY.battle1();
         }

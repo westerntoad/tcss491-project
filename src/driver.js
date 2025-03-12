@@ -110,6 +110,7 @@ ASSET_MANAGER.queueDownload("./assets/mary-theme.wav");
 ASSET_MANAGER.queueDownload("./assets/battle1.wav");
 ASSET_MANAGER.queueDownload("./assets/battle2.wav");
 ASSET_MANAGER.queueDownload("./assets/gameover.wav");
+ASSET_MANAGER.queueDownload("./assets/dogfight.wav");
 
 //Items
 ASSET_MANAGER.queueDownload("./assets/items/laserPointer.png");
@@ -141,6 +142,16 @@ ASSET_MANAGER.queueDownload("./assets/scrolls/bernice1.wav");
 ASSET_MANAGER.queueDownload("./assets/scrolls/bernice2.wav");
 ASSET_MANAGER.queueDownload("./assets/scrolls/yesoon1.wav");
 ASSET_MANAGER.queueDownload("./assets/scrolls/yesoon2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/pearl1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/pearl2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/mmulberry1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/mmulberry2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/fmulberry1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/fmulberry2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/derek1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/derek2.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/jerry1.wav");
+ASSET_MANAGER.queueDownload("./assets/scrolls/jerry2.wav");
 
 // Fonts
 // NOTE: fonts must not start with './'

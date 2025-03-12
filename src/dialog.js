@@ -38,6 +38,26 @@ class Dialog {
                 ASSET_MANAGER.getAsset("./assets/scrolls/bernice1.wav"),
                 ASSET_MANAGER.getAsset("./assets/scrolls/bernice2.wav")
             ],
+            pearl: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/pearl1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/pearl2.wav"),
+            ],
+            derek: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/derek1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/derek2.wav")
+            ],
+            mmulberry: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/mmulberry1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/mmulberry2.wav")
+            ],
+            fmulberry: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/fmulberry1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/fmulberry2.wav")
+            ],
+            jerry: [
+                ASSET_MANAGER.getAsset("./assets/scrolls/jerry1.wav"),
+                ASSET_MANAGER.getAsset("./assets/scrolls/jerry2.wav")
+            ],
         };
     }
 
@@ -60,23 +80,33 @@ class Dialog {
                     scrolls[0].volume = 0.1;
                     scrolls[1].volume = 0.1;
                 } else if (this.speaker == "Pearl") {
-                    scrolls = this.scrolls.mary;
+                    scrolls = this.scrolls.pearl;
+                    scrolls[0].volume = 0.15;
+                    scrolls[1].volume = 0.15;
                 } else if (this.speaker == "Ye-soon") {
                     scrolls = this.scrolls.yesoon;
                     scrolls[0].volume = 0.15;
                     scrolls[1].volume = 0.15;
                 } else if (this.speaker == "Bernice") {
                     scrolls = this.scrolls.bernice;
-                    scrolls[0].volume = 0.15;
-                    scrolls[1].volume = 0.15;
+                    scrolls[0].volume = 0.35;
+                    scrolls[1].volume = 0.35;
                 } else if (this.speaker == "Mr.Mulberry") {
-                    scrolls = this.scrolls.mary;
+                    scrolls = this.scrolls.mmulberry;
+                    scrolls[0].volume = 0.55;
+                    scrolls[1].volume = 0.55;
                 } else if (this.speaker == "Mrs.Mulberry") {
-                    scrolls = this.scrolls.mary;
+                    scrolls = this.scrolls.fmulberry;
+                    scrolls[0].volume = 0.2;
+                    scrolls[1].volume = 0.2;
                 } else if (this.speaker == 'Jerry') {
-                    scrolls = this.scrolls.mary;
+                    scrolls = this.scrolls.jerry;
+                    scrolls[0].volume = 0.25;
+                    scrolls[1].volume = 0.25;
                 } else if (this.speaker == 'Derek King') {
-                    scrolls = this.scrolls.mary;
+                    scrolls = this.scrolls.derek;
+                    scrolls[0].volume = 0.35;
+                    scrolls[1].volume = 0.35;
                 } else {
                     scrolls = this.scrolls.mary;
                 }

@@ -85,6 +85,10 @@ PLAY.overworld = () => PARAMS.altMusic
     ? PLAY.__play('./assets/mary-theme.wav', 0.3, true)
     : PLAY.__play("./assets/soundtrack/TCSS-491-Mary-Yotts-Overworld.mp3", 0.1, true); // placeholder
 
+PLAY.dogfight = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/dogfight.wav', 0.2, true)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+
 STOP.gameover = () => {
     // add other looped music here to avoid unstoppable music
     STOP.__stop('./assets/gameover.wav');
@@ -105,6 +109,11 @@ STOP.battle2 = () => {
     STOP.__stop('./assets/battle2.wav');
 }
 
+STOP.dogfight = () => {
+    // add other looped music here to avoid unstoppable music
+    STOP.__stop('./assets/dogfight.wav');
+}
+
 STOP.overworld = () => {
     STOP.__stop('./assets/mary-theme.wav');
     STOP.__stop("./assets/soundtrack/TCSS-491-Mary-Yotts-Overworld.mp3");
@@ -116,4 +125,5 @@ STOP.allMusic = () => {
     STOP.battle1();
     STOP.battle2();
     STOP.overworld();
+    STOP.dogfight();
 }

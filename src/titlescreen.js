@@ -16,6 +16,15 @@ class TitleScreen {
         this.buttonHeight = 50;
         this.buttonStartY = height *(3/8);
         this.buttonSpacing = 70;
+
+        const altW = 50;
+        const altH = 50;
+        this.altTick = {
+            w: altW,
+            h: altH,
+            x: PARAMS.canvasWidth  - 2 * altW,
+            y: PARAMS.canvasHeight - 2 * altH,
+        }
         
         // Create buttons
         this.buttons = [
@@ -72,6 +81,12 @@ class TitleScreen {
                 button.action();
             }
         });
+        if (mouseX >= this.altTick.x && mouseX <= this.altTick.x + this.altTick.w
+                && mouseY >= this.altTick.y && mouseY <= this.altTick.y + this.altTick.h) {
+            PARAMS.altMusic ^= true; // true => false, false => true
+            STOP.allMusic();
+            PLAY.title();
+        }
     }
 
     // Removes listener after the title screen is no longer needed.
@@ -167,6 +182,24 @@ class TitleScreen {
         ctx.textAlign = "center";
         ctx.strokeText("Grandmas vs. Unhappiness", this.width / 2, this.height / 4); // Draw the outline
         ctx.fillText("Grandmas vs. Unhappiness", this.width / 2, this.height / 4); // Draw the text
+
+        ctx.lineWidth = 1; // Thickness of the outline
+        ctx.fillStyle = '#000000';
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillRect(this.altTick.x, this.altTick.y, this.altTick.w, this.altTick.h);
+        ctx.strokeRect(this.altTick.x, this.altTick.y, this.altTick.w, this.altTick.h);
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.font = "32px runescape";
+        ctx.fillText("Alt Music", this.altTick.x - 18, this.altTick.y + 0.5 * this.altTick.h);
+        if (PARAMS.altMusic) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ff0000';
+            ctx.font = '40pt monospace';
+            ctx.fillText('✓', this.altTick.x + this.altTick.w / 2, this.altTick.y + this.altTick.h / 2 + 2);
+        }
+        ctx.lineWidth = 10; // Thickness of the outline
+        ctx.textBaseline = 'alphabetic';
         
         // Draw buttons
         this.buttons.forEach(button => {

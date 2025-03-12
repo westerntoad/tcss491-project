@@ -155,7 +155,6 @@ class PauseMenu {
         STOP.allMusic();
         PARAMS.altMusic ^= true; // true => false, false => true
         PLAY.overworld();
-        console.log(PARAMS.altMusic);
 
     }
 
