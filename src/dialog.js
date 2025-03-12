@@ -187,6 +187,9 @@ class Dialog {
             ctx.fillStyle = '#cc1503';
         }
         //ctx.fillStyle = 'blue';
+        ctx.strokeStyle = "black"; // Color of the outline
+        ctx.lineWidth = 4; // Thickness of the outline
+        ctx.strokeText(this.speaker, this.padding * 1.5, this.boxY + this.padding);
         ctx.fillText(this.speaker, this.padding * 1.5, this.boxY + this.padding);
         ctx.restore();
       }
