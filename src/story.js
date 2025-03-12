@@ -421,8 +421,18 @@ class Story {
                 const roomExit = new Tile(this.map, true, 5, 4, 0, '');
                 roomExit.stepOn = () => {
                     // change to next map
-                    this.map.changeMap(MAPS.marysMap(this.map), 5, 7);
-                    this.map.player.dir = 2;
+                    this.map.player.noUpdate = true;
+                    this.map.noUpdate = true;
+                    this.map.game.addEntity(new Transition(this.map.game, [
+                        () => {
+                            this.map.changeMap(MAPS.marysMap(this.map), 5, 7);
+                            this.map.player.dir = 2;
+                        },
+                        () => {
+                            this.map.player.noUpdate = false;
+                            this.map.noUpdate = false;
+                        }
+                    ]));
                 };
                 this.specialTiles.push(roomExit);
             }

@@ -186,7 +186,9 @@ class GameEngine {
         this.ctx.clearRect(0, 0, PARAMS.canvasWidth, PARAMS.canvasHeight);
         // Draw latest things first
         for (let i = this.entities.length - 1; i >= 0; i--) {
-            this.entities[i].draw(this.ctx, this);
+            if (!this.entities[i].noDraw) {
+                this.entities[i].draw(this.ctx, this);
+            }
         }
     };
 
@@ -213,7 +215,7 @@ class GameEngine {
         for (let i = 0; i < entitiesCount; i++) {
             let entity = this.entities[i];
 
-            if (entity && !entity.removeFromWorld) {
+            if (entity && !entity.removeFromWorld && !entity.noUpdate) {
                 entity.update();
             }
         }

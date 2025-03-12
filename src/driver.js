@@ -135,6 +135,7 @@ ASSET_MANAGER.queueDownload("./assets/autoBattler/forestBush.png");
 ASSET_MANAGER.queueDownload("./assets/select.wav");
 ASSET_MANAGER.queueDownload("./assets/invalid.wav");
 ASSET_MANAGER.queueDownload("./assets/death.wav");
+ASSET_MANAGER.queueDownload("./assets/scene-transition.wav");
 ASSET_MANAGER.queueDownload("./assets/hit1.wav");
 ASSET_MANAGER.queueDownload("./assets/hit2.wav");
 

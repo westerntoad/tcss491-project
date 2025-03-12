@@ -53,6 +53,9 @@ PLAY.select = () => PARAMS.altMusic
 PLAY.invalid = () => PARAMS.altMusic
     ? PLAY.__play('./assets/invalid.wav', 1)
     : PLAY.__play('./assets/invalid.wav', 0); // placeholder
+PLAY.transition = () => PARAMS.altMusic
+    ? PLAY.__play('./assets/scene-transition.wav', 0.25)
+    : PLAY.__play('./assets/invalid.wav', 0); // placeholder
 PLAY.death = () => PARAMS.altMusic
     ? PLAY.__play('./assets/death.wav', 1)
     : PLAY.__play('./assets/invalid.wav', 0); // placeholder
